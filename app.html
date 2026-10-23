@@ -433,6 +433,11 @@ details[open] .chev{transform:rotate(90deg);}
   .tdoc{width:210mm;min-height:auto;padding:16mm 15mm;box-shadow:none;margin:0;transform:none!important;position:static!important;}
   .doc:last-child{page-break-after:auto;}
   .pb{page-break-after:always;}
+  /* 打印兜底：表头/合计条改为浅底深字。若不打印背景，白字会整片消失；
+     浅色底在黑白打印机上也更清晰、更省墨。屏幕预览仍保持主题深色。 */
+  .d-items th{background:#E9EDF2!important;color:#14181d!important;
+    border-top:1px solid #9AA1AB;border-bottom:1px solid #9AA1AB;}
+  .d-sumtotal{background:#E9EDF2!important;color:#14181d!important;border:1px solid #9AA1AB;}
 }
 @page{size:A4;margin:0;}
 
@@ -776,6 +781,94 @@ b,strong{font-weight:600;}
 .skel{background:linear-gradient(90deg,#F1F3F6 25%,#E7EAEF 37%,#F1F3F6 63%);background-size:400% 100%;animation:skelmove 1.4s ease infinite;border-radius:6px;}
 @keyframes skelmove{0%{background-position:100% 50%}100%{background-position:0 50%}}
 .skel-wrap{background:#fff;}
+
+/* ========== 报价计算器 ========== */
+.calc-note{background:#F0F7FF;border:1px solid #CFE3FA;color:#1E4E79;font-size:12.5px;line-height:1.7;
+  padding:10px 14px;border-radius:10px;margin-bottom:14px}
+.calc-grid{display:grid;grid-template-columns:minmax(0,1fr) 344px;gap:16px;align-items:start}
+.calc-side{position:sticky;top:14px}
+.calc-hero{background:linear-gradient(135deg,#0F172A,#243B53);color:#fff;border-radius:14px;
+  padding:20px 20px 18px;margin-bottom:12px}
+.calc-hero .ch-label{font-size:12px;color:#9FB3C8;letter-spacing:.06em}
+.calc-hero .ch-val{font-size:33px;font-weight:700;letter-spacing:-.02em;margin:5px 0 3px;
+  font-variant-numeric:tabular-nums}
+.calc-hero .ch-sub{font-size:12px;color:#BCCCDC}
+.calc-list{background:#fff;border:1px solid #E4E7EC;border-radius:12px;overflow:hidden;margin-bottom:12px}
+.calc-row{display:flex;justify-content:space-between;gap:12px;padding:9px 14px;font-size:12.5px;
+  border-bottom:1px solid #F1F4F8}
+.calc-row:last-child{border-bottom:0}
+.calc-row span{color:#64748B;flex-shrink:0}
+.calc-row b{font-weight:600;color:#0F172A;font-variant-numeric:tabular-nums;text-align:right}
+.calc-row.ok b{color:#0E7C4A}
+.calc-row.warn b{color:#B45309}
+.calc-row.bad b{color:#B4262C}
+.calc-sep{font-size:11.5px;color:#94A3B8;letter-spacing:.08em;margin:14px 0 6px;padding-left:2px}
+.calc-acts{display:flex;gap:8px;flex-wrap:wrap}
+.calc-err{color:#B4262C;font-size:13px;margin-bottom:6px}
+.calc-warn{background:#FFFBEB;border:1px solid #FDE68A;color:#92400E;font-size:12px;line-height:1.7;
+  padding:8px 12px;border-radius:9px;margin-bottom:12px}
+.calc-warn.bad{background:#FEF2F2;border-color:#FECACA;color:#B4262C}
+@media (max-width:900px){
+  .calc-grid{grid-template-columns:1fr}
+  .calc-side{position:static}
+  .calc-hero .ch-val{font-size:29px}
+}
+
+/* 计算器：手机吸底摘要条 */
+.calc-bar{display:none}
+@media (max-width:900px){
+  .calc-bar{display:flex;position:fixed;left:0;right:0;bottom:58px;z-index:32;
+    background:#0F172A;color:#fff;padding:9px 16px;align-items:center;justify-content:space-between;
+    font-size:12.5px;box-shadow:0 -3px 14px rgba(0,0,0,.2);cursor:pointer}
+  .calc-bar b{font-size:17px;font-variant-numeric:tabular-nums;margin:0 2px}
+  .calc-bar i{font-style:normal;color:#BCCCDC;font-size:12px}
+  .calc{padding-bottom:54px}
+}
+.calc-form .grid2,.calc-form .grid3{margin-bottom:10px}
+.calc-form .grid2:last-child,.calc-form .grid3:last-child{margin-bottom:0}
+
+/* 单据内提示（非打印干扰项） */
+.d-note-warn{border:1px dashed #E0A800;background:#FFFBEB;color:#7A4F01;font-size:10.5px;
+  line-height:1.6;padding:6px 9px;border-radius:5px;margin:8px 0}
+
+/* ========== 使用条款确认 ========== */
+.eula{position:fixed;inset:0;z-index:200;background:var(--bg);padding:20px 16px;display:flex;align-items:center;justify-content:center}
+.eula-card{width:100%;max-width:680px;max-height:calc(100vh - 40px);background:#fff;border:1px solid var(--line);
+  border-radius:16px;box-shadow:0 20px 50px rgba(16,24,40,.10);overflow:hidden;display:flex;flex-direction:column}
+.eula-h{display:flex;align-items:center;gap:12px;padding:20px 24px 16px;border-bottom:1px solid var(--line)}
+.eula-mark{width:38px;height:38px;border-radius:10px;background:var(--brand);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex:none}
+.eula-h b{display:block;font-size:15px;color:var(--ink)}
+.eula-h span{display:block;font-size:11.5px;color:var(--faint);margin-top:2px}
+.eula-body{padding:18px 24px;flex:1;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch}
+.eula-lead{font-size:12.5px;line-height:1.75;color:var(--ink2);background:#F7F9FC;
+  border-left:3px solid var(--brand);padding:9px 12px;border-radius:0 7px 7px 0;margin:0 0 14px}
+.eula-sec{margin-bottom:13px}
+.eula-sec h4{font-size:12.5px;color:var(--ink);margin:0 0 4px;font-weight:600}
+.eula-sec p{font-size:12px;line-height:1.8;color:var(--ink2);margin:0}
+.eula-foot-note{font-size:11.5px;color:var(--faint);border-top:1px dashed var(--line);padding-top:10px;margin-top:6px}
+.eula-acts{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 24px;border-top:1px solid var(--line);background:#FBFCFD;flex-wrap:wrap}
+.eula-tip{font-size:11.5px;color:var(--faint);line-height:1.6;flex:1;min-width:200px}
+.eula-acts .btn{flex:none}
+@media (max-width:600px){
+  .eula{padding:0;align-items:stretch}
+  .eula-card{max-height:none;height:100%;border-radius:0;border:0;max-width:100%}
+  .eula-body{padding:14px 16px}
+  .eula-h,.eula-acts{padding-left:16px;padding-right:16px}
+  .eula-acts{flex-direction:column;align-items:stretch;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+  .eula-acts .btn{width:100%}
+}
+/* 版本信息表 */
+.ver-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.ver-table td{padding:7px 0;border-bottom:1px solid #F1F4F8;color:var(--ink2)}
+.ver-table td:first-child{color:var(--faint);width:88px}
+.ver-table tr:last-child td{border-bottom:0}
+.verlog{padding:8px 0;border-bottom:1px solid #F1F4F8;font-size:12px}
+.verlog b{color:var(--ink);margin-right:8px}
+.verlog span{color:var(--faint);font-size:11.5px}
+.verlog ul{margin:4px 0 0 16px;padding:0;line-height:1.7;color:var(--ink2)}
+.d-cur-note{font-size:9px;color:#7A8394;margin-top:3px;text-align:right}
 
 </style>
 </head>
@@ -1677,7 +1770,7 @@ var LIC = (function(){
 var DOC_I18N = {
 zh: {
   quotation:'报价单', proforma:'形式发票', contract:'销售合同', commercial:'商业发票', packing:'装箱单',
-  no:'编号', date:'日期', lInco:'贸易术语', lLead:'交货期', lPay:'付款条件', lPort:'装运 → 目的', lCur:'币种', std:['报价有效期以本单载明为准；逾期后如原材料成本变动，卖方有权重新议价。','货款以电汇（T/T）支付；卖方银行以外的银行费用由买方承担。','交期自收到全额定金并书面确认样品与规格之日起算；因买方确认延迟造成的误期，不由卖方承担。','实际发货数量允许 ±3% 公差，按实际装运数量结算。','质量以双方确认封存的样品为准；异议须在货物到港后 7 日内书面提出，并附照片或视频。','货款付清前，货物所有权归卖方所有。','因不可抗力（自然灾害、罢工、战争、疫情、政府行为、港口封闭）导致不能履行的，卖方不承担责任。','本单据适用中华人民共和国法律；争议先协商解决，协商不成提交卖方所在地法院。'], validDays:'天（自报价日起）', validUntil:'有效期至', orderNo:'订单号',
+  no:'编号', date:'日期', lInco:'贸易术语', lLead:'交货期', lPay:'付款条件', lPort:'装运 → 目的', lCur:'币种', std:['报价有效期以本单载明为准；逾期后如原材料成本变动，卖方有权重新议价。','货款以电汇（T/T）支付；卖方银行以外的银行费用由买方承担。','交期自收到全额定金并书面确认样品与规格之日起算；因买方确认延迟造成的误期，不由卖方承担。','实际发货数量允许 ±3% 公差，按实际装运数量结算。','质量以双方确认封存的样品为准；异议须在货物到港后 30 日内书面提出，并附照片或视频。','货款付清前，货物所有权归卖方所有，卖方无义务交付正本提单及其他物权凭证。','因不可抗力（自然灾害、罢工、战争、疫情、政府行为、港口封闭）导致不能履行的，卖方不承担责任。','本单据适用中华人民共和国法律；争议先协商解决，协商不成提交卖方所在地法院。'], validDays:'天（自报价日起）', validUntil:'有效期至', orderNo:'订单号',
   from:'卖方', to:'买方', contact:'联系人', address:'地址', tel:'电话', email:'邮箱', web:'网址',
   paymentTerms:'付款条件', tradeTerms:'贸易术语', deliveryTime:'交货期', portLoading:'装运港', portDest:'目的港', currency:'币种',
   items:'商品明细', photo:'图片', desc:'产品名称及描述', hs:'HS编码', spec:'规格型号', qty:'数量', unit:'单位',
@@ -1707,7 +1800,7 @@ zh: {
 },
 en: {
   quotation:'QUOTATION', proforma:'PROFORMA INVOICE', contract:'SALES CONTRACT', commercial:'COMMERCIAL INVOICE', packing:'PACKING LIST',
-  no:'No.', date:'Date', lInco:'Incoterms', lLead:'Lead Time', lPay:'Payment Terms', lPort:'POL → POD', lCur:'Currency', std:['Validity: this quotation is valid for the period stated above. After expiry the seller may renegotiate the price if the cost of raw material has changed.','Payment: all sums shall be paid by T/T. Bank charges outside the seller bank are for the buyer account.','Lead time: counted from receipt of the full deposit and written confirmation of the sample and specification; delay caused by late buyer confirmation is not attributable to the seller.','Quantity: a tolerance of plus or minus 3 percent is permitted; settlement against the quantity actually shipped.','Quality: goods shall conform to the sample confirmed by both parties; any objection must be raised in writing within 7 days after arrival, with photo or video evidence.','Title: goods remain the property of the seller until payment is received in full.','Force majeure: the seller is not liable for failure caused by natural disaster, strike, war, epidemic, act of government or port closure.','Governing law: this document is governed by the laws of the People\'s Republic of China; disputes shall first be settled by negotiation.'], validDays:'days from date of offer', validUntil:'Valid Until', orderNo:'Order No.',
+  no:'No.', date:'Date', lInco:'Incoterms', lLead:'Lead Time', lPay:'Payment Terms', lPort:'POL → POD', lCur:'Currency', std:['Validity: this quotation is valid for the period stated above. After expiry the seller may renegotiate the price if the cost of raw material has changed.','Payment: all sums shall be paid by T/T. Bank charges outside the seller bank are for the buyer account.','Lead time: counted from receipt of the full deposit and written confirmation of the sample and specification; delay caused by late buyer confirmation is not attributable to the seller.','Quantity: a tolerance of plus or minus 3 percent is permitted; settlement against the quantity actually shipped.','Quality: goods shall conform to the sample confirmed by both parties; any objection must be raised in writing within 30 days after arrival, with photo or video evidence.','Title: goods remain the property of the seller until payment is received in full; the seller is not obliged to release the original bill of lading before such payment.','Force majeure: the seller is not liable for failure caused by natural disaster, strike, war, epidemic, act of government or port closure.','Governing law: this document is governed by the laws of the People\'s Republic of China; disputes shall first be settled by negotiation.'], validDays:'days from date of offer', validUntil:'Valid Until', orderNo:'Order No.',
   from:'From (Seller)', to:'To (Buyer)', contact:'Contact', address:'Address', tel:'Tel', email:'Email', web:'Web',
   paymentTerms:'Payment Terms', tradeTerms:'Trade Terms', deliveryTime:'Delivery Time', portLoading:'Port of Loading', portDest:'Port of Destination', currency:'Currency',
   items:'ITEMS', photo:'Photo', desc:'Description', hs:'HS Code', spec:'Specification', qty:'Quantity', unit:'Unit',
@@ -1724,7 +1817,7 @@ en: {
   clauses: {
     parties:'1. PARTIES', partiesT:'Seller: {seller}. Buyer: {buyer}. Through friendly negotiation, the two parties agree to enter into this contract on the following terms:',
     products:'2. PRODUCTS', productsT:'The name, specification, quantity and unit price of the goods are set out in the Items table of this contract, which forms an integral part hereof.',
-    price:'3. PRICE', priceT:'The total contract value is {totalAmount} {currency} (SAY TOTAL {sayTotal} ONLY). Trade Terms: {tradeTerms}. The price includes standard export packing and documentation charges.',
+    price:'3. PRICE', priceT:'The total contract value is {totalAmount} {currency} ({sayTotal}). Trade Terms: {tradeTerms}. The price includes standard export packing and documentation charges.',
     payment:'4. PAYMENT', paymentT:'The Buyer shall effect payment as follows: {paymentTerms}. All banking charges are for the Buyer\'s account.',
     delivery:'5. DELIVERY', deliveryT:'Delivery time: {deliveryTime}. Port of loading: {portLoading}. Port of destination: {portDest}. The Seller shall complete production and notify the Buyer in advance.',
     packing:'6. PACKING & MARKS', packingT:'The goods shall be packed in export standard packing suitable for long-distance transportation and repeated handling. Each package shall be clearly marked with shipping marks, package number, gross weight, net weight and measurements. One packing list shall be enclosed in each carton.',
@@ -1737,7 +1830,7 @@ en: {
 },
 ja: {
   quotation:'見積書', proforma:'プロフォーマインボイス', contract:'売買契約書', commercial:'コマーシャルインボイス', packing:'パッキングリスト',
-  no:'番号', date:'日付', lInco:'貿易条件', lLead:'納期', lPay:'支払条件', lPort:'積出 → 仕向', lCur:'通貨', std:['見積の有効期間は本状記載のとおり。期間経過後、原材料費が変動した場合、売主は価格を再協議する権利を有する。','代金は電信送金（T/T）による。売主銀行以外の銀行手数料は買主負担とする。','納期は手付金全額入金及びサンプル・仕様の書面確認日から起算する。買主の確認遅延による遅れは売主の責に帰さない。','出荷数量は±3%の許容範囲を認め、実際出荷数量で精算する。','品質は双方確認のサンプルによる。異議は到着後7日以内に写真・動画を添えて書面で提出する。','代金完済まで貨物の所有権は売主に帰属する。','不可抗力（自然災害、ストライキ、戦争、疫病、政府行為、港湾閉鎖）による不履行について売主は責任を負わない。','本書は中華人民共和国法に準拠する。紛争はまず協議により解決する。'], validDays:'日間（見積日から）', validUntil:'有効期限', orderNo:'注文番号',
+  no:'番号', date:'日付', lInco:'貿易条件', lLead:'納期', lPay:'支払条件', lPort:'積出 → 仕向', lCur:'通貨', std:['見積の有効期間は本状記載のとおり。期間経過後、原材料費が変動した場合、売主は価格を再協議する権利を有する。','代金は電信送金（T/T）による。売主銀行以外の銀行手数料は買主負担とする。','納期は手付金全額入金及びサンプル・仕様の書面確認日から起算する。買主の確認遅延による遅れは売主の責に帰さない。','出荷数量は±3%の許容範囲を認め、実際出荷数量で精算する。','品質は双方確認のサンプルによる。異議は到着後30日以内に写真・動画を添えて書面で提出する。','代金完済まで貨物の所有権は売主に帰属する。','不可抗力（自然災害、ストライキ、戦争、疫病、政府行為、港湾閉鎖）による不履行について売主は責任を負わない。','本書は中華人民共和国法に準拠する。紛争はまず協議により解決する。'], validDays:'日間（見積日から）', validUntil:'有効期限', orderNo:'注文番号',
   from:'売り主（From）', to:'買い主（To）', contact:'連絡先', address:'住所', tel:'電話', email:'メール', web:'ウェブ',
   paymentTerms:'支払条件', tradeTerms:'貿易条件', deliveryTime:'納期', portLoading:'積出港', portDest:'仕向港', currency:'通貨',
   items:'商品明細', photo:'画像', desc:'品名・仕様', hs:'HSコード', spec:'規格', qty:'数量', unit:'単位',
@@ -2036,8 +2129,7 @@ function numToWordsEN(num){
   }
   return parts.join(' ');
 }
-var CN_DIGITS = ['零','壹','贰','叁','肆','伍','陆','柒','捌','玖'];
-var CN_UNITS = ['','拾','佰','仟'];
+var CN_DIGITS = ['零','壹','贰','叁','肆','伍','陆','柒','捌','玖'];var CN_UNITS = ['','拾','佰','仟'];
 var CN_GROUPS = ['','万','亿','万亿'];
 function fourToCN(n){
   n = Math.floor(n);
@@ -2062,6 +2154,113 @@ function numToWordsCN(num){
     num = Math.floor(num/10000); i++;
   }
   return parts.join('') || '零';
+}
+/* 金额转中文大写：按角分处理，避免出现 undefined */
+function numToMoneyCN(amount){
+  if(!isFinite(amount)) return '';
+  var neg = amount < 0;
+  var cents = Math.round(Math.abs(amount) * 100);
+  var yuan = Math.floor(cents / 100);
+  var jiao = Math.floor((cents % 100) / 10);
+  var fen = cents % 10;
+  var s = (neg ? '负' : '') + numToWordsCN(yuan) + '元';
+  if(jiao === 0 && fen === 0) return s + '整';
+  if(jiao > 0) s += CN_DIGITS[jiao] + '角';
+  else if(fen > 0) s += '零';
+  if(fen > 0) s += CN_DIGITS[fen] + '分';
+  else s += '整';
+  return s;
+}
+/* 金额转英文大写 */
+function numToMoneyEN(amount, curName){
+  if(!isFinite(amount)) return '';
+  var cents = Math.round(Math.abs(amount) * 100);
+  var whole = Math.floor(cents / 100);
+  var frac = cents % 100;
+  return 'SAY ' + (curName || '') + ' ' + numToWordsEN(whole) +
+    (frac ? ' AND CENTS ' + (frac < 10 ? '0' : '') + frac : '') + ' ONLY';
+}
+
+/* ========== 贸易术语责任划分（Incoterms 2020） ==========
+   每条 4 句，每句 4 种语言：[中文, 英文, 日文, 韩文]
+   其他语言回退英文（国际贸易单据通用） */
+var INCO_RULES = {
+  EXW:{
+    risk:['货物在卖方场所（工厂/仓库）交由买方处置时，风险即转移至买方。', 'Risk passes to the Buyer when the goods are placed at the Seller\'s disposal at the named place.', '貨物が売主の事業所において買主の処分に委ねられた時にリスクは買主に移転します。', '리스크는 매도인의 영업장에서 매수인이 처분할 수 있게 된 시점에 매수인에게 이전됩니다.'],
+    fr:['自卖方场所起的全部运输费用由买方承担。', 'All transport costs from the Seller\'s premises are for the Buyer\'s account.', '売主の事業所からの輸送費用はすべて買主の負担とします。', '매도인 영업장부터의 모든 운송비용은 매수인 부담입니다.'],
+    ins:['运输保险由买方自行安排。', 'Insurance is for the Buyer\'s account.', '輸送保険は買主が手配するものとします。', '운송보험은 매수인이 체결합니다.'],
+    cl:['出口报关、进口清关手续及全部税费均由买方负责。', 'Export and import clearance, together with all duties and taxes, are for the Buyer.', '輸出通関及び輸入通関の手続並びに関税その他一切の費用は買主の負担とします。', '수출통관 및 수입통관 절차와 관세 등 모든 비용은 매수인 부담입니다.'],
+  },
+  FCA:{
+    risk:['货物在指定地点交付买方指定的承运人时，风险转移至买方。', 'Risk passes to the Buyer when the goods are handed to the carrier nominated by the Buyer at the named place.', '貨物が指定地で買主の指定する運送人に引き渡された時にリスクは買主に移転します。', '리스크는 지정 장소에서 매수인이 지정한 운송인에게 인도된 시점에 매수인에게 이전됩니다.'],
+    fr:['自交付承运人起的运输费用由买方承担。', 'Freight from the point of delivery to the carrier is for the Buyer\'s account.', '運送人への引渡し以降の輸送費用は買主の負担とします。', '운송인 인도 이후의 운송비용은 매수인 부담입니다.'],
+    ins:['运输保险由买方自行安排。', 'Insurance is for the Buyer\'s account.', '輸送保険は買主が手配するものとします。', '운송보험은 매수인이 체결합니다.'],
+    cl:['出口报关由卖方负责；进口清关及关税由买方负责。', 'Export clearance is for the Seller; import clearance and duties are for the Buyer.', '輸出通関は売主、輸入通関及び関税は買主の負担とします。', '수출통관은 매도인, 수입통관 및 관세는 매수인 부담입니다.'],
+  },
+  FAS:{
+    risk:['货物在装运港船边置于买方指定船舶的吊钩下时，风险转移至买方。', 'Risk passes to the Buyer when the goods are placed alongside the vessel at the port of loading.', '貨物が積込港において本船の船側に置かれた時にリスクは買主に移転します。', '리스크는 적재항에서 본선의 선측에 놓인 시점에 매수인에게 이전됩니다.'],
+    fr:['装船费及海运费由买方承担。', 'Loading costs and ocean freight are for the Buyer\'s account.', '船積費用及び海上運賃は買主の負担とします。', '선적비용 및 해상운임은 매수인 부담입니다.'],
+    ins:['运输保险由买方自行安排。', 'Insurance is for the Buyer\'s account.', '輸送保険は買主が手配するものとします。', '운송보험은 매수인이 체결합니다.'],
+    cl:['出口报关由卖方负责；进口清关及关税由买方负责。', 'Export clearance is for the Seller; import clearance and duties are for the Buyer.', '輸出通関は売主、輸入通関及び関税は買主の負担とします。', '수출통관은 매도인, 수입통관 및 관세는 매수인 부담입니다.'],
+  },
+  FOB:{
+    risk:['货物在装运港装上买方指定船舶时，风险转移至买方。', 'Risk passes to the Buyer when the goods are placed on board the vessel nominated by the Buyer at the port of loading.', '貨物が積込港において買主の指定する本船に積み込まれた時にリスクは買主に移転します。', '리스크는 적재항에서 매수인이 지정한 본선에 적재된 시점에 매수인에게 이전됩니다.'],
+    fr:['装运港至目的港的海运费由买方承担。', 'Ocean freight from the port of loading to the port of destination is for the Buyer\'s account.', '積込港から仕向港までの海上運賃は買主の負担とします。', '적재항에서 목적항까지의 해상운임은 매수인 부담입니다.'],
+    ins:['运输保险由买方自行投保；卖方装船后应立即发出装运通知。', 'Insurance is to be effected by the Buyer; the Seller shall give prompt shipping advice after loading.', '輸送保険は買主が付保するものとし、売主は船積後速やかに船積通知を発するものとします。', '운송보험은 매수인이 체결하며, 매도인은 선적 후 즉시 선적통지를 발송합니다.'],
+    cl:['出口报关由卖方负责；进口清关及关税由买方负责。', 'Export clearance is for the Seller; import clearance and duties are for the Buyer.', '輸出通関は売主、輸入通関及び関税は買主の負担とします。', '수출통관은 매도인, 수입통관 및 관세는 매수인 부담입니다.'],
+  },
+  CFR:{
+    risk:['货物在装运港装上船时，风险转移至买方（风险与费用分离）。', 'Risk passes to the Buyer when the goods are on board at the port of loading; cost and risk are separated.', '貨物が積込港で本船に積み込まれた時にリスクは買主に移転します（費用とリスクは分離）。', '리스크는 적재항에서 본선에 적재된 시점에 매수인에게 이전됩니다(비용과 위험 분리).'],
+    fr:['装运港至指定目的港的海运费由卖方承担。', 'Ocean freight to the named port of destination is for the Seller\'s account.', '指定仕向港までの海上運賃は売主の負担とします。', '지정 목적항까지의 해상운임은 매도인 부담입니다.'],
+    ins:['运输保险由买方自行投保。', 'Insurance is for the Buyer\'s account.', '輸送保険は買主が付保するものとします。', '운송보험은 매수인이 체결합니다.'],
+    cl:['出口报关由卖方负责；进口清关及关税由买方负责。', 'Export clearance is for the Seller; import clearance and duties are for the Buyer.', '輸出通関は売主、輸入通関及び関税は買主の負担とします。', '수출통관은 매도인, 수입통관 및 관세는 매수인 부담입니다.'],
+  },
+  CIF:{
+    risk:['货物在装运港装上船时，风险转移至买方；卖方投保不改变风险转移点。', 'Risk passes to the Buyer when the goods are on board at the port of loading; the Seller\'s insurance cover does not alter this point.', '貨物が積込港で本船に積み込まれた時にリスクは買主に移転します。売主の保険付保はこの移転時点を変更しません。', '리스크는 적재항에서 본선에 적재된 시점에 매수인에게 이전됩니다. 매도인의 보험 가입은 이 시점을 변경하지 않습니다.'],
+    fr:['装运港至指定目的港的海运费由卖方承担。', 'Ocean freight to the named port of destination is for the Seller\'s account.', '指定仕向港までの海上運賃は売主の負担とします。', '지정 목적항까지의 해상운임은 매도인 부담입니다.'],
+    ins:['卖方按发票金额的 110% 投保协会货物条款（C）险，受益人为买方；买方如需更高险别应自行加保。', 'The Seller shall insure the goods for 110% of the invoice value against Institute Cargo Clauses (C), in favour of the Buyer; the Buyer requiring wider cover shall arrange it at its own cost.', '売主はインボイス金額の110%について協会貨物約款(C)による保険を買主を受益者として付保します。買主がより広い補償を必要とする場合は自己の負担で追加付保するものとします。', '매도인은 인보이스 금액의 110%에 대해 협회적하약관(C)으로 매수인을 수익자로 하여 보험에 가입합니다. 더 넓은 보상을 원하는 매수인은 자비로 추가 가입합니다.'],
+    cl:['出口报关由卖方负责；进口清关及关税由买方负责。', 'Export clearance is for the Seller; import clearance and duties are for the Buyer.', '輸出通関は売主、輸入通関及び関税は買主の負担とします。', '수출통관은 매도인, 수입통관 및 관세는 매수인 부담입니다.'],
+  },
+  CPT:{
+    risk:['货物交付买方指定的承运人时，风险转移至买方（风险与费用分离）。', 'Risk passes to the Buyer when the goods are handed to the carrier nominated by the Buyer; cost and risk are separated.', '貨物が買主の指定する運送人に引き渡された時にリスクは買主に移転します（費用とリスクは分離）。', '리스크는 매수인이 지정한 운송인에게 인도된 시점에 매수인에게 이전됩니다(비용과 위험 분리).'],
+    fr:['运至指定目的地的运费由卖方承担。', 'Freight to the named place of destination is for the Seller\'s account.', '指定仕向地までの運賃は売主の負担とします。', '지정 목적지까지의 운임은 매도인 부담입니다.'],
+    ins:['运输保险由买方自行安排。', 'Insurance is for the Buyer\'s account.', '輸送保険は買主が手配するものとします。', '운송보험은 매수인이 체결합니다.'],
+    cl:['出口报关由卖方负责；进口清关及关税由买方负责。', 'Export clearance is for the Seller; import clearance and duties are for the Buyer.', '輸出通関は売主、輸入通関及び関税は買主の負担とします。', '수출통관은 매도인, 수입통관 및 관세는 매수인 부담입니다.'],
+  },
+  CIP:{
+    risk:['货物交付买方指定的承运人时，风险转移至买方。', 'Risk passes to the Buyer when the goods are handed to the carrier nominated by the Buyer.', '貨物が買主の指定する運送人に引き渡された時にリスクは買主に移転します。', '리스크는 매수인이 지정한 운송인에게 인도된 시점에 매수인에게 이전됩니다.'],
+    fr:['运至指定目的地的运费由卖方承担。', 'Freight to the named place of destination is for the Seller\'s account.', '指定仕向地までの運賃は売主の負担とします。', '지정 목적지까지의 운임은 매도인 부담입니다.'],
+    ins:['卖方按发票金额的 110% 投保协会货物条款（A）险，受益人为买方。', 'The Seller shall insure the goods for 110% of the invoice value against Institute Cargo Clauses (A), in favour of the Buyer.', '売主はインボイス金額の110%について協会貨物約款(A)による保険を買主を受益者として付保します。', '매도인은 인보이스 금액의 110%에 대해 협회적하약관(A)으로 매수인을 수익자로 하여 보험에 가입합니다.'],
+    cl:['出口报关由卖方负责；进口清关及关税由买方负责。', 'Export clearance is for the Seller; import clearance and duties are for the Buyer.', '輸出通関は売主、輸入通関及び関税は買主の負担とします。', '수출통관은 매도인, 수입통관 및 관세는 매수인 부담입니다.'],
+  },
+  DAP:{
+    risk:['货物运至指定目的地、尚未卸货时，风险转移至买方。', 'Risk passes to the Buyer when the goods arrive at the named place of destination, ready for unloading.', '貨物が指定仕向地に到着し、荷卸し前の状態でリスクは買主に移転します。', '리스크는 화물이 지정 목적지에 도착하여 양하 전 상태가 된 시점에 매수인에게 이전됩니다.'],
+    fr:['运至指定目的地的全部运费由卖方承担。', 'All freight to the named place of destination is for the Seller\'s account.', '指定仕向地までの輸送費用はすべて売主の負担とします。', '지정 목적지까지의 모든 운송비용은 매도인 부담입니다.'],
+    ins:['运输保险由卖方按需自行安排，不作为交货义务。', 'Insurance is arranged by the Seller at its discretion and is not a delivery obligation.', '輸送保険は売主が任意に手配するものとし、引渡義務とはしません。', '운송보험은 매도인이 재량으로 가입하며 인도 의무로 하지 않습니다.'],
+    cl:['出口报关由卖方负责；进口清关及关税由买方负责。', 'Export clearance is for the Seller; import clearance and duties are for the Buyer.', '輸出通関は売主、輸入通関及び関税は買主の負担とします。', '수출통관은 매도인, 수입통관 및 관세는 매수인 부담입니다.'],
+  },
+  DDP:{
+    risk:['货物在指定目的地、办妥进口清关后交由买方处置时，风险转移至买方。', 'Risk passes to the Buyer when the goods are placed at the Buyer\'s disposal at the named place of destination, cleared for import.', '貨物が指定仕向地で輸入通関を完了し買主の処分に委ねられた時にリスクは買主に移転します。', '리스크는 지정 목적지에서 수입통관을 완료하고 매수인이 처분할 수 있게 된 시점에 이전됩니다.'],
+    fr:['运至指定目的地的全部运费由卖方承担。', 'All freight to the named place of destination is for the Seller\'s account.', '指定仕向地までの輸送費用はすべて売主の負担とします。', '지정 목적지까지의 모든 운송비용은 매도인 부담입니다.'],
+    ins:['运输保险由卖方按需自行安排。', 'Insurance is arranged by the Seller at its discretion.', '輸送保険は売主が任意に手配するものとします。', '운송보험은 매도인이 재량으로 가입합니다.'],
+    cl:['出口报关、进口清关手续及进口关税、税费均由卖方负责。', 'Export clearance, import clearance and all import duties and taxes are for the Seller.', '輸出通関及び輸入通関の手続並びに輸入関税その他一切の費用は売主の負担とします。', '수출통관 및 수입통관 절차와 수입관세 등 모든 비용은 매도인 부담입니다.'],
+  }
+};
+function incoLines(term, lang){
+  var key = String(term || '').trim().toUpperCase().replace(/\s.*$/, '');
+  var r = INCO_RULES[key];
+  if(!r) return [];
+  var IDX = {zh:0, en:1, ja:2, ko:3};
+  var i = IDX[lang];
+  if(i === undefined) i = 1;
+  var HEAD = {
+    zh: '按 ' + key + ' 术语划分责任：',
+    en: key + ' — allocation of risk and cost: ',
+    ja: key + ' 条件によるリスクと費用の分担：',
+    ko: key + ' 조건에 따른 위험과 비용의 분담: '
+  };
+  var head = HEAD[lang] || HEAD.en;
+  return [head + r.risk[i], r.fr[i], r.ins[i], r.cl[i]];
 }
 
 var TPL_LIB = [{"k":"inq:0","m":"inq","mn":"询盘处理","s":0,"n":"询盘登记表","sc":"in","lay":"form","d":"收到询盘 30 分钟内登记完。客户原话照抄，不要自己改写。这张表是后面报价、跟单、复盘的源头。","t":"【询盘登记表】INQ-______\n▸新手提示：登记只需要「客户名称 / 联系人 / 邮箱 / 来源渠道」四项就能过节点校验，其余可后补。但客户原话必须当天抄完——隔天就记不清客户到底要什么了。\n\n登记人：【必填】______   登记日期：【必填】______   询盘来源平台：______\n客户名称：【必填】____________   国家/地区：【必填】____________\n联系人：【必填】____________   邮箱：【必填】____________   电话/WhatsApp：____________\n来源渠道：【必填】□独立站-联系表单  □阿里国际站  □展会  □开发信  □老客户介绍  □Google/社媒  □其他____\n▸新手提示：来源渠道决定后面怎么判断客户质量。展会和阿里来的要重点跟，独立站表单来的通常量大但杂。\n\n需求产品：【必填】____________   需求数量：【必填】________ （单位写清：pcs / sets / ctn）\n目标单价：________   贸易条款：________　装运港：________\n是否需要样品：□否  □是（样品数量____，希望 ____ 前收到）\n客户原话（逐字照抄，不要改写、不要润色）：\n______________________________________________________\n______________________________________________________\n______________________________________________________\n▸新手提示：客户原话是唯一的原始证据。改写过的需求日后一定会扯皮——\"我明明说的是 5000 套\"。\n\n初步判断\n  是否在产品目录内：□是  □否（走非标报价）\n  数量是否达到 MOQ：□是  □否（MOQ 为 ______）\n  客户可信度初判：□高 □中 □低（依据：____________________）\n下次跟进日期：【必填】______","sub":false},{"k":"inq:1","m":"inq","mn":"询盘处理","s":1,"n":"询盘回复函","sc":"out","lay":"letter","d":"24 小时内必须发出。这是客户看到的第一份正式文件，格式与语气直接决定客户敢不敢跟你做下去。","t":"INQUIRY ACKNOWLEDGEMENT\n\nDate: ______\nOur Ref.: INQ-______\n\nTo:\n  ____________________________ (Company Name)\n  ____________________________ (Contact Person)\n  ____________________________ (Address)\n\nDear ________,\n\nThank you for your inquiry regarding ________ (product name). We appreciate your interest and are pleased to assist you.\n\nBased on our discussion, we understand your requirement as follows:\n\n  1. Product: ________\n  2. Specification: ________ (material / size / colour / finish)\n  3. Quantity: ________ (unit)\n  4. Packing: ________ (carton / pallet / MOQ)\n  5. Trade Term: ________　Port of Loading: ________\n\nShould the above match your intention, we will prepare a detailed Quotation including price, lead time and payment terms within 2 working days.\n\nTo enable us to quote accurately, could you kindly confirm the points below?\n  a) Is there any requirement on logo / custom packaging?\n  b) Do you need any certification or test report (e.g. EN 71, BSCI, SGS)?\n  c) What is your target delivery date?\n\nWe suggest a short call on ________ (date) at ________ (time) ________ (time zone) to align all details before quotation.\n\nLooking forward to your reply.\n\nBest regards,\n____________________________\n________________ (Name)\n________________ (Title)   |   ________________ (Company)\n________________ (Email)   |   ________________ (Tel / WhatsApp)\n\n--- Attachment: Quotation (to follow) ---\n\n★Standard notes\n1. This letter is for acknowledgement only; the particulars are subject to the contract or proforma invoice finally signed by both parties.\n2. This letter does not constitute an offer and shall not bind either party on quantity, price or lead time.\n▸Tip: No prices in this letter. Prices belong to the formal Quotation / PI. This reply does three things only: acknowledge receipt, restate the requirement, and propose the next contact time.\n▸Tip: Always ask items a/b/c. If the certification requirement is not clarified, the certification cost will be missing from the quotation and will end up on us.","sub":false},{"k":"inq:2","m":"inq","mn":"询盘处理","s":2,"n":"客户需求确认单","sc":"out","lay":"form","d":"推进到「需求已明确」前必须完成。目的是把口头需求变成双方书面确认的件——这是日后所有争议的护身符。","t":"CONFIRMATION OF REQUIREMENTS\nConfirmation No.: INQ-______\n\nDate: ______\nCustomer: ____________ (Company Name)　　Inquiry Ref.: INQ-______\n\n1. Product & Specification\n  Product Name: ____________\n  Material / Size / Colour: ____________\n  Craft / Finish: ____________\n  Packing: ____________ (carton size, pcs/carton, total cartons)\n▸Tip: Write the specification to the level the buyer can repeat it to his own customer. One missing dimension means remaking the sample.\n\n2. Quantity & Price\n  Quantity: 【必填】________ (unit)　　Target Unit Price: ________\n  MOQ reached: □Yes □No　(MOQ: ______)\n  Price Validity: ______ days from the quotation date\n\n3. Commercial Terms\n  Trade Term: 【必填】________　Port of Loading: 【必填】________\n  Currency: 【必填】________\n  Lead Time: 【必填】______ days before shipment\n  Payment Terms: ______% deposit, ______% balance\n\n4. Other Requirements\n  Sample required: □No □Yes\n  Certification / testing required: □No □Yes (type: ____________)\n  Custom logo / packaging: □No □Yes (requirement: ____________)\n  Others: ____________\n\n★Standard notes｜1. This sheet serves to clarify requirements only and does not constitute an order or an offer. 2. Final price, lead time and payment terms are subject to the formal contract signed by both parties. 3. The contents hereof shall not be used as a basis for production without the seller's written confirmation.\n\nConfirmed and agreed:\n\nFor and on behalf of the Buyer　　For and on behalf of the Seller\n\nName: ____________　　Name: ____________\nTitle: ____________　　Title: ____________\nSignature: ________　　Signature: ________\nDate: ______　　　　Date: ______","sub":false},{"k":"inq:3","m":"inq","mn":"询盘处理","s":3,"n":"询盘转报价交接单","sc":"in","lay":"form","d":"先建报价单，再改询盘状态。顺序反了会出现「有状态没报价单」的脏数据。","t":"【交接单】询盘 → 报价\n▸新手提示：整张表只有一条铁律——先把报价单建好、拿到 QUO 编号，再回来把状态改成「已转报价」。\n\n询盘编号：【必填】INQ-______\n客户名称：____________\n新建报价单编号：【必填】QUO-______（先建好再回来改状态）\n报价金额：________\n毛利率：______%　（低于 10% 必须先填清特批原因、留痕后才报）\n是否已把成本录入系统：□是 □否\n交接人：______　交接日期：______\n▸新手提示：非标单必须先把成本录进系统。成本没录，接多了单子会亏，而且亏完你都不知道。","sub":false},{"k":"quo:0","m":"quo","mn":"报价核算","s":0,"n":"成本核算表","sc":"in","lay":"form","d":"接单前必算。毛利率低于 10% 不要报，先填清特批原因再决定接不接。填完自动算毛利，不用拿计算器。","t":"【成本核算表】QUO-______\n▸新手提示：这份表不对外，只有你们三个人看，但它是唯一能证明\"这单该不该接\"的依据。材料、加工、杂费一项都不能漏。\n\n产品名称：【必填】____________　规格：____________　数量：【必填】________\n币种：【必填】________　　贸易条款：【必填】________　装运港：【必填】________\n\n一、Material Cost 材料成本\n  主材：____________ × ______ = ________\n  配件 / 包材：____________ = ________\n  定制费用（logo / 开模 / 印刷）：________\n  材料成本小计：________　（主材+配件包材+定制费用，系统自动汇总）\n\n二、Processing & Other 加工及其他费用\n  外协加工费：________\n  包装 / 装箱费：________\n  检验 / 认证 / 检测费：________\n  国内运费至港口：________\n  其他：________\n  成本合计：________　（分项填完系统自动汇总，不用手加）\n\n三、Quotation & Margin 报价与毛利\n  单价：【必填】________\n  总金额：________　（公式：数量 × 单价）\n  预计毛利：________　（公式：总金额 − 成本合计）\n  毛利率：______%　（公式：预计毛利 ÷ 总金额）\n▸新手提示：低于 10% 系统会拦住节点。确实要接，必须先把特批原因写清楚存下来，不要改数字硬闯。\n\n四、Exchange Rate 汇率\n  报价汇率：1 USD = ¥ ______\n  本单账期：______ 天\n  长账期处理：□不适用 □做远期结汇锁汇 □约定汇率变动超 3% 双方重新议价\n  说明：系统毛利率按订单币种计算，汇率波动不体现在毛利率上，但会实打实吃掉人民币利润。\n\n五、完整算例（照这个套，数字全部自洽）\n  产品：户外折叠椅 1000 件　币种 USD　FOB 宁波\n  主材 8000 + 配件包材 1200 + 定制费用 0 = 材料成本小计 9200\n  外协 1500 + 包装 400 + 检验 600 + 国内运费 800 + 其他 246 = 成本合计 12746\n  单价 15.00 → 总金额 15000 → 预计毛利 2254 → 毛利率 15.03%（过 10% 红线，可报）\n  ⚠ 同样这单只报 13.00：毛利率 1.95%，系统直接拦 —— 要么跟工厂压价、要么跟客户谈量、\n  要么写清特批原因，三条路之外没有第四条。\n\n核算人：______　日期：______　复核人确认：______","sub":false},{"k":"quo:1","m":"quo","mn":"报价核算","s":1,"n":"报价单与形式发票 Quotation & PI","sc":"out","lay":"mixed","d":"发给客户的正式商务文件。客户按它算钱、按它打款。有效期不写＝默认长期有效，原料涨价就自己亏。","t":"QUOTATION / PROFORMA INVOICE\n\n────────────────────────────────────────\nFrom / Seller:\n  ____________________________ (Company Name)\n  ____________________________ (Address)\n  Contact: ____________　Tel: ____________　Email: ____________\n\nTo / Buyer:\n  ____________________________ (Company Name)\n  ____________________________ (Address)\n  Attn: ____________\n\nQuotation No.: QUO-______　　　　PI No.: ______\nDate: ______　　　　　　　　　　Validity: 【必填】______ (e.g. 15 days from the date above)\nCurrency: 【必填】________\n────────────────────────────────────────\n\nItem 1\n  Product: ________\n  Specification: ________ (material / size / colour)\n  Packing: ________ (pcs/carton)\n  Quantity: ________ (unit)　　Unit Price: ________\n  Amount: ________\n\nItem 2 (copy the block above if more items)\n  Product: ________　Specification: ________　Packing: ________\n  Quantity: ________　Unit Price: ________　Amount: ________\n\n────────────────────────────────────────\nTOTAL: ________ ________\n(Say in words: ____________ only)\n\nTrade Term (Port of Loading / place of delivery): 【必填】________\n□FOB　□CFR　□CIF　□EXW　(Tick the term adopted for this order — it decides who bears freight and insurance.)\nLead Time: ______ days before shipment, counted from receipt of the deposit and confirmation of the sample.\nPayment Terms: ______% deposit by T/T before production; ______% balance before shipment.\n────────────────────────────────────────\nBank Details 【收款账户】\n  Bank Name: ________\n  Account Name: ________\n  Account No.: ________\n  SWIFT / BIC: ________\n  Bank Address: ________\n────────────────────────────────────────\n★Terms and Conditions (standard wording for international trade; not to be deleted or altered)\n1. Validity: This quotation is valid for the period stated above from the date hereof. Should the cost of raw materials change after expiry, the seller reserves the right to renegotiate the price.\n2. Delivery: the goods shall be delivered within the lead time stated above. Partial shipment and transhipment are permitted unless otherwise agreed in writing.\n3. Payment: All sums under this quotation shall be paid by telegraphic transfer (T/T). The buyer shall bear the charges of its own bank and any intermediary bank; the amount actually received by the seller shall be reduced accordingly.\n4. Lead Time: The lead time runs from the date of receipt of the full deposit and written confirmation of the sample / specification. Delay caused by the buyer's late confirmation shall not be borne by the seller.\n5. Quantity Tolerance: A tolerance of +3% / -3% in the shipped quantity is permitted, and settlement shall be made against the quantity actually shipped.\n6. Quality: Quality shall conform to the sample confirmed and sealed by both parties. The buyer shall raise any quality objection within 7 days after arrival of the goods, supported by photo or video evidence.\n7. Force Majeure: The seller shall not be liable for failure to perform caused by force majeure (including natural disaster, strike, war, epidemic, act of government, or port closure); the parties shall negotiate an extension of the lead time or termination of the contract.\n8. Bank Charges: Charges of the intermediary bank and the collecting bank shall be borne by the buyer; charges of the seller's bank shall be borne by the seller.\n▸Tip: Always state the total both in figures and in words (TOTAL: USD 45,000.00 — SAY USD FORTY-FIVE THOUSAND ONLY). In international practice the amount in words prevails; a wrong figure leaves room for dispute.\n▸Tip: The ±3% tolerance in clause 5 is not a concession — it is trade practice. Accepting a fixed quantity means accepting a reasonable tolerance, otherwise the shortfall only shows up when loading.\n\nAuthorized Signature: ________　　Date: ______","sub":false},{"k":"quo:2","m":"quo","mn":"报价核算","s":2,"n":"报价跟进与确认记录","sc":"in","lay":"form","d":"口头确认不算，必须拿到客户书面（邮件或 PO）确认才能往下走。","t":"【报价跟进与确认记录】QUO-______\n客户名称：____________　报价金额：________　报价有效期至：______\n\n跟进记录（每次联系都记一行，不记等于没跟）\n日期 ______｜方式 □邮件 □电话 □消息 □会议　｜对方 ________\n  客户反馈：____________________________________________\n  我方处理：____________________________________________\n日期 ______｜方式 □邮件 □电话 □消息 □会议　｜对方 ________\n  客户反馈：____________________________________________\n  我方处理：____________________________________________\n日期 ______｜方式 □邮件 □电话 □消息 □会议　｜对方 ________\n  客户反馈：____________________________________________\n  我方处理：____________________________________________\n\n客户确认方式：□邮件书面确认 □PO 回传 □其他 ______\n确认凭证已归档：□是 □否（存放位置：____________）\n▸新手提示：\"客户说不错\" 不算确认。要问到\"可以按这个规格做大批量吗\"，并让客户回一封邮件或 PO。\n\n最终成交数量：________　成交单价：________","sub":false},{"k":"quo:3","m":"quo","mn":"报价核算","s":3,"n":"报价转订单交接单","sc":"in","lay":"form","d":"先建订单，再改报价状态。成交价必须与客户确认价完全一致。","t":"【交接单】报价 → 订单\n▸新手提示：和询盘转报价一样，顺序不能反。先建订单拿到 SO 编号，再回改报价状态。\n\n报价单编号：【必填】QUO-______　客户名称：____________\n新建订单编号：【必填】SO-______（先建好再回来改状态）\n成交数量：________　成交单价：________　订单金额：________\n客户 PO 号：____________　要求交期：______\n定金比例：【必填】______%　收款状态：□未收款\nPI 号：______　合同号：______　（两个编号都要有，客户打款和签合同都要用）\n▸新手提示：成交价必须和 PI 上写的、客户邮件确认过的一模一样。差 0.01 都会在后续核销时对不上。\n\n交接人：______　交接日期：______","sub":false},{"k":"pre:0","m":"pre","mn":"预报价","s":0,"n":"预报价单 / 指示性报价 Indicative Quotation","sc":"out","lay":"form","d":"计算器算完、还没核到正式成本之前，先给客户一个\"大概价位\"。它是探路用的，不是要约 —— 关键在最后那段声明。","t":"INDICATIVE QUOTATION　PRE-______\n▸Tip: The common accident with an indicative quotation is that the buyer treats it as a firm offer and presses the price, or simply places an order against it. Always state that it is indicative and does not constitute an offer, and always give a validity date.\n\n1. Parties\n  Seller: ____________　Contact / Email: ____________\n  Buyer: ____________　Country / Region: ____________\n  Date: ______　Valid until: 【必填】______ (recommended: not more than 30 days)\n\n2. Goods\n  Product Name: 【必填】____________　Specification / Model: ____________\n  Material / Craft: ____________　Packing: ____________\n  Quantity: 【必填】________　Unit: □pcs □sets □ctn □other ______\n\n3. Price (indicative)\n  Currency: □USD □EUR □CNY □other ______\n  Indicative Unit Price: 【必填】________　Trade Term: □EXW □FOB □CFR □CIF □other ______\n  Port of Loading: ____________　Port of Destination (if known): ____________\n  Reference Total Amount: ________\n▸Tip: Always put the trade term after the unit price. A figure without EXW / FOB / CIF leaves the freight to the buyer's own assumption, and that ends in an argument.\n\n4. Commercial Terms (fill in what is known; write \"to be advised\" where not yet fixed)\n  Lead Time (reference): ____________\n  Payment Method (reference): □T/T □L/C □D/P □to be advised ______\n  MOQ: ____________　Sample: □available (cost ______) □not available\n  Certification / testing required: ____________\n\n5. Conversion to a Formal Quotation\n  Pre-quotation record No.: PRE-______\n  Cost calculation completed: □No (this sheet is indicative only) □Yes (convertible to formal quotation QUO-______)\n  Handled by: ______　Date: ______\n\n★Standard notes｜1. This sheet states an indicative price for preliminary discussion only. It does not constitute an offer or a commitment, and no obligation to supply arises from its issue. 2. The prices shown are calculated on the basis of the current costs of raw materials, exchange rates and freight; should any of these change, the seller reserves the right to recalculate, and the recalculated price shall prevail. 3. Firm price, lead time and terms are subject to the formal Quotation / Proforma Invoice subsequently issued by the seller; before that, any price confirmation, whether oral or written, shall not be effective. 4. This sheet is valid until the date stated in \"Valid until\" and lapses automatically thereafter; a new inquiry is required.\n▸Tip: Clause 1 on \"does not constitute an offer\" is not boilerplate. Under the commercial law of some countries, a quotation definite enough in its terms becomes a contract once accepted — leave it unsaid and a reply of \"we accept\" locks you in.\n▸Tip: When converting to a formal quotation, use the built-in pre-quotation → formal quotation comparison; do not recalculate by hand. A hand-calculated figure that differs from the original will come back when the buyer produces the earlier sheet.","sub":false},{"k":"ord:0","m":"ord","mn":"订单合同","s":0,"n":"销售合同 / 订单确认书","sc":"out","lay":"letter","d":"签单用。这是整个流程里法律效力最强的一份文件，所有条款都是固定的，不要自己删改。","t":"SALES CONTRACT / ORDER CONFIRMATION\n\nContract No.: 【必填】SC-______\nDate: ______\nPlace of Signing: ______\n\nPARTIES\nSELLER (Supplier)\n  Company Name: ________\n  Address: ________\n  Contact: ________　Tel: ________　Email: ________\n\nBUYER (Purchaser)\n  Company Name: ________\n  Address: ________\n  Contact: ________　Tel: ________　Email: ________\n\nBuyer P.O. No.: ________　　Contract Date: ______\n\n1. GOODS\n  Item 1\n    Product: ________\n    Specification: ________ (material / size / colour / finish)\n    Packing: ________ (pcs per carton)\n    Quantity: ________ (unit)　　Unit Price: ________\n    Amount: ________\n  Item 2 (copy the block above if more items)\n    Product: ________　Specification: ________　Packing: ________\n    Quantity: ________　Unit Price: ________　Amount: ________\n\nTOTAL CONTRACT VALUE: ________\n(Say in words only: ____________________ only)\n\n2. TRADE TERMS\n  Trade Term (port of loading / place of delivery): 【必填】________\n  □FOB　□CFR　□CIF　□EXW　(Tick the term adopted for this contract — it decides who bears freight and insurance.)\n  Currency: ________\n  Delivery Date: ______ (not later than ______ )\n  Latest Shipment Date: ______\n  Payment Terms: ______% deposit by T/T before production; ______% balance before shipment.\n\n3. BANK DETAILS 【收款账户】\n  Bank Name: ________　Account Name: ________\n  Account No.: ________　SWIFT / BIC: ________\n  Bank Address: ________\n\n★CONTRACTUAL TERMS (standard wording for international trade; not to be deleted or altered)\n1. Effectiveness. This contract becomes effective upon signature or seal by the authorized representatives of both parties.\n2. Delivery & Risk. Delivery shall be made within the lead time stated above, counted from receipt of the deposit and confirmation of the pre-production sample. Risk passes to the Buyer in accordance with the Incoterm stated above.\n3. Lead Time. The lead time runs from receipt of the full deposit. Delay caused by the buyer's late submission of the confirmed sample, packing materials or prepayment shall not constitute a breach by the seller.\n4. Quantity Tolerance. A tolerance of ±3% in the shipped quantity is permitted, and payment shall be settled against the quantity actually shipped.\n5. Quality. Quality shall conform to the sample confirmed and sealed by both parties. The buyer shall raise any quality objection within 7 days after arrival of the goods with photo or video evidence; otherwise the goods are deemed accepted.\n6. Claims. Claims on quality or quantity shall be raised in writing within 7 days after arrival of the goods at the port of destination, together with an inspection report.\n7. Force Majeure. The seller shall not be liable for failure to perform this contract caused by force majeure (including natural disaster, strike, war, epidemic, act of government, port closure or change of shipping route); the parties shall negotiate an extension of the lead time or termination of the contract.\n8. Intellectual Property. Trademarks, artwork and materials supplied by the buyer remain the property of the buyer; the seller shall not use or transfer them without the buyer's written permission.\n9. After-sales. The warranty period is ______ months after arrival of the goods and covers quality defects only; damage not caused by quality is excluded.\n10. Dispute Resolution. Disputes arising from this contract shall be settled amicably; failing which, they shall be submitted to ________ (arbitration body or court of jurisdiction) for decision under its rules then in force, and the decision shall be final and binding on both parties.\n11. Governing Law. This contract is governed by the laws of ________ (name of law); where the parties choose the United Nations Convention on Contracts for the International Sale of Goods (CISG), the CISG shall prevail.\n12. Language. This contract is made in the English language, and the English text shall prevail.\n▸Tip: Always write the amount in words after the figures (Say in words only). In international practice the amount in words prevails — it is the key protection against alteration.\n▸Tip: The blanks in clauses 10 and 11 (arbitration body / court / governing law) must be filled in when the terms are negotiated — never sign with them empty. Check them with another team member before filling in.\n\nSIGNATURES\n\nFor and on behalf of the SELLER\nName: ________　Title: ________　Signature: ________　Date: ______\n\nFor and on behalf of the BUYER\nName: ________　Title: ________　Signature: ________　Date: ______","sub":false,"step":"订单录入"},{"k":"ord:0#1","m":"ord","mn":"订单合同","s":0,"n":"销售确认书 Sales Confirmation","sc":"out","lay":"letter","d":"客户直接下 PO 时回的确认件。和销售合同不同：它不复述全部条款，只逐项确认 PO 上的要素，客户回签即为成交。金额大或首次合作不要用这份，直接用销售合同。","t":"SALES CONFIRMATION\n▸Tip: Starting production straight on the buyer's PO is the classic mistake. A PO usually carries the buyer's own standard terms (penalties, claim period, nominated arbitration seat). Send this confirmation first to switch the terms to ours.\n\nS/C No.: SC-______　　　　Date: ______\nBuyer P.O. No.: 【必填】______　　P.O. Date: ______\n\nWe hereby confirm acceptance of your Purchase Order under the terms below.\n\n1. Parties\n  SELLER: ____________　Address: ____________\n  BUYER: ____________　Address: ____________\n  Attn: ____________　Email: ____________\n▸Tip: The buyer's name must match the PO word for word. A short form will not match later when the L/C is issued or the certificate of origin is applied for.\n\n2. Goods\n  Product: ________　Specification: ________　Packing: ________\n  Quantity: 【必填】________ (unit)　　Unit Price: ________\n  Amount: ________\n  TOTAL: ________ (Say in words: ____________ only)\n\n3. Shipment\n  Trade Term (port of loading / place of delivery): 【必填】________\n  □FOB　□CFR　□CIF　□EXW　(Tick the term adopted — it decides who bears freight and insurance.)\n  Port of Destination: ________\n  Latest Shipment Date: ______\n  Partial Shipment: □Allowed　□Not allowed\n  Transhipment: □Allowed　□Not allowed\n▸Tip: Always tick partial shipment and transhipment. Left unticked, a last-minute change by the forwarder means going back to the buyer for an amendment — one day lost is one day lost.\n\n4. Payment\n  Currency: ________\n  Deposit: ______% by T/T before production\n  Balance: ______% by T/T before shipment\n▸Tip: The ratio is negotiated order by order; do not copy someone else's 30%. For new buyers, large amounts or custom goods, keep the deposit at not less than 30%.\n\n5. Bank Details 【收款账户】\n\n★TERMS (standard wording for international trade; not to be deleted or altered)\n1. Effect. This confirmation confirms the particulars of the order only and does not replace a sales contract signed by both parties; where such a contract exists, its terms shall prevail.\n2. Quantity Tolerance. A tolerance of ±______% in the shipped quantity is permitted, and payment shall be settled against the quantity actually shipped.\n3. Quality. Quality shall conform to the sample confirmed and sealed by both parties; the buyer shall raise any quality objection within ______ days after arrival of the goods with photo or video evidence, otherwise the goods are deemed accepted.\n4. Lead Time. The lead time runs from receipt of the full deposit; delay caused by the buyer's late confirmation of specification, packing or prepayment shall not be borne by the seller.\n5. Force Majeure. The seller shall not be liable for failure to perform caused by force majeure; the parties shall negotiate an extension of the lead time or termination.\n6. Effectiveness. This confirmation becomes effective on the date the buyer signs it back or confirms it in writing.\n▸Tip: This sheet can be sent without a company seal, but the buyer's counter-signature must be obtained (a reply of \"Confirmed\" by email counts — keep a copy on file). Starting production without a counter-signature means there is no confirmation at all.\n\nSIGNED\n  For the BUYER: Name ____　Title ____　Signature ____　Date ____\n  For the SELLER: Name ____　Title ____　Signature ____　Date ____","sub":true,"step":"订单录入"},{"k":"ord:1","m":"ord","mn":"订单合同","s":1,"n":"生产排产通知单","sc":"in","lay":"form","d":"发给工厂的排产指令。计划完工日要比要求交期早 5–7 天，留出验货和订舱时间。","t":"【生产排产通知单】SO-______\n▸新手提示：这是下发给工厂的指令。完工日必须早于客户要求交期 5–7 天，否则验货和订舱来不及，会直接导致延期。\n\n订单号：SO-______\n客户名称：____________\n产品 / 规格：____________　数量：________ (unit)\n出货港：________　币种：________\n\n一、Schedule 排产安排\n  工厂：____________　产线 / 车间：____________\n  客户要求交期：【必填】______\n  计划开工日：______\n  计划完工日：【必填】______（须比要求交期早 5–7 日，留出验货与订舱时间）\n  生产周期：______ 天\n▸新手提示：交期倒排公式：完工日 = 要求交期 − 7 天（验货 3 天 + 订舱 2 天 + 缓冲 2 天）。宁可早排，不可晚排。\n\n二、Material Readiness 备料要求\n  物料齐套日要求：______（开工前必须齐套）\n  是否需要外协：□否 □是（说明：____________）\n  是否需要客户确认样：□否 □是（确认样编号 ______，确认日 ______）\n\n三、Quality Requirement 品质要求\n  封样编号：______　封样存放位置：____________\n  AQL 标准：______（常用 2.5）　验货方式：□全检 □抽检\n  特别注意：____________________________________\n\n四、Capacity Confirmation 产能确认\n  该产线当前负荷：□充足 □紧张 □排不开\n  工厂确认人 / 电话：____________\n  工厂承诺完工日：______（若与计划不同，写明原因）____________\n\n五、Risk Alert 风险提示（我方填写）\n  已知风险 / 需客户配合事项：____________________________\n  是否需提前告知客户交期风险：□否 □是（何时告知 ______）\n\n排产确认人：______　日期：______　工厂回签：______","sub":false,"step":"生产排期"},{"k":"ord:2","m":"ord","mn":"订单合同","s":2,"n":"备料跟进表（BOM 核对）","sc":"in","lay":"form","d":"物料没齐就开工一定会在中途停工——这是延期最常见的原因。每 3 天核对一次。","t":"【备料跟进表】SO-______\n▸新手提示：物料齐套率低于 100% 就不要开工。开工后缺料停工，损失的是交期不是钱。\n\n订单号：SO-______　客户名称：____________　计划完工日：______\n────────────────────────────────────────\n序号｜物料名称｜规格/材质｜需求数量｜单位｜供应商｜下单日｜到料日｜状态\n1 ｜________｜________｜______｜__｜______｜____｜____｜□未下单 □已下单 □已到料 □异常\n2 ｜________｜________｜______｜__｜______｜____｜____｜□未下单 □已下单 □已到料 □异常\n3 ｜________｜________｜______｜__｜______｜____｜____｜□未下单 □已下单 □已到料 □异常\n4 ｜________｜________｜______｜__｜______｜____｜____｜□未下单 □已下单 □已到料 □异常\n5 ｜________｜________｜______｜__｜______｜____｜____｜□未下单 □已下单 □已到料 □异常\n────────────────────────────────────────\n齐套率：______%　（目标：100%）\n长周期物料（需重点盯）：____________　预计到料日：______\n\n异常处理\n  短缺物料：____________　数量缺口：______\n  替代方案：____________\n  替代方案是否已获客户书面同意：□是 □否\n  未获同意的处理：□自行采购 □改期 □取消该部分\n  处理决定人 / 日期：____________\n▸新手提示：替代材料未经客户书面同意就用，是最容易吃下来的哑巴亏——客户会以\"与确认样不符\"拒付尾款。\n\n备料全部完成日：【必填】______","sub":false,"step":"备料跟进"},{"k":"ord:2#1","m":"ord","mn":"订单合同","s":2,"n":"采购合同（对国内供应商）","sc":"sup","lay":"letter","d":"对国内供应商 / 工厂的采购合同。和出口销售合同是两套：含税单价、增值税专用发票、账期、验收入库、境内违约责任。备料前先签，没合同就下单，物料出问题无法追责。","t":"【采购合同】PURCHASE CONTRACT\n▸新手提示：客户催货时最容易跳过这一步 —— \"先让工厂做，合同回头补\"。物料尺寸做错、延期交货、涨价，没有合同就只能自己吃。\n▸新手提示：这份是给供应商的，报价、客户名称、目标价都不要写进去。把客户信息泄漏给供应商，它可以直接去找你的客户。\n\nContract No. / 采购合同号：【必填】PC-______　　Date / 签订日期：______\n关联出口订单号 / Export Order Ref.：________（内部对应用，可选填）\n\n一、Parties 双方\n  需方（甲方 / 采购方）：____________\n    统一社会信用代码：____________　地址：____________　联系人 / 电话：____________\n  供方（乙方 / 供应商）：____________\n    统一社会信用代码：____________　地址：____________　联系人 / 电话：____________\n▸新手提示：供应商名称要与它开票主体一致，并核对统一社会信用代码。名称和开票主体不一致，专票抵扣不了。\n\n二、Goods 采购标的\n  品名：________　规格型号：________　材质 / 标准：________\n  数量：________ (unit)　含税单价：¥ ________　税率：______%\n  不含税金额：¥ ________　税额：¥ ________　含税总价：¥ ________\n  供货周期 / 交期：自 ______ 起 ______ 天，最迟 ______ 前到货\n  交付地点：____________　运输方式与费用承担：____________\n▸新手提示：单价务必写清\"含税 / 不含税\"和税率。只写一个单价，开票时对方按不含税算，差额就是自己贴。\n\n三、Quality & Acceptance 质量与验收\n  质量标准：□国标 GB______  □行标 ______  □双方封样  □图纸 / 技术协议（另附）\n  验收方式：□到货全检  □抽检（比例 ______%）□凭供方出厂检验报告\n  验收期限：到货后 ______ 个工作日内提出异议，逾期视为验收合格\n  不合格处理：□退货  □换货  □折价接收（折价比例 ______%）\n▸新手提示：一定写\"验收期限\"。不写，三个月后才发现批次不良，法律上你已经验收过了。\n\n四、Payment & Invoice 付款与发票\n  付款方式：□款到发货  □预付 ______%，验收合格后付 ______%  □账期 ______ 天\n  发票要求：□增值税专用发票（税率 ______%）□增值税普通发票　□不开票\n  开票时限：收货 / 付款后 ______ 日内\n▸新手提示：出口退税靠的就是这张进项专票。合同里不约定\"必须开专票\"，对方给你开普票，退税款直接损失。\n\n五、Breach 违约责任\n  延期交货：每逾期 1 日按合同总额的 ______% 计违约金，累计上限 ______%\n  质量不符：供方承担退换货费用及由此造成的连带损失\n  需方逾期付款：每逾期 1 日按未付金额的 ______% 计违约金\n\n★固定条款｜TERMS（不得删改）\n1. 权属与合规。供方保证所供货物权属清晰、无第三方权利争议，且符合国家强制性标准。\n2. 知识产权。需方提供的图纸、模具、样品，其知识产权归需方所有；供方不得用于其他客户或自行销售。\n3. 保密。供方不得向任何第三方披露本合同内容、需方客户信息及产品资料。\n4. 不可抗力。因不可抗力致无法履约的，双方互不承担违约责任，应协商顺延或解除。\n5. 争议解决。因本合同产生的争议，双方协商解决；协商不成，提交 ________（仲裁机构 / 管辖法院）裁决。\n6. 合同生效。本合同经双方签字或盖章后生效，一式两份，双方各持一份，具有同等法律效力。\n▸新手提示：第 5 条的空白不要留。管辖地写 \"供方所在地\" 是最吃亏的写法 —— 打官司要跑到对方城市去。\n\nSIGNATURES / 签署\n  需方（甲方）：Name ____　Title ____　Signature / 盖章 ____　Date ____\n  供方（乙方）：Name ____　Title ____　Signature / 盖章 ____　Date ____","sub":true,"step":"备料跟进"},{"k":"ord:2#2","m":"ord","mn":"订单合同","s":2,"n":"采购订单 PO（对国内供应商）","sc":"sup","lay":"form","d":"采购合同管框架，PO 管每一单。逐单下达 PO，来料出问题、进项票对不上时才说得清是哪一批。","t":"【采购订单】PURCHASE ORDER\nPO 编号：【必填】PO-______　下单日期：【必填】______\n采购合同编号：____________　关联订单号（我方出口订单）：SO-______\n▸新手提示：PO 上一定要写\"对应我方出口订单号\"。进项发票、验收单都挂这个号，退税核查时能一条线串起来。\n\n一、供需双方\n  采购方（我方）：____________　联系人：____________\n  供应商：【必填】____________　联系人 / 电话：____________\n\n二、货物\n  品名 / 规格：【必填】____________\n  数量：【必填】________　单位：________　单价：¥ ________\n  金额（含税）：¥ ________　税率：______%　金额（不含税）：¥ ________\n  包装要求：____________　唛头：□按我方另行通知 □无 □按附件\n\n三、交付\n  交货日期：【必填】______　交货地点：____________\n  运输方式：□供方送货 □我方自提 □物流（运费承担：______）\n  是否需随货提供：□合格证 □检测报告 □材质证明 □其他 ______\n\n四、结算与票据\n  付款方式：□预付 ______% □货到付款 □月结 ______ 天 □验收合格后 ______ 天\n  发票类型：【必填】□增值税专用发票 □普通发票（专票才能退税，务必确认）\n  开票资料是否与我方提供的一致：□一致（不一致会导致无法认证）\n\n五、验收与违约\n  验收期限：到货后 ______ 天内　质量标准：□按封样 □按国标 ______ □按图纸\n  不合格处理：□退货 □换货 □让步接收（降价 ______%）\n  逾期交货：每逾期一天按订单金额的 ______% 计违约金，超过 ______ 天我方有权取消\n\n六、签署\n  采购方（盖章）：____________　经办人：______　日期：______\n  供应商确认（盖章）：____________　经办人：______　日期：______\n\n★固定条款｜1. 供应商须开具与本合同一致的增值税专用发票，发票品名、数量、金额须与本 PO 及实际交付货物相符；票货不符导致我方无法办理出口退税的，由供应商承担全部损失。2. 供应商不得向任何第三方披露本 PO 中的客户名称、订单编号及成交价格。3. 本 PO 经供应商签章确认后生效，与双方签署的采购合同不一致的，以本 PO 为准。\n▸新手提示：一定要在 PO 上写\"增值税专用发票\"。供应商默认开普票是常事，普票不能抵扣，这笔退税就白丢了。","sub":true,"step":"备料跟进"},{"k":"ord:2#3","m":"ord","mn":"订单合同","s":2,"n":"供应商到货验收单","sc":"in","lay":"form","d":"来料验收是进项票与退税能对上的前提。不验收就入库，出了质量问题说不清是哪一批，进项票也对不上实物。","t":"【供应商到货验收单】INCOMING INSPECTION\n验收单号：QC-______　关联 PO 编号：【必填】PO-______\n到货日期：【必填】______　验收日期：【必填】______　验收人：【必填】______\n▸新手提示：验收单、PO、进项发票三者数量对不上，退税核查时一定被挑。三张纸要对得起来。\n\n一、到货信息\n  供应商：【必填】____________　送货单号：____________\n  品名 / 规格：____________\n  送货数量：【必填】________　实收数量：【必填】________　单位：________\n  差异：□无 □有（短缺 ______，原因 ____________）\n\n二、检验项目\n  外观：□合格 □不合格（描述 ____________）\n  规格 / 尺寸：□合格 □不合格（实测 ____________）\n  数量 / 重量：□合格 □不合格\n  包装：□合格 □不合格（描述 ____________）\n  随货文件：□合格证 □检测报告 □材质证明 □无　是否齐全：□是 □否\n  抽检比例：______%　抽检数量：______　不合格数：______\n\n三、结论\n  验收结论：【必填】□合格入库 □让步接收 □退货 □换货 □待处理\n  不合格处理方式：____________　责任方：□供应商 □物流 □我方\n  供应商回复期限：______　是否需要索赔：□否 □是（金额 ______）\n\n四、票据与入库\n  进项发票是否已到：□否（催票日期 ______）□是（发票号 ____________）\n  发票金额与实收是否一致：□一致 □不一致（差额 ______）\n  入库单号：____________　库位：____________\n\n五、签署\n  验收人：______　品质负责人：______　日期：______\n\n★固定条款｜1. 本单与采购订单、供应商送货单及增值税专用发票共同构成付款与退税的依据，四者数量、金额不一致的，以本单实收数量为准并须书面说明差异原因。2. 未经检验即投入使用的，视为放弃对供应商的质量异议权。3. 验收结论为不合格的，须在约定异议期内书面通知供应商，逾期视为验收合格。\n▸新手提示：不合格一定要在合同约定的异议期内书面通知。过了期，法律上就视为验收合格了 —— 沉默是有代价的。","sub":true,"step":"备料跟进"},{"k":"ord:3","m":"ord","mn":"订单合同","s":3,"n":"订单跟进台账 / 交期变更函","sc":"in","lay":"mixed","d":"每 3–5 天跟一次工厂并更新进度。落后计划 3 天以上必须立刻通知客户（用下方交期变更函）。","t":"【订单跟进台账】SO-______\n▸新手提示：台账每 3–5 天更新一次，进度落后计划 3 天以上，必须当天发交期变更函给客户，不要等客户来问。\n\n订单号：SO-______　客户名称：____________\n客户要求交期：______　计划完工日：______\n\n一、Progress Tracking 进度跟踪\n日期｜进度%｜本周完成内容｜异常/问题｜处理动作｜跟进人\n____｜____｜____________｜________｜________｜____\n____｜____｜____________｜________｜________｜____\n____｜____｜____________｜________｜________｜____\n____｜____｜____________｜________｜________｜____\n────────────────────────────────────────\n实际开工日：______　　实际完工日：______\n当前进度：______%　　是否落后计划：□否 □是（落后 ___ 天）\n★固定条款｜延期通知规则（不得删改）：一旦确认交期无法满足，无论原因是什么，必须在 24 小时内书面通知客户，不得等客户问。\n\n=== 以下为对外发客户的正式函件，仅在需变更交期时使用 ===\n\nNOTICE OF DELAY IN DELIVERY\n\nDate：______　　Our Ref.：SO-______\nTo：____________ (Company)　　Attn：____________\n\nDear ________,\n\nFurther to our previous communication regarding order ______ (order details), we regret to inform you that the shipment will be delayed.\n\nReason for delay：\n  □ Delay from our upstream supplier / component shortage\n  □ Delay in raw material arrival\n  □ Production capacity constraint\n  □ Other（explain）：____________\n\nOriginal delivery date：______\nRevised delivery date：______（延误 ___ 天）\nImpact on agreed trade term：________（不变 / 需调整为 ________）\n\nWe have already taken the following measures to minimise the impact：\n  1. ________\n  2. ________\n  3. ________\n\nWe sincerely apologise for the inconvenience caused and will keep you updated on the production progress every five days until shipment.\n\n★固定条款｜1. 本通知仅变更交期，不变更本合同其他条款。2. 交期顺延不构成卖方违约；因买方原因造成的延误，卖方不承担任何责任。\n▸新手提示：发延期函前必须先和另一名成员对一遍。不要自己决定延几天——涉及客户罚款和后续谈判。","sub":false,"step":"订单跟进"},{"k":"ord:4","m":"ord","mn":"订单合同","s":4,"n":"验货报告单 / 验货邀请函","sc":"mixed","lay":"mixed","d":"出货前必做。跳过验货直接出货，出问题责任在自己。下方附可直接发客户的验货邀请函。","t":"INSPECTION REPORT\n────────────────────────────────────────\nInspection No.：INS-______\nOrder No.：SO-______　　Customer：____________\nFactory：____________\nInspection Date：______\nInspector：________　人数：____　方式：□全检 □抽检 ______%\nProduct / Specification：____________\nOrder Quantity：________　　Actual Packed Quantity：________\n\n一、Inspection Items 检查项目（逐项打勾并写实测值）\n  □ 外观与做工　　　实测：________________\n  □ 尺寸 / 规格　　 实测：________________\n  □ 材质确认　　　 实测：________________\n  □ 颜色 / 表面处理 实测：________________\n  □ 功能 / 装配测试 实测：________________\n  □ Logo / 定制工艺 实测：________________\n  □ 包装方式　　　 实测：________________\n  □ 箱唛 / 唛头　　实测：________________\n  □ 装箱数 / 体积　 实测：________________\n\n二、Defects 不良品\n  不良品数量：______　占比：______%\n  描述：____________________________________\n  处置：□返工 □挑出补足 □让步接收（需客户书面同意）\n\n三、Evidence 留证\n  是否拍照 / 录像：□是（存放位置 ____________）□否\n  封样比对：□一致 □不一致（说明 ____________）\n\n四、Conclusion 结论\n  □ 合格 Pass —— 准予出货\n  □ 让步放行 Concession（客户已书面同意）\n  □ 不合格 Fail —— 禁止出货\n\n验货人签字：________　日期：______　工厂确认：________\n\n=== 以下为对外发客户的正式函件 ===\n\nINSPECTION INVITATION\n\nDate：______　　Our Ref.：SO-______\nTo：____________ (Company)　　Attn：____________\n\nDear ________,\n\nWe are pleased to inform you that the goods under order ______ have reached approximately ______% completion and will be ready for inspection on ______.\n\nInspection Details\n  Date：______　　Time：9:00 a.m. / 2:00 p.m.\n  Address / Factory：____________\n  Products：____________\n\nYou or your representative are cordially invited to attend the inspection. Please confirm attendance by replying to this email before ______ (date).\n\nPlease note that if we do not receive your confirmation by the above date, we will proceed with the inspection and shipment according to our standard procedure.\n\n★固定条款｜1. 本邀请不构成对货物品质、数量或交期的承诺，也不构成对任何索赔的放弃。2. 买方未按期确认参加验货的，视为接受我方第三方验货结果。\n▸新手提示：邀请函一定要写\"不确认视为接受我方验货结果\"。没有这一句，客户不来验货，将来他投诉你说验货时他不在——你很被动。\n▸新手提示：验货结论只填「合格 / 让步放行 / 不合格」三选一，系统节点只认这三个值。","sub":false,"step":"验货"},{"k":"ord:4#1","m":"ord","mn":"订单合同","s":4,"n":"不合格整改单 / 让步接收单","sc":"mixed","lay":"mixed","d":"验货不合格时用。内部走整改，客户书面同意放行时走让步接收 —— 没有这份纸面确认，客户事后照样可以拒收。","t":"【不合格整改单】NON-CONFORMITY & CORRECTIVE ACTION\n订单号：SO-______　关联验货报告单编号：____________　开具日期：______\n▸新手提示：订单表里已经留了「返工次数 / 上次不合格项 / 返工要求 / 返工责任方 / 返工预计完成日」五个字段，这张单就是那五个字段的纸面凭据。系统里记了、纸面没有，客户追责时我们拿不出东西。\n\n一、不合格描述\n  发现环节：□自检 □客户验货 □第三方验货（SGS / BV / TÜV）□到货后客户反馈\n  发现日期：______　发现人：____________\n  不合格项目：【必填】____________\n  不合格数量 / 占比：________ / ______%　严重程度：□轻微 □一般 □严重\n  不合格等级判定：□合格 □让步放行 □不合格\n\n二、原因分析\n  原因分类：□原材料 □工艺 / 操作 □设备 □设计 / 图纸 □包装 □运输 □客户标准理解偏差\n  根本原因：____________\n  是否重复发生：□否 □是（第 ______ 次）\n\n三、整改要求\n  处理方式：【必填】□返工 □返修 □挑选 □补件 □报废重做 □让步接收（需客户书面同意）\n  返工要求：【必填】____________\n  返工责任方：【必填】□我方 □供应商 □客户原因 □物流\n  返工预计完成日：【必填】______　是否影响原交期：□否 □是（新交期 ______）\n  费用承担：□我方 □供应商 □客户 □分摊（比例 ______）\n\n四、整改验证\n  整改完成日：______　复检结论：□合格 □仍不合格（转二次整改）\n  复检人：____________　返工次数累计：______ 次\n\n五、签署\n  开具人：______　生产负责人：______　品质负责人：______　日期：______\n\n=== 以下为对外发客户的正式函件 ===\n\nCONCESSION / WAIVER REQUEST（让步接收申请）\n\nDate：______　　Our Ref.：SO-______\nTo：____________ (Company)　　Attn：____________\n\nDear ________,\n\nRegarding the inspection of the above order, we regret to inform you that ________ (item) was found not fully in conformity with the agreed specification. Details are as follows:\n\n  Non-conformity：____________\n  Quantity affected：________ （______% of total）\n  Root cause：____________\n  Corrective action taken：____________\n\nWe request your acceptance of the goods under concession on the following terms:\n  □ Price allowance of ______%  □ Free replacement in next shipment  □ Other：____________\n\nPlease confirm your acceptance in writing. Shipment will be held pending your reply.\n恳请贵司书面确认是否接受上述让步条件；在收到贵司书面回复前，本批货物暂不放行。\n\n★固定条款｜1. 让步接收以买方**书面**同意为唯一生效条件，口头、电话或即时通讯工具的确认均不构成同意；未经书面同意即放行的，买方仍有权拒收并要求退货、换货或赔偿。2. 让步接收不构成我方对同类不合格的默认许可，后续批次仍按原约定标准执行。3. 买方接受让步的，除本函所列补偿方式外不得再就同一不合格项主张其他赔偿。\n▸新手提示：没有客户书面回函就放行，是最常见的一种自作主张。客户口头说\"可以吧\"，回头照样拒收 —— 因为口头同意在他那边没有任何成本。\n▸新手提示：让步接收一定要写清补偿方式（降价 / 下次补货 / 其他）。只说\"请接受\"，客户没有理由替你承担损失。","sub":true,"step":"验货"},{"k":"ord:4#2","m":"ord","mn":"订单合同","s":4,"n":"第三方验货委托书（SGS / BV / TÜV 等）","sc":"sup","lay":"form","d":"客户指定第三方验货时用。委托书要写清验什么、按什么标准、谁来承担费用 —— 这三件事不写清，现场一定会扯皮。","t":"【第三方验货委托书】THIRD-PARTY INSPECTION NOMINATION\n受托机构：【必填】____________（□SGS □BV □TÜV □Intertek □其他 ________）\n委托日期：【必填】______　关联订单号：SO-______\n▸新手提示：委托书里一定要写清\"按什么标准判定\"。只写\"验货\"，现场判定全凭验货员个人理解，出了分歧谁也说不清。\n\n一、验货安排\n  验货地点：【必填】____________（工厂 / 仓库地址）\n  期望验货日期：【必填】______　备选日期：______\n  联系人 / 电话：【必填】____________\n  货物是否已备齐：□已备齐 □未备齐（预计 ______ 备齐）\n  验货时是否需要我方人员在场：□需要（______）□不需要\n\n二、验货范围与标准（AQL 要写清）\n  验货类型：□生产前 □生产中（DUPRO）□出货前（PSI）□监装（Loading Supervision）\n  抽检标准：【必填】□AQL 2.5/4.0（一般）□AQL 1.0/2.5（加严）□客户指定 ____________\n  抽检水平：□一般检验水平 II □客户指定 ____________\n  验货数量/比例：【必填】________（总数量 ______，抽 ______）\n\n三、验货项目\n  □ 外观 / 工艺　□ 尺寸 / 规格　□ 数量 / 装箱\n  □ 包装 / 唛头 / 标签　□ 功能测试（方法 ____________）\n  □ 安规 / 认证标识（□CE □UL □其他 ______）\n  □ 条码 / 说明书 / 配件　□ 其他：____________\n\n四、判定与报告\n  判定结论口径：□合格 / 不合格 二选一 □允许让步放行\n  报告出具时限：验货后 ______ 个工作日内\n  报告语言：□英文 □中英对照　报告接收人 / 邮箱：____________\n  不合格时是否需要现场照片：□需要 □不需要\n\n五、费用\n  验货费承担：【必填】□我方 □客户 □供应商\n  预估费用：________　计费单位：□人天（______ 人天）□按次\n  复检费用承担：□初次不合格由 ______ 承担\n\n六、签章\n  委托单位（盖章）：____________　经办人签字：____________　日期：______\n  受托机构确认：____________　确认日期：______\n\n★固定条款｜1. 受托机构应按本委托书约定的范围、AQL 标准与抽样水平出具报告，超出约定范围的判定不作为双方验收依据。2. 验货报告仅反映抽样当时的货物状态，不免除供方对未抽检部分的质量责任。3. 验货结论为不合格的，复检费用及由此产生的船期延误责任按本委托书第五条约定承担。\n▸新手提示：费用于谁承担一定要先谈定。客户临时要求加验一次，几千块就没了 —— 写在委托书上，事后不扯皮。\n▸新手提示：监装（Loading Supervision）值得单独加。柜子装了什么、装了多少，有第三方拍照留证，将来客户说短装时有据可查。","sub":true,"step":"验货"},{"k":"ord:5","m":"ord","mn":"订单合同","s":5,"n":"订舱委托书 / 发货通知","sc":"mixed","lay":"mixed","d":"只问价格不问船期的货代不要合作。ETD 一旦确认立刻通知客户（用下方发货通知）。","t":"【订舱委托信息表】SO-______\n▸新手提示：订舱前必须问货代三件事——船期、截关日、免费堆存期。只问运价不问船期，最后是自己亏。\n\n订单号：SO-______　客户名称：____________\n────────────────────────────────────────\n一、Shipping Agent 货代信息\n  货代 / 船公司：____________　联系人 / 电话：____________\n  Booking No. (S/O)：____________\n\n二、Cargo 货物信息\n  柜型柜量：□20GP □40GP □40HQ □45HQ × ____ 个\n  件数 / 包装：______ ctn　每箱数量：______ pcs\n  毛重：____ kg　　净重：____ kg　　体积：____ CBM\n\n三、Route & Schedule 航线与船期\n  装运港：____________　目的港：____________\n  截关日 CY Cut-off：【必填】______\n  开船日 ETD：______\n  预计到港 ETA：______\n  免费堆存期：______ 天\n\n四、Freight Comparison 运价比对\n  货代 A：______（船期 ______，是否含 THC：□是 □否）\n  货代 B：______（船期 ______，是否含 THC：□是 □否）\n  选定：货代 ____________　　理由：____________\n▸新手提示：比价必须同时比船期和费用包含项。只比总价，很容易被低价单证费反超。\n\n五、Confirmations 确认项\n  船期是否满足客户交期：□是 □否（说明 ____________）\n  是否已通知客户 ETD：【必填】□否 □是（日期 ______，方式 ______）\n  订舱确认人：______　日期：______\n  委托方（盖章）：____________　经办人签字：____________　日期：______\n\n=== 以下为对外发客户的正式函件 ===\n\nSHIPPING ADVICE\n\nDate：______　　Our Ref.：SO-______\nTo：____________ (Company)　　Attn：____________\n\nDear ________,\n\nWe are pleased to advise that your order has been shipped. Details are as follows:\n\n  Order No.：________\n  Invoice No.：________　　Packing List No.：________\n  B/L No.：________\n  Vessel / Voyage：________ / ________\n  Port of Loading：________\n  Port of Discharge：________\n  ETD：______　　ETA：______\n  Container No. / Seal No.：________ / ________\n\nDocuments enclosed / to follow\n  □ Commercial Invoice　□ Packing List　□ Bill of Lading (original / telex release)\n  □ Certificate of Origin　□ Insurance Certificate　□ Other：________\n\n★固定条款｜1. 货物按 ________ 条件交付，风险自装运港装船时转移。2. 提单签发方式：□正本提单 □电放，须于收到尾款后办理。3. 运费、保险及目的港费用由买方承担。\n▸新手提示：ETD 一确认就发这封信，不要等到开船才说。客户要时间安排船和仓库。\n▸新手提示：提单方式必须在这里写清。\"正本提单\"客户要付全款才拿得到单，这是重要的催款手段。","sub":false,"step":"订舱出运"},{"k":"ord:5#1","m":"ord","mn":"订单合同","s":5,"n":"VGM 载重核实与舱单申报数据表","sc":"sup","lay":"form","d":"VGM（集装箱总重核实）是强制的，没提交船公司不给装船。走美线还要 AMS/ISF、欧线要 ENS，都是截关前必须申报的。","t":"【VGM 载重核实与舱单申报数据表】\n订舱号 Booking No.：【必填】____________　船名 / 航次：____________\n▸新手提示：VGM 没提交，船公司**直接不给装船** —— 不是罚款，是上不了船。截关前 24~48 小时必须提交。\n\n一、VGM 载重核实（每个柜子一份）\n  填法：柜号｜空箱皮重(kg)｜货物毛重(kg)｜包装/垫料(kg)｜总重VGM(kg)｜称重方式｜称重单位盖章\n  1 ｜____｜____｜____｜____｜____｜____\n  2 ｜____｜____｜____｜____｜____｜____\n\n  合计总重：______ kg（各柜 VGM 相加，舱单申报总毛重以此为准）\n  称重方式：□整体称重（方法 1）□累加计算（方法 2，须经认证）\n  称重设备是否校准并在有效期内：□是 □否\n  VGM 提交截止时间：【必填】______　实际提交时间：______　提交回执号：____________\n\n二、航线附加申报（走哪条线勾哪条）\n  □ 美线 AMS：申报截止时间 ______　申报号 ____________\n  □ 美线 ISF（10+2）：须于装船前 24 小时申报；申报号 ____________\n     制造商 / 供应商名称：____________　收货人编号：____________\n  □ 欧线 ENS：申报截止时间 ______　申报号 ____________\n  □ 其他（加拿大 ACI / 日本 AFD 等）：____________\n\n三、舱单数据一致性（错了要改单，改单要钱还要时间）\n  □ 舱单的收发货人名称与提单一致\n  □ 件数 / 毛重与装箱单、发票一致\n  □ HS 编码与报关单一致\n  □ 目的港与提单一致\n\n四、签章与提交\n  申报单位（盖章）：____________　经办人签字：____________　日期：______\n\n★固定条款｜1. VGM 数据须在承运人规定的截止时间前提交，逾期未提交的承运人有权拒绝装船，由此产生的滞箱费、改配费及延误由托运人承担。2. 所申报的重量须真实准确，与实际重量偏差超出允许范围的，海关与承运人可拒绝装运并追究申报责任。3. AMS / ISF / ENS 等舱单申报数据须与实际货物及报关数据一致，申报错误的改单费用由托运人承担。\n▸新手提示：ISF 是\"装船前 24 小时\"，不是\"截关前 24 小时\"。这两个时间常常差一两天，按后者算会来不及。","sub":true,"step":"订舱出运"},{"k":"ord:5#2","m":"ord","mn":"订单合同","s":5,"n":"补料单 / 装船通知 Shipping Instruction","sc":"sup","lay":"form","d":"补料是货代出提单的唯一依据：柜号封条号、收发货人、运费条款这八项错一项，印出来的提单就要改单——改单既要付费，又要船公司和目的港都同意。截关前 24 小时是死线。","t":"【补料单 / 装船通知 SHIPPING INSTRUCTION】\n订舱号 Booking No.：【必填】____________　船名 / 航次 Vessel / Voyage：【必填】____________\n▸新手提示：补料是**出提单的唯一依据**。货代按你补的内容印提单，印错了改单既要付费又要船公司和目的港都同意。截关前 24 小时是死线。\n\n一、补料八项（每一项都要与装箱单、商业发票核对一致）\n  填法：项目｜内容｜与哪张单核对\n  发货人 Shipper｜____________｜商业发票\n  收货人 Consignee｜____________｜合同 / 客户书面确认\n  通知方 Notify｜____________｜合同 / 客户书面确认\n  品名 Description｜____________｜商业发票\n  件数 / 毛重 / 体积 Packages / G.W. / CBM｜____________｜装箱单\n  柜号与封条号 Container / Seal No.｜____________｜装柜现场记录\n  运费条款 Freight Term｜□ PREPAID □ COLLECT｜合同成交方式\n  唛头 Marks｜____________｜装箱单 / 外箱实际刷唛\n\n二、装卸港与船期\n  装运港 Port of Loading：【必填】____________　目的港 Port of Discharge：【必填】____________\n  截关日 Customs Cut-off：【必填】______　开船日 ETD：【必填】______\n  期望签发方式：□ 正本提单　□ 电放（电放必须客户书面同意且尾款已收，走 10 段步2 的见款放单红线）\n\n三、一致性自检（错了要改单，改单要钱还要时间）\n  □ 收发货人名称与合同、报关单一致（一个字母都不能差）\n  □ 件数 / 毛重 / 体积与装箱单、VGM 表（ord:5#1）一致\n  □ 柜号封条号与装柜现场记录一致（抄错一个数字，提单整行重打）\n  □ 运费条款与成交方式一致（FOB 收 COLLECT，CIF / CFR 收 PREPAID）\n  □ 唛头与外箱实际刷唛一致（无唛头写 N/M）\n\n四、发送与回执\n  发送日期：______　发送方式：□ 邮件 □ 货代系统　回执收到日期：______\n  货代确认按本单出提单草稿：□ 是　□ 否（否：写明差在哪，当天补齐）\n\n★固定条款｜1. 补料内容一经确认用于签发提单，任何变更均构成改单，改单费用及因此产生的船期延误由责任方承担。2. 补料的收发货人、通知人信息须与合同及报关数据完全一致；不一致导致目的港无法提货或清关延误的，责任由补料方承担。3. 柜号与封条号须与装柜现场记录一致，错报、虚报的按申报不实处理。\n▸新手提示：通知方这栏最常填错 —— 它不一定是收货人。客户没指定时留空让货代按提单惯例处理，也别随手抄一个上去。","sub":true,"step":"订舱出运"},{"k":"ord:5#3","m":"ord","mn":"订单合同","s":5,"n":"空运提单 AWB 核对表","sc":"in","lay":"form","d":"走空运的订单用这一份（海运那张是「提单核对」）。AWB 是客户凭以提货的凭证，签发后再改要钱；空运按计费重量收费，件数毛重体积填错就是白送运费。","t":"【空运提单 AWB 核对表】\n订单号：SO-______　订舱号：____________　制单日期：______\n▸新手提示：空运提单（AWB）不是海运提单 —— 它不是物权凭证，正本不控货。所以空运**必须在发货前收齐尾款**，别拿\"正本在我手上\"当筹码，那是海运的逻辑。\n\n一、运单主体\n  主单号 MAWB：【必填】____________\n  分单号 HAWB：____________（走拼板 / 货代分单时才有）\n  航空公司 Airline：【必填】____________　航班号 Flight No.：【必填】____________\n  航班日期 Flight Date：【必填】______\n\n二、机场三字码（写错等于把货发去另一个城市）\n  起运机场 Origin：____________（三字码，如 PVG / CAN / HKG）\n  目的机场 Destination：____________（三字码，如 LAX / FRA / DXB）\n  ▸新手提示：三字码必须和客户的清关口岸对得上。只写城市名，货代可能按同名机场发错国家。\n\n三、收发货人（与商业发票、装箱单逐字一致）\n  发货人 Shipper：____________\n  收货人 Consignee：____________\n  通知方 Notify Party：____________\n\n四、货物与计费重量（空运最贵的坑在这里）\n  品名 Description：____________\n  件数 No. of Packages：【必填】______\n  实际毛重 Actual G.W.：【必填】______ kg\n  体积 Volume：【必填】______ CBM　体积重 Volumetric Wt.：______ kg（长×宽×高cm ÷ 6000 × 件数）\n  计费重量 Chargeable Wt.（取大者）：【必填】______ kg\n  运费条款：□ PREPAID 预付 □ COLLECT 到付\n  申报价值（用于报关与保险）：____________\n  ▸新手提示：体积重 = 长×宽×高(cm) ÷ 6000 × 件数，与实际毛重**取大**计费。泡货（轻抛货）常在这里被多算一倍运费，装柜前先压一压体积。\n\n五、随货单证（随机的那一份，与客户清关口径一致）\n  □商业发票 Commercial Invoice　□装箱单 Packing List\n  □原产地证 CO / FORM E　□鉴定报告 / MSDS（带电、带磁、液体必附）\n  □熏蒸证（木质包装）　□其他 ____________\n\n六、核对与确认\n  AWB 草稿已与商业发票 / 装箱单逐项比对：□是 □否\n  已回传客户确认：□是 □否（确认方式 □邮件 □其他 ______）\n  核对人：______　复核人：______　日期：______\n▸新手提示：AWB 签发后改单要钱，且需要航司同意。草稿阶段把三字码、件数毛重、收发货人核对三遍，比签发了再改便宜得多。","sub":true,"step":"订舱出运"},{"k":"ord:6","m":"ord","mn":"订单合同","s":6,"n":"报关委托书 / 装箱单 / 商业发票 / 提单草稿核对","sc":"mixed","lay":"mixed","d":"出口四件套一起用。报关品名 / 数量 / 金额必须与合同发票完全一致，不一致会被海关查验、银行退单。","t":"===== 1. 报关委托书（对海关 / 报关行） =====\n委托方（我方公司）：____________\n报关行：____________　委托日期：______　预计报关日：______\n  合同号：____________　发票号：____________　收汇方式：□预收 □一般贸易\n  币种：________　成交方式：________\n  品名（中文）：____________　海关编码 HS Code：____________\n  数量 / 单位：________ / ________\n  金额：________　　毛重：____ kg　净重：____ kg　体积：____ CBM\n  件数 / 包装：____________ / ____________\n  装运港 / 目的港：____________ / ____________\n  委托方盖章 / 签字：________　报关行签章：________\n▸新手提示：中文品名必须与 HS 编码对应，不能随便写。写错会被查验，拖 3–5 天。\n\n===== 2. 装箱单 Packing List（对外） =====\nPACKING LIST\nPacking List No.：________　Date：______\nTo（Consignee）：____________\n────────────────────────────────────────\n序号｜Description 品名｜Specification 规格｜Qty per carton｜Cartons｜Total Qty｜N.W.(kg)｜G.W.(kg)｜CBM\n1 ｜____｜____｜____｜____｜______｜______｜______｜____\n2 ｜____｜____｜____｜____｜____｜______｜______｜____\n────────────────────────────────────────\n合计件数 Cartons：______ ctn　合计数量 Total Qty：______ pcs　合计净重 N.W.：______ kg　合计毛重 G.W.：______ kg　合计体积 CBM：______ CBM\nContainer No.：________　Seal No.：________\nShipment Mark（唛头）：\n________________________________________\n▸新手提示：装箱单上的净重毛重必须和发票、提单、报关单完全一致。这几份单据\"单单不符\"会被扣货。\n\n===== 3. 商业发票 Commercial Invoice（对外） =====\nCOMMERCIAL INVOICE\nInvoice No.：________　Date：______\nExporter (Seller)：____________\nTo (Consignee)：____________　　Attn：____________\n────────────────────────────────────────\n序号｜Description｜Specification｜Quantity｜Unit Price USD｜Amount USD\n1 ｜____｜____｜______｜________｜________\n2 ｜____｜____｜______｜________｜________\n────────────────────────────────────────\n发票金额合计 TOTAL：USD ________（大写：USD ________ only）\n合计数量 QTY：______　合计件数 TOTAL CARTONS：______ ctn\nTrade Term：________　　Currency：________\nShipment From：________　To：________\nTerms of Payment：定金 ______% T/T 前，尾款 ______% T/T 装运前\n\n▸新手提示：发票金额要和合同一致。但客户若需扣 3% 银行费，可在这行写「Invoice value: USD ___ (to cover bank charges of 3%)」——这是行业通行做法。\n\n===== 4. 提单草稿核对 B/L Draft Check（内部） =====\nShipper：________　Consignee：________（须与客户要求一致）\nNotify Party：________\nPort of Loading：________　Port of Discharge：________\nFreight Terms：□Prepaid □Collect　No. of Original B/L：______\nDescription of Goods（须与发票一致）：____________\nNo. of Packages：______ ctn　Gross Weight：____ kg　Volume：____ CBM\nContainer No.：________　Seal No.：________\n────────────────────────────────────────\n逐项核对结果：□ 已全部核对无误，可向货代确认\n★固定条款｜提单草稿必须逐字核对后再确认；确认后改单既产生费用又耽误船期。正本提单须在收到尾款后签发。\n▸新手提示：Consignee（收货人）抬头必须和客户要求一字不差。写错要作废重出，费用和船期都耽误。","sub":false,"step":"报关单证"},{"k":"ord:6#1","m":"ord","mn":"订单合同","s":6,"n":"出口报关单信息登记与核对表","sc":"in","lay":"form","d":"海关放行拿到报关单后，把上面每一栏登记进来留档。退税、核销、查单、复购都要用；报关单号同时是「出口退税」节点的放行条件。","t":"【出口报关单信息登记与核对表】关联订单 ______\n▸新手提示：报关单是出口合法凭证，也是退税与收汇核销的申报依据。放行当天就登记，不要等退税时才回头翻。\n\n一、报关单基本信息（照报关单逐字抄）\n  报关单号：【必填】____________　海关编号：____________\n  申报日期：______　出口日期：______　申报地海关：____________\n  报关行 / 申报单位：____________　报关员：____________\n  监管方式：【必填】□一般贸易(0110) □进料加工(0615) □其他 ________\n  征免性质：____________　结汇方式：____________\n  运输方式：____________　运输工具名称 / 航次：____________\n  提运单号：____________　集装箱号：____________\n▸新手提示：报关单号在订单「出货」栏也要回填一次。退税节点的放行条件读的就是那个字段，只登在这张表里，系统不认。\n\n二、商品项（一票多品时逐项登记）\n  填法：项号｜HS 编码｜中文品名｜规格型号｜申报数量 / 单位｜法定数量｜币制｜单价｜总价｜毛重(kg)｜净重(kg)｜原产国｜最终目的国\n  1 ｜____｜____｜____｜____｜____｜____｜____｜____｜____｜____｜____｜____\n  2 ｜____｜____｜____｜____｜____｜____｜____｜____｜____｜____｜____｜____\n  合计总价：________　合计毛重：______ kg　合计净重：______ kg\n\n三、随附单证\n  □合同　□商业发票　□装箱单　□报关委托书　□提（运）单\n  □原产地证　□出口许可证　□商检 / 熏蒸证明　□其他 ____________\n\n四、核对（逐项打勾，漏一项退税就可能卡住）\n  □ 报关单的品名 / 数量 / 金额与商业发票完全一致\n  □ 出口日期与提单开船日不矛盾\n  □ HS 编码与「单证表」里登记的一致\n  □ 成交方式 ________ 与合同一致\n  □ 退税联已收到\n  □ 报关单号已回填到订单「出货」栏\n\n★固定条款｜报关单号一经申报不得自行涂改；发现错误必须由申报单位向海关申请改单，并将改单原因与费用承担一并留档。\n▸新手提示：HS 编码写错是查验率最高的一类。抄的时候对着报关单一位一位核，不要凭记忆 —— 凭记忆一定会错一位。\n▸新手提示：纸质 / 电子报关单按「年份-报关单号」存档。税务核查时，这是第一批要调的资料。","sub":true,"step":"报关单证"},{"k":"ord:6#2","m":"ord","mn":"订单合同","s":6,"n":"货物申报要素信息表","sc":"sup","lay":"form","d":"报关行每次都会问的那一串信息。一个产品填一次、存一份，以后每票货直接复制给报关行，不用每次现翻现编。","t":"【货物申报要素信息表】Item Declaration Elements\n报关行 / 接收方：____________　填表日期：______\n本表编号：ELM-______　产品编号 / SKU：____________\n▸新手提示：申报要素每次现编，一定会出现两次口径不一样。同一个产品第一次出口就把这张表填好存起来。\n\n一、产品识别\n  中文品名：【必填】____________　英文品名：____________\n  HS 编码（10 位）：【必填】____________　退税率：______%\n  规格型号：____________\n  品牌类型：□无品牌　□境内自主品牌　□境内收购品牌　□境外品牌(贴牌)　□境外品牌(其他)\n  品牌名称：____________（无品牌填 N/M）\n\n二、材质与成分\n  材质：【必填】____________（例：100% 棉 / ABS+PC / 304 不锈钢）\n  成分含量：____________（例：棉 100% / ABS 60% PC 40%）\n  是否含濒危动植物成分：____________\n\n三、用途与功能\n  用途：【必填】____________（例：家用 / 工业用 / 汽车配件）\n  功能 / 工作原理：____________\n  加工方法：____________\n\n四、包装与规格\n  包装种类：【必填】____________（例：纸箱 / 托盘 / 编织袋）\n  每箱装量：______　单件净重 ______ kg　单件毛重 ______ kg　单件体积 ______ CBM\n  是否零售包装：□是　□否\n\n五、其他申报要素\n  是否含 GTIN：____________（有则填码，无则填\"无\"）\n  是否为成套货物：□是　□否\n  是否有附件 / 配件：____________\n  生产厂家名称：____________　统一社会信用代码：____________\n\n六、关联与签章\n  关联报关单号：____________（一票报关单对应一份要素表，便于日后调档）\n  申报单位（盖章）：____________　经办人签字：____________　日期：______\n\n★固定条款｜申报要素必须与实际货物、商业发票、报关单完全一致。伪报、瞒报申报要素构成走私，法律责任由申报单位与实际货主共同承担。\n▸新手提示：申报要素填错最常见的后果不是罚款，是查验 —— 一查就是 3 到 5 天，赶上截关日就是甩柜。\n▸新手提示：HS 编码和退税率要一起记。编码变了退税率可能跟着变，报错了少退的钱是自己的。\n▸新手提示：这份可以复制给报关行，但发之前确认一下别把成本价、客户名留在同一份文件里。","sub":true,"step":"报关单证"},{"k":"ord:6#3","m":"ord","mn":"订单合同","s":6,"n":"出口报关确认函","sc":"sup","lay":"letter","d":"报关行报完关、海关放行后，我方签字回传的确认件。作用是留一份「我方已确认放行、放行内容是什么」的书面记录，出事时用来界定责任。","t":"【出口报关确认函】EXPORT DECLARATION CONFIRMATION\n致 / To：____________（报关行 / 货代）\n关联订单号：____________　委托编号：____________　日期：______\n▸新手提示：这份函不签字盖章就只是一张纸。报关行要的是\"你确认放行\"这个动作。\n\n一、你方申报内容（据你方回传的报关单填写）\n  报关单号：____________　申报日期：______　放行日期：______\n  出口日期：______　监管方式：____________\n  品名 / 数量 / 金额：____________ / ________ / ________\n  集装箱号：____________　封条号：____________\n  是否查验：□否　□是（查验方式 ____________，结果 ____________）\n\n二、我方确认（已核对以下各项）\n  □ 报关单号、出口日期与我方记录一致\n  □ 品名 / 数量 / 金额与商业发票一致\n  □ HS 编码与申报要素信息表一致\n  □ 成交方式 ________ 与合同一致\n  □ 退税联已收到\n\n三、待办与遗留（这一栏最有价值，别空着）\n  □ 退税联未收，预计 ______ 前补寄\n  □ 需改单：项目 ____________　原因 ____________　改单费用由 ______ 承担\n  □ 无遗留事项\n\n★固定条款｜1. 本函仅确认上述申报内容与我方记录一致，不构成对申报行为合法性的担保；申报行为由申报单位依《海关法》独立承担责任。2. 本函出具后发现申报内容有误的，我方应在 1 个工作日内书面通知你方，并按海关规定申请改单。\n▸新手提示：第 3 节\"待办与遗留\"是最容易被写空、也最该写实的一栏。退税联没收到就在这里写清楚 —— 别嘴上说一句就过去，三个月后没人记得是谁答应的。\n▸新手提示：要改单的，务必在函里写明费用谁承担。改单费用通常不小，事后再谈就谈不动了。\n\n报关行签章：____________　我方签字 / 盖章：____________　日期：______","sub":true,"step":"报关单证"},{"k":"ord:6#4","m":"ord","mn":"订单合同","s":6,"n":"原产地证申领表（CO / FORM E / FORM A）","sc":"sup","lay":"form","d":"客户减免关税全靠这张证。缺了它客户一定回来要，而且往往是在货已经到港清不了关的时候才来要。","t":"【原产地证申领表】Certificate of Origin Application\n申领机构：□贸促会 CCPIT □海关 □其他 ____________　申请日期：______\n▸新手提示：FORM E 是中国—东盟自贸区专用的，能给客户降的税最多。出货前先问客户要哪种 —— 等货到港再问，滞港费比证贵得多。\n\n一、证书种类（三选一，勾错等于白办）\n  □ CO（一般原产地证）\n  □ FORM E（中国—东盟自贸区）\n  □ FORM A（普惠制，仅部分给惠国仍接受）\n  □ 其他：____________（例：RCEP / 中韩 / 中澳）\n\n二、Exporter 出口商（须与发票、报关单一致）\n  名称 / 地址：____________\n  统一社会信用代码：____________\n\n三、Consignee 收货人（须与提单 Consignee 一致）\n  名称 / 地址：____________　国家 / 地区：____________\n\n四、Goods 商品信息\n  中文品名：【必填】____________　英文品名：____________\n  HS 编码（6 位即可）：【必填】____________\n  数量 / 单位：________ / ________　毛重：______ kg\n  发票号：【必填】____________　发票金额：________　发票日期：______\n  原产地标准：□完全获得 □含进口成分（百分比 ______%）\n▸新手提示：HS 编码各国海关要求位数不同，申领前按目的国要求确认。填错一位，客户的关税优惠就作废。\n\n五、Transport 运输信息\n  装运港：____________　目的港：____________\n  运输方式：□海运 □空运 □陆运　船名 / 航次：____________\n  出运日期：______　提单号：____________\n\n六、申领与签章\n  申领份数：正本 ______ 份　副本 ______ 份\n  申领单位（盖章）：____________　经办人签字：____________\n  申领日期：______　证书编号（出证后回填）：____________\n\n★固定条款｜1. 本表所填内容须与商业发票、装箱单、报关单完全一致，任一处不一致均可能导致证书被拒签或在目的港无法享惠。2. 原产地标准须如实申报，虚报原产地构成骗取出入境证件，由申领单位承担全部法律责任。3. 证书签发后内容不得自行涂改，需变更的应向原签发机构申请重发。\n▸新手提示：证书拿到手先扫一份存电脑，再把纸质正本单独寄给客户。只寄一次、客户说没收到，重办要重新缴费。","sub":true,"step":"报关单证"},{"k":"ord:6#5","m":"ord","mn":"订单合同","s":6,"n":"货物运输保险投保单","sc":"sup","lay":"form","d":"CIF 由我方投保时用。保险金额通常按发票金额 ×110% 投保，少保那 10% 就是货损时自己贴的钱。","t":"【货物运输保险投保单】Marine Cargo Insurance Application\n保险公司 / 代理：____________　投保日期：【必填】______\n▸新手提示：CIF 成交时投保是**我方义务**，不是可选动作。忘了投保，货物出险后要自己承担全部损失。\n\n一、Parties 主体\n  投保人（Applicant）：____________\n  被保险人（Insured）：□我方 □客户（按信用证 / 合同要求）____________\n  赔款偿付地点（通常与目的港一致）：____________\n\n二、保险金额\n  发票金额：【必填】________　币种：□USD □EUR □RMB\n  投保加成：110%（默认）□其他 ______%\n  保险金额：【必填】________（＝ 发票金额 × 加成）\n▸新手提示：加成不是保险公司乱收的。那 10% 是预期利润，不加成的话货损时只赔成本，利润自己吞。\n\n三、Coverage 险别\n  □ 平安险 FPA　□ 水渍险 WPA　□ 一切险 All Risks\n  □ 附加：□战争险 □罢工险 □碰损破碎险 □其他 ____________\n  适用条款：□CIC（中国保险条款）□ICC（伦敦协会条款）\n\n四、Shipment 运输信息\n  发票号 / 合同号：____________　提单号：____________\n  运输工具（船名 / 航次）：____________\n  起运地：____________　中转地：____________　目的地：____________\n  开航日期：______　预计到达：______\n  包装与件数：______ ctn　毛重：______ kg\n\n五、特别约定\n  □ 仓至仓条款 Warehouse to Warehouse\n  □ 免赔额：____________\n  其他约定：____________\n\n六、投保与签章\n  保费：________　保单号（出单后回填）：____________\n  投保人（盖章）：____________　经办人签字：____________　日期：______\n\n★固定条款｜1. 投保单所填内容须与商业发票、提单一致；申报不实影响赔付的，由投保人自行承担后果。2. 保险责任以保单签发并收取保费之日起成立，投保单本身不构成保险合同的成立。3. 保险金额低于发票金额 110% 的，超额损失部分由投保人自行承担。\n▸新手提示：保单出来后第一时间核对三件事 —— 被保险人、保险金额、目的港。这三处错得最多，而且出险前没人会发现，出险后保险公司按错的那份拒赔。","sub":true,"step":"报关单证"},{"k":"ord:6#6","m":"ord","mn":"订单合同","s":6,"n":"装船通知 Shipping Advice","sc":"out","lay":"letter","d":"CIF / CFR 成交时，装船后必须立刻发给客户。这封信不发，出现货损保险公司可以拒赔 —— 因为客户无从投保、也无从准备收货。","t":"SHIPPING ADVICE\n▸Tip: Under CIF this notice carries legal weight — our insurance obligation is discharged only when the shipping advice is sent. One day late is one more day of risk carried by us.\n\nDate: ______　　Our Ref.: SO-______\nTo: ____________ (Company)　　Attn: ____________\n\nDear ________,\n\nWe are pleased to inform you that the following goods have been shipped. Please find the details below:\n\n  Order / Contract No.: ________\n  Invoice No.: ________　　Packing List No.: ________\n  B/L No.: ________　　Booking No.: ________\n  Vessel / Voyage: ________ / ________\n  Port of Loading: ________　　Port of Discharge: ________\n  ETD: ______　　ETA: ______\n  Container / Seal No.: ________ / ________\n  No. of Packages: ______ ctn　　Gross Weight: ______ kg　　Volume: ______ CBM\n  Insurance Policy / Certificate No.: ________ (mandatory under CIF)\n\nPlease arrange to take delivery and, where applicable, to lodge any claim with the insurer promptly.\n\n★Standard notes｜1. This advice is issued on ________ (trade term) terms; risk in the goods passes to the buyer when the goods are loaded on board at the port of shipment. 2. The buyer shall inspect the goods before taking delivery; where loss or damage is found, a claim shall be lodged with the insurer within the period stipulated in the insurance policy, and the evidence on site shall be preserved. 3. The contents of this advice are subject to the original bill of lading and commercial invoice; in case of discrepancy, the original documents shall prevail.\n▸Tip: Send it as soon as ETD is confirmed — do not wait for departure, still less for the buyer to ask. The buyer needs this letter to arrange his agent, warehouse and insurance.\n▸Tip: On CIF orders, fill in the insurance policy number. Without it the buyer does not even know who to claim from.","sub":true,"step":"报关单证"},{"k":"ord:6#7","m":"ord","mn":"订单合同","s":6,"n":"MSDS 与危险品 / 木质包装声明","sc":"mixed","lay":"mixed","d":"化工品、带电池、带液体的货必备 MSDS；木箱 / 木托盘包装必须有 IPPC 熏蒸标识。缺了不是罚款的问题，是货上不了船、到了港也清不了关。","t":"【MSDS 与包装声明】MATERIAL SAFETY DATA SHEET & PACKING DECLARATION\n产品名称：【必填】____________　型号：____________　填表日期：______\n▸新手提示：是不是危险品，不由你我说了算 —— 由 MSDS 和鉴定报告说了算。凭经验判断\"这个应该不算\"，被查出来就是瞒报。\n\n一、货物属性判定\n  是否化工品 / 含化学成分：□否 □是（主要成分：____________）\n  是否含锂电池 / 蓄电池：□否 □是（类型 ____________，容量 ______ Wh）\n  是否含液体 / 气体 / 粉末：□否 □是（____________）\n  是否磁性 / 含压力容器：□否 □是\n  判定结论：【必填】□非危险品 □危险品（UN 编号 ____________，类别 ______）\n  判定依据：□MSDS □第三方鉴定报告（编号 ____________，出具机构 ____________）\n\n二、MSDS 要素（十六项，缺项船公司与海关会退件）\n  □ 1 产品与厂商信息　□ 2 成分信息　□ 3 危险性概述　□ 4 急救措施\n  □ 5 消防措施　□ 6 泄漏应急处理　□ 7 操作与储存　□ 8 暴露控制\n  □ 9 理化特性　□ 10 稳定性与反应性　□ 11 毒理学信息　□ 12 生态学信息\n  □ 13 废弃处置　□ 14 运输信息（含 UN 号与包装类别）□ 15 法规信息　□ 16 其他\n  MSDS 版本日期：______　语言：□中英对照 □英文 □中文\n\n三、木质包装声明（IPPC）\n  木质包装：□无（全部为纸箱 / 塑料 / 金属）□有\n  有木质包装时必填：\n    材料：□木箱 □木托盘 □木条　处理方式：□热处理 HT □熏蒸 MB □其他 ______\n    IPPC 标识是否清晰可见：□是 □否（无标识的木质包装会被目的港退运或销毁）\n    处理证书编号：____________　出具机构：____________\n\n四、其他包装声明\n  □ 货物中不含任何隐藏的危险品\n  □ 包装符合所采用运输方式的要求\n  □ 无土壤、种子、树皮等检疫禁止物（木包装已处理）\n\n=== 以下为对外发客户的正式函件 ===\n\nPACKING DECLARATION（包装声明）\n\nDate：______　　Our Ref.：SO-______\nTo：____________ (Company)\n\nDear Sir / Madam,\n\nWe hereby declare that the goods under the above order are packed as follows:\n\n  Packing material：□ carton  □ wooden case / pallet (IPPC treated, cert. no. ________)  □ other：________\n  The goods are：□ non-dangerous  □ dangerous (UN ________, class ________)\n  No hidden dangerous goods are contained in the shipment.\n\n★固定条款｜1. 本声明所载货物属性与包装情况须与实际货物完全一致；虚报、瞒报危险品构成违法行为，由此产生的罚款、退运、销毁及第三方索赔由申报方承担。2. 含木质包装的，须带有清晰可辨的 IPPC 标识并随附处理证书；无标识或标识不清的木质包装将在目的港被退运或销毁，费用与风险由发货人承担。3. MSDS 须为最新版本且涵盖十六项要素，内容与实际货物不符的，船公司有权拒绝承运。\n▸新手提示：带电池的货最容易被卡。哪怕是很小的纽扣电池，也要如实申报 —— 被查出瞒报，罚款之外还会被列入黑名单，后续出货全部严查。\n▸新手提示：木质包装没有 IPPC 标识，目的港通常的处置是**整柜退运或销毁**，费用比货值还高。用木托盘之前先确认供应商有没有处理证书。","sub":true,"step":"报关单证"},{"k":"ord:7","m":"ord","mn":"订单合同","s":7,"n":"清关单证清单","sc":"in","lay":"form","d":"单证不齐客户在目的港清不了关，会产生滞港费，责任在我们。","t":"【清关单证清单】SO-______\n▸新手提示：这份清单的每勾一个，都要留下\"已寄出\"的证据。单证不齐导致的滞港费比单证本身的成本高得多。\n\n订单号：SO-______　目的港：____________　客户要求到港日：______\n────────────────────────────────────────\n单证名称｜份数｜单号/编号｜签发日｜已寄出｜寄送方式｜快递单号\n商业发票 Commercial Invoice｜__｜________｜____｜□｜______｜______\n装箱单 Packing List｜__｜________｜____｜□｜______｜______\n提单 B/L（□正本 □电放）｜__｜________｜____｜□｜______｜______\n产地证 CO / FORM E（如需）｜__｜________｜____｜□｜______｜______\n质量 / 检测报告（如需）｜__｜________｜____｜□｜______｜______\n保险单（如需）｜__｜________｜____｜□｜______｜______\n其他：____________｜__｜________｜____｜□｜______｜______\n────────────────────────────────────────\n客户是否需要电放：【必填】□否 □是（确认日期 ______）\n电放是否已办理：□否 □是（日期 ______）\n单证寄出日：______\n客户清关联系人 / 电话：____________\n▸新手提示：电放权在客户手上。收了尾款再去要电放申请；没收款不要给电放，这是唯一的筹码。\n\n异常记录：____________________________________","sub":false,"step":"清关交付"},{"k":"ord:7#1","m":"ord","mn":"订单合同","s":7,"n":"电放申请书 Telex Release Application","sc":"sup","lay":"form","d":"把正本提单改成电放，等于把货权提前交给客户 —— 这是尾款最重要的筹码，放之前一定确认钱已到账。","t":"【电放申请书】TELEX RELEASE APPLICATION\n致（船公司 / 货代）：____________　申请日期：【必填】______\n▸新手提示：电放之前只问一句：**尾款到账了吗？** 电放一放，货权就归客户了，再催款就没有筹码了。\n\n一、提单信息\n  提单号 B/L No.：【必填】____________　签发份数：______ 份正本\n  船名 / 航次：____________　开航日 ETD：______\n  装运港：____________　目的港：____________\n  柜号 / 封条号：____________ / ____________\n  收货人 Consignee：____________\n\n二、货物信息\n  品名：____________　件数：______ ctn　毛重：______ kg\n  发票号：____________　发票金额：________\n\n三、申请事项\n  □ 申请电放（Surrender / Telex Release）\n  □ 申请海运单（Seaway Bill）\n  申请理由：□尾款已收清 □长期合作客户，经批准 □信用证项下 □其他 ____________\n\n四、放货前确认（逐项打勾，缺一项不得申请）\n  □ 尾款 / 全部货款已到账（金额 ________，到账日 ________）\n  □ 客户已书面确认无需正本提单\n  □ 正本提单 ____ 份已全部交回 / 作废；无法交回的已说明原因 ____________\n  □ 已取得另一名成员书面同意（未收清货款的必须有）\n\n五、承诺与签章\n  我司承诺：因本次电放产生的一切责任、风险与费用（包括但不限于错误放货、重复提货、第三方索赔）均由我司承担，与贵司无关。\n  申请单位（盖章）：____________　负责人签字：____________\n  联系电话 / 邮箱：____________　日期：______\n\n★固定条款｜1. 电放一经办理即不可撤销，货物所有权自电放指令生效时转移，申请人不得以任何理由要求恢复正本提单。2. 申请人须确认全部货款已收讫；未收讫即申请电放的，由此造成的货款损失由申请人自行承担。3. 因电放导致的错误放货、无单放货及第三方索赔，由申请人承担全部责任并赔偿承运人损失。\n▸新手提示：正本提单如果已经寄出去了，一定要先追回再办电放。提单在别人手里又办了电放，等于两份提货权同时在外流通 —— 这是最容易出大事故的一种情况。","sub":true,"step":"清关交付"},{"k":"ord:8","m":"ord","mn":"订单合同","s":8,"n":"收汇核销单 / 对账单 / 收款确认函","sc":"mixed","lay":"mixed","d":"到账金额与应收不符要立刻查清（手续费 / 汇率 / 少付），不能糊过去。下方附可直接发客户的收款确认函。","t":"【收汇核销单】SO-______\n▸新手提示：到账比应收少一分钱都要查清楚。糊过去的话，下次客户少付你根本发现不了。\n\n一、应收应付\n  订单应收总额：________\n  定金：________　尾款：________\n  累计已收：________　　未收：【必填】________\n────────────────────────────────────────\n二、本次收汇\n  收汇日期：______\n  收汇金额：________\n  银行手续费：________\n  实际到账净额：________　（公式：收汇金额 − 手续费）\n  银行水单号：____________　　汇率：1 USD = ¥ ______\n  已转余款抵订单：□是 □否\n────────────────────────────────────────\n三、差异说明（如有必填）\n  原因：□银行手续费 □汇率差 □客户少付 □其他 ______\n  金额差：________\n  处理动作：______________________________\n  是否已向客户追讨：□否 □是（日期 ______，方式 ______）\n────────────────────────────────────────\n四、核销结论\n  核销后状态：【必填】□部分收款 □已收清\n  未收金额：________（勾「已收清」时必须为 0）\n  外汇核销 / 退税是否已办理：□否 □是（日期 ______）\n  经办人：______　日期：______　复核人：______\n  制单人签字：____________　复核人签字：____________\n  公司盖章：______________________　核销日期：______\n\n五、汇差算例（照这个算，别让汇率差糊过去）\n  订单应收 USD 20000（尾款已收清）\n  收汇金额 USD 20000、银行手续费 USD 40 → 实际到账净额 USD 19960\n  结汇汇率 7.10 → 结汇人民币 20000 × 7.10 = 142000\n  若按报价时汇率 7.25 算应是 145000 —— 汇率一口吃掉 3000 人民币，\n  这就是「差异说明」里勾「汇率差」的那 3000：不体现在毛利率上，\n  但实打实吃掉人民币利润。水单号与结汇汇率当天登记，别攒到月底。\n\n=== 以下为对外发客户的正式函件 ===\n\nPAYMENT CONFIRMATION\n\nDate：______　　Our Ref.：SO-______\nTo：____________ (Company)　　Attn：____________\n\nDear ________,\n\nThank you for your payment. We confirm receipt of your payment for order ______ as follows:\n\n  Invoice No.：________\n  Amount Received：________\n  Value Date：______\n  Our Reference No.：________\n\nThe outstanding balance of this order is now ________, which is payable by ______ (due date).\n\n★固定条款｜1. 收到款项以我方银行实际入账为准，中转行扣费造成的差额由付款方承担。2. 款项入账后我方将出具收据；如需形式发票收据请书面告知。\n▸新手提示：这封函不是客套，是留痕。银行入账后当天发，客户日后争议\"我付过了\"时，这就是证据。\n\n=== 对账单 Statement of Account ===\nSTATEMENT OF ACCOUNT\nStatement No.：______　Date：______　　Customer：____________\nCurrency：________\n────────────────────────────────────────\nDate｜Invoice No.｜Description｜Amount Due｜Amount Paid｜Balance\n____｜________｜________｜________｜________｜________\n____｜________｜________｜________｜________｜________\n─────┬──────────────────────────────────\nTOTAL DUE：________\nPayment Terms：定金 ______% 于生产前，尾款 ______% 于装运前\n▸新手提示：对账单一并发给客户，能显著减少\"以为付过了\"的争议。同时留一份自己存档。","sub":false,"step":"收汇结算"},{"k":"ord:8#1","m":"ord","mn":"订单合同","s":8,"n":"汇款水单登记与核对表","sc":"in","lay":"form","d":"客户打款后把水单（汇款证明）登记进来，逐项核对到账金额。收汇核销和退税都要求「收汇已核销」，水单是唯一凭据。","t":"【汇款水单登记与核对表】关联订单 ______\n▸新手提示：水单是收汇的唯一凭据。收到当天就登记，不要等月底对账时一起补 —— 补的时候就记不清是哪笔了。\n\n一、水单信息（照客户提供的水单 / 银行入账通知抄）\n  付款方名称：【必填】____________（须与合同买方一致）\n  付款银行 / 国家地区：____________\n  汇款日期：______　到账日期：______\n  汇出金额：________　　汇出币种：____________\n  入账金额：________　　入账币种：____________\n  差额（汇出 - 入账）：____________（自动计算）\n  结算币种：□USD □EUR □CNY □其他 ______\n  水单号 / 报文号：____________　银行 / 经办人：____________\n  汇款附言（客户备注的合同号 / 订单号）：____________\n▸新手提示：付款方和合同买方不一致的，一定要拿到买方书面说明再确认收款。第三方代付在退税环节是重点核查项。\n\n二、到账核对\n  本单应收：________　本单累计已收：________\n  本次款项性质：□定金（应收 ______%）□尾款（应收 ______%）□全额　□样品费\n  差额归属：□我方承担  □客户承担  □已向客户说明并同意\n  结汇汇率：______　结汇金额（RMB）：________\n▸新手提示：发票金额与到账金额不一致，绝不能默认\"差额就是手续费\"就算了。先查清是手续费、汇率还是少付；查不清就书面问客户。\n\n三、一致性核对（逐项打勾）\n  □ 水单上的付款方与合同买方一致\n  □ 水单附言里的合同号 / 订单号与本单一致（不一致必须书面确认，不能默认）\n  □ 到账金额与应收金额一致，或差额已说明\n  □ 本次收汇已回填订单「收汇日期 / 收汇金额 / 水单号 / 结汇汇率」\n  □ 该笔已计入「收汇核销」\n\n四、第三方代付（如有）\n  实际付款方：____________　与买方关系：____________\n  □ 有买方书面授权　□ 无买方书面授权（无授权不得确认收款）\n  □ 已完成受制裁国家 / 地区筛查，无异常\n  □ 本单无第三方代付\n\n★固定条款｜1. 水单仅为到账线索，收汇以我方银行实际入账金额为准。2. 客户提供的付款方与合同买方不一致的，必须取得买方书面说明后方可确认收款；否则可能构成第三方代付，影响收汇核销与出口退税。3. 水单原件须存档，保存期不少于 5 年。\n▸新手提示：水单要留能看清付款方、金额、日期的原件（银行回单或客户水单截图都行）。税务核查时只认原件，看不清的一律不算。","sub":true,"step":"收汇结算"},{"k":"ord:8#2","m":"ord","mn":"订单合同","s":8,"n":"信用证审证表（收到 L/C 先审后做）","sc":"in","lay":"form","d":"L/C 一到手就审，不要等到备货完才看。信用证是单据交易，条款里任何一条做不到，银行就有理由拒付 —— 而货已经发走了。","t":"【信用证审证表】L/C CHECKLIST\nL/C 编号：【必填】____________　开证行：____________　开证日：______\n▸新手提示：最晚交单期和有效期是两个日子，别看混。过了交单期，银行拒付，货和钱两头空。\n\n一、四个关键日期（错一个就是不符点）\n  信用证有效期：【必填】______（到期地点：□我方所在地 □开证行所在地）\n  最迟装船日：【必填】______　我们能否做到：□能 □不能\n  最晚交单期：【必填】______（交单不得晚于此日，且不得晚于信用证有效期）\n  通常为装船后 ______ 日内交单 —— 与最迟装船日一起核对，两个日子要能同时做到\n  交单地点：____________\n\n二、金额与币种\n  信用证金额：【必填】________　币种：【必填】________\n  与合同 / PI 金额是否一致：□一致 □不一致（差额 ______，原因 ____________）\n  是否允许分批装运：□允许 □不允许　是否允许转运：□允许 □不允许\n  溢短装：□无 □±______%\n\n三、单据要求（逐项核对，缺一份就拒付）\n  □ 商业发票（份数 ______，是否需签署/认证 ______）\n  □ 装箱单（份数 ______）\n  □ 提单（□全套正本 □____ 份；Consignee 抬头要求：____________）\n  □ 原产地证（种类 ______，签发机构 ______）\n  □ 保险单（CIF 时；投保加成 ______%，险别 ____________）\n  □ 检验证书（□我方出具 □第三方 ______ □客户指定 ______）\n  □ 受益人证明 □ 装船通知副本 □ 其他：____________\n\n四、软条款排查（这几条出现一条就要警惕）\n  □ 要求\"开证行另行通知才能装运\"→ 不接受，必须删改\n  □ 要求提交\"客户签署的检验证书\"→ 主动权在对方，必须删改\n  □ 要求\"正本提单直接寄开证申请人\"→ 货权丢失，必须删改\n  □ 信用证在开证行所在地到期 → 交单时间不可控，要求改到我方所在地\n  □ 本证受 UCP600 约束：□是 □否（不是的话要特别当心）\n\n五、审证结论\n  结论：【必填】□可直接执行 □需改证（改证申请编号 ______）□不可接受，须重开\n  需修改条款清单：______________________________\n  审证人：______　复核人：______　日期：______\n\n★固定条款｜1. 信用证项下银行处理的仅是单据而非货物，任何单据不符点均可构成拒付理由，与货物是否合格无关。2. 本表所列软条款一经接受，即丧失对货权与装运的主动权，须在改证后方可安排生产。3. 审证结论为\"需改证\"的，在收到开证行修改通知书之前不得安排装运。\n▸新手提示：改证要趁早。越临近装船，改证越容易误了船期；而且改证费通常是我方承担。\n▸新手提示：「客户签署的检验证书」是最典型的软条款 —— 客户不签，你永远交不了单。","sub":true,"step":"收汇结算"},{"k":"ord:8#3","m":"ord","mn":"订单合同","s":8,"n":"信用证改证申请书","sc":"sup","lay":"form","d":"审证发现做不到的条款，必须书面要求开证申请人改证。改证要在装船前完成，改证费通常我方承担。","t":"【信用证改证申请书】L/C AMENDMENT REQUEST\n致（开证申请人）：____________　申请日期：【必填】______\nL/C 编号：【必填】____________　合同号：____________\n▸新手提示：改证申请一定要落到书面（邮件即可），并请对方书面确认已向开证行申请。口头答应没用，开证行没收到改证申请，原条款依然有效。\n\n一、申请修改事项（逐条写清\"原文 → 改为\"）\n  修改 1：原条款 ______________________________\n          修改为 ______________________________\n  修改 2：原条款 ______________________________\n          修改为 ______________________________\n  修改 3：原条款 ______________________________\n          修改为 ______________________________\n\n二、修改原因\n  □ 交期做不到（说明 ____________）　□ 单据无法取得（说明 ____________）\n  □ 存在软条款，我方无法控制（说明 ____________）\n  □ 与合同 / PI 不一致（说明 ____________）\n  □ 其他：______________________________\n\n三、费用与时间\n  改证费承担：□我方 □开证申请人　预计金额：________\n  最迟需在本日之前完成改证：【必填】______（晚于此日将影响装船）\n\n四、签章\n  申请单位（盖章）：____________　经办人：____________　日期：______\n  对方书面确认收到：□已确认（日期 ______，方式 ______）□未确认\n\n★固定条款｜1. 信用证修改须经开证行发出修改通知书并为我方接受后方生效，开证申请人的口头或书面同意不构成修改。2. 我方对修改通知书须作出接受或拒绝的明确表示，沉默不构成接受。3. 在修改生效前，原信用证条款对各方仍具约束力。\n▸新手提示：改证通知书到了之后，要么明确接受、要么明确拒绝，不能\"不表态\"。部分接受是不允许的 —— UCP600 下修改只能整体接受或整体拒绝。","sub":true,"step":"收汇结算"},{"k":"ord:8#4","m":"ord","mn":"订单合同","s":8,"n":"信用证交单清单（议付/承兑用）","sc":"sup","lay":"form","d":"交单前逐项清点。银行是按单据付款的，少一份、错一处，就是一次拒付 —— 拒付一次，货款至少晚一个月。","t":"【信用证交单清单】DOCUMENTS PRESENTATION CHECKLIST\nL/C 编号：【必填】____________　交单日期：【必填】______　交单银行：____________\n我方编号（BP/议付编号）：____________\n▸新手提示：交单清单一式两份，银行留一份、自己留一份。将来真被拒付，要能说清\"当时交了什么\"。\n\n一、单据清单（与信用证要求逐条对照后打勾）\n  填法：单据名称｜份数｜编号/号码｜签发日｜与 L/C 要求是否一致｜备注\n  1 ｜____｜____｜____｜____｜____\n  2 ｜____｜____｜____｜____｜____\n  3 ｜____｜____｜____｜____｜____\n  4 ｜____｜____｜____｜____｜____\n  5 ｜____｜____｜____｜____｜____\n\n二、交单前必查（不符点高发区）\n  □ 发票金额与信用证金额一致（含溢短装的在允许范围内）\n  □ 发票上的货物描述与信用证**逐字**一致\n  □ 提单的 Consignee / Notify 与信用证要求一致\n  □ 提单已按要求背书（□空白背书 □记名背书 ________）\n  □ 保险单的投保加成不低于信用证要求（通常 110%）\n  □ 各单据之间的件数 / 毛重 / 体积完全相符\n  □ 所有需要签署的单据都已签署\n  □ 在交单期内（最晚交单日 ______）且未过信用证有效期\n\n三、金额与收汇\n  本次交单金额：【必填】________　币种：________\n  银行费用：________　预计入账净额：________\n  收汇方式：□议付 □承兑（到期日 ______）□付款\n\n四、签署\n  制单人：______　复核人：______　日期：______\n  银行签收：____________　签收日期：______\n\n★固定条款｜1. 交单单据须符合信用证条款及 UCP600 的规定，任何不符点均可能导致开证行拒付，且拒付与货物实际状况无关。2. 交单后如需退单修改，须经开证行同意并承担由此产生的费用与时间损失。3. 本清单一式两份，一份随单交银行，一份由我方留存备查。\n▸新手提示：发票上的货物描述要和信用证\"一字不差\"。多写一个词、少写一个空格都可能被挑不符点 —— 这不是银行刁难，是单据交易的游戏规则。","sub":true,"step":"收汇结算"},{"k":"ord:8#5","m":"ord","mn":"订单合同","s":8,"n":"托收交单委托书（D/P · D/A）","sc":"sup","lay":"form","d":"D/P 是付款交单、D/A 是承兑交单。D/A 意味着客户先拿到单、后付款 —— 等于赊销，只有老客户且信用良好才用。","t":"【托收交单委托书】COLLECTION ORDER\n致（托收行）：____________　委托日期：【必填】______\n▸新手提示：D/A（承兑交单）客户只要签个字就能把货提走，钱要到期才付 —— 这是赊销，不是收款。只有合作多年、信用良好的客户才用。\n\n一、交单条件\n  方式：【必填】□D/P at sight（付款交单）□D/P after ______ 天 □D/A ______ 天\n  托收金额：【必填】________　币种：________\n  是否允许分批付款：□不允许 □允许　是否需拒绝证书（protest）：□不需要 □需要\n\n二、当事人\n  委托人（我方）：____________\n  付款人（客户）：____________　地址：____________\n  代收行：____________（客户所在地银行，SWIFT：____________）\n\n三、随附单据\n  □ 汇票（份数 ______，期限 ______）　□ 商业发票（______ 份）\n  □ 装箱单（______ 份）　□ 提单（____ 份正本，抬头 ____________）\n  □ 原产地证　□ 保险单　□ 其他：____________\n\n四、特别指示（不写清楚，代收行按自己的惯例办）\n  □ 费用由付款人承担；付款人拒付时由委托人承担\n  □ 不得放弃利息 / 费用\n  □ 需要代收行在拒付时做成拒绝证书\n  □ 提单不得在付款 / 承兑前放单\n  □ 拒付时货物处理方式：□原地仓储并投保 □退运 □转卖（需我方书面同意）\n\n五、签章\n  委托单位（盖章）：____________　经办人签字：____________　日期：______\n\n★固定条款｜1. 托收属商业信用，银行仅代为收款，不承担付款责任；付款人拒付或承兑后到期不付的，风险由委托人自行承担。2. D/A（承兑交单）项下单据在付款人承兑后即行释放，委托人须自行评估付款人信用风险。3. 代收行按本委托书指示办理；指示不明的，代收行按所在地惯例处理，后果由委托人承担。\n▸新手提示：托收没有信用证那样的\"银行信用\"兜底。客户不要货就是不要货，货已经在目的港，退运的成本常常比货值还高。","sub":true,"step":"收汇结算"},{"k":"ord:9","m":"ord","mn":"订单合同","s":9,"n":"出口退税申报跟踪表","sc":"in","lay":"form","d":"国家退的钱，不申报就是白丢。申报期限一过就补不回来。","t":"【出口退税申报跟踪表】SO-______\n▸新手提示：出口退税是公司实打实的现金流入。漏报不是\"少赚\"，是\"白丢\"。设好日历提醒，不要靠记性。\n\n一、申报依据（缺一不可）\n  报关单号：____________（退税联已收：□是 □否）\n  出口日期（报关单上的）：______\n  采购进项发票：已认证 □是 □否　发票号码：____________\n  收汇是否已核销：【必填】□是 □否（未核销一般不能申报）\n\n二、申报金额\n  采购成本（不含税）：¥ ________\n  退税率：______%（以商品编码对应税率为准，常见 13%）\n  预计可退税额：¥ ________　（公式：采购成本 × 退税率）\n  实际申报金额：¥ ________\n\n三、申报与到账\n  退税系统申报日：______（与系统「出口退税申报日」一致）\n  申报批次号 / 受理号：____________\n  税务机关受理：□待受理 □已受理 □已复审\n  退税款到账日：______　到账金额：¥ ________\n\n四、时限提醒（最要命的一条）\n  出口之日：______　→ 申报截止：次年 4 月 30 日\n  距今剩：______ 天　（≤90 天必须处理，别拖）\n────────────────────────────────────────\n差异说明（申报额 ≠ 到账额时必填）：\n  ____________________________________________________\n经办人：______　复核人：______","sub":false,"step":"出口退税"},{"k":"ord:9#1","m":"ord","mn":"订单合同","s":9,"n":"进项发票（增值税专票）追踪台账","sc":"in","lay":"form","d":"出口退税能不能退到，命门在这张票上：发票没到、没认证、或与报关单对不上，税就退不回来。一票一追踪，别等到申报期才发现缺票。","t":"【进项发票（专票）追踪台账】\n▸新手提示：退税申报有期限（报关出口之日起至次年 4 月 30 日前的各申报期）。票没到、没认证，期限一到这笔退税就彻底没了 —— 而这张票的成本已经付给供应商了。\n\n订单号：SO-______　出口报关单号：____________　出口日期：______\n退税申报批次：____________　申报截止日：______\n\n一、进项发票逐票登记\n  填法：项号｜供应商｜采购合同号｜专票号码｜开票日期｜金额(不含税)｜税率%｜税额｜认证日期｜认证状态｜对应出口报关单号\n  1 ｜____｜____｜____｜____｜____｜____｜____｜____｜____｜____\n  2 ｜____｜____｜____｜____｜____｜____｜____｜____｜____｜____\n  3 ｜____｜____｜____｜____｜____｜____｜____｜____｜____｜____\n  合计金额（不含税）：________　合计税额：________\n\n二、票证一致性核对（退税核查必看）\n  □ 发票上的品名与出口报关单的品名能对上（名称可不同，但必须是同一货物）\n  □ 发票金额与采购合同、付款金额一致\n  □ 供应商与采购合同、付款对象一致（不一致＝票货分离，退税高风险）\n  □ 发票已在增值税发票综合服务平台勾选认证\n  □ 发票开票日期早于退税申报日期\n\n三、缺票 / 异常追踪\n  缺票供应商：____________　缺票金额：________　催票日期：______\n  异常类型：□未开票 □已开票未寄到 □已到票未认证 □开票信息有误需重开 □供应商走逃失联\n  处理动作：______________________________\n  责任人：____________　预计解决日：______\n\n★固定条款｜1. 进项发票的品名、金额、供应商须与采购合同及付款记录相互对应，票货分离或不对应的不得用于退税申报。2. 发票须在规定期限内完成认证（勾选），逾期未认证的进项税额不得抵扣，亦不得作为退税依据。3. 供应商走逃、失联或开具异常凭证的，已退税款可能被追回，相关责任由经办人及审批人承担。\n▸新手提示：供应商\"开票要等下个月\"这种话不能信。催票要落在纸面上 —— 催票日期、对方承诺日期、责任人，三样都要有。\n▸新手提示：供应商失联是退税里最坏的一种情况，已经退的税会被追回。合作前查一下供应商的经营状态和纳税信用等级，成本很低。","sub":true,"step":"出口退税"},{"k":"ord:9#2","m":"ord","mn":"订单合同","s":9,"n":"出口退（免）税单证备案封面与目录","sc":"in","lay":"form","d":"税务要求出口企业把单证留存备案。没有这份封面和目录，备案就是一摞散纸，核查时说不清哪票是哪票。","t":"【出口退（免）税单证备案】封面与目录\n备案年度：______　备案编号：____________　装订日期：______\n▸新手提示：备案要按\"申报批次 + 报关单号\"归档。核查时税务是按批次调的，散着放一定找不到。\n\n一、封面信息\n  企业名称：____________　纳税人识别号：____________\n  备案所属期：______ 年 第 ______ 批次\n  本册共 ______ 票，报关单号自 ____________ 至 ____________\n  本册出口销售额合计：________　申报退税额合计：________\n  装订人：______　复核人：______　保管期限：______ 年（不少于 5 年）\n\n二、目录（逐票登记）\n  填法：序号｜报关单号｜出口日期｜出口销售额｜申报退税额｜备案单证是否齐全｜备注\n  1 ｜____｜____｜____｜____｜____｜____\n  2 ｜____｜____｜____｜____｜____｜____\n  3 ｜____｜____｜____｜____｜____｜____\n\n三、每票必备的备案单证（逐票打勾，缺一件就是备案不齐）\n  □ 出口货物报关单（退税联）\n  □ 商业发票　□ 装箱单\n  □ 提单 / 运单（或其他承运人出具的货物单据）\n  □ 采购合同 / 供货合同　□ 进项增值税专用发票（认证通过）\n  □ 收汇凭证（水单 / 结汇凭证）\n  □ 委托报关协议（委托报关时）\n\n四、自查\n  □ 各票单证的品名、数量、金额相互一致\n  □ 报关单号与退税申报表一一对应\n  □ 进项发票已认证，且供应商未走逃失联\n  □ 本册已按序号装订，页码连续\n\n★固定条款｜1. 出口企业须按规定将备案单证按顺序装订成册并妥善保存，保存期不少于 5 年；备案单证不齐或伪造的，已退税款应予追回。2. 本目录所列各票单证应与退税申报表逐项对应，任何一票缺失均构成该笔申报的备案缺陷。3. 备案单证不得涂改；需更正的应另行说明并留存更正依据。\n▸新手提示：核查时最常挑的就是\"进项发票没认证\"和\"供应商走逃\"。这两件事在装订前先自查一遍，比事后补救省事得多。","sub":true,"step":"出口退税"},{"k":"ord:10","m":"ord","mn":"订单合同","s":10,"n":"订单结案复盘表 / 售后沟通函","sc":"mixed","lay":"mixed","d":"关账后本单数据锁定。趁热把踩过的坑记下来，下一单才不会重犯。下方附对客户的售后函。","t":"【订单结案复盘表】SO-______\n▸新手提示：结案复盘不是为了交差，是为了把这单的坑变成下单的清单。写得越具体越有用。\n\n一、Result 结果\n  订单金额：________\n  成本合计：________\n  实际毛利：________　　实际毛利率：______%\n  是否达到 10% 毛利线：□是 □否（原因 ____________）\n  是否按时出货：□是 □否（延迟 ____ 天）\n  尾款是否收清：□是 □否（未收 ________，原因 ______）\n────────────────────────────────────────\n二、Problems 本单踩过的坑（必填，写具体）\n  1. ______________________________________________\n  2. ______________________________________________\n  3. ______________________________________________\n────────────────────────────────────────\n三、Reusable Lessons 可复用的经验 / 建议写进 SOP\n  ____________________________________________________\n────────────────────────────────────────\n客户复购可能性评估：□高 □中 □低\n客户档案是否已更新：□是 □否\n结案日期：______　结案人：______\n\n=== 以下为对外发客户的正式函件 ===\n\nAFTER-SALES SERVICE REQUEST / RESPONSE\n\nDate：______　　Our Ref.：SO-______\nTo：____________ (Company)　　Attn：____________\n\nDear ________,\n\nThank you for your order ______. We hope the goods have performed as expected.\n\nIssue reported\n  Description of issue：____________\n  Affected quantity / batch：____________\n  Photos or video attached：□Yes □No\n  Date the issue was first noticed：______\n\nOur proposed solution\n  □ Replacement of the affected goods in the next shipment\n  □ Credit note against your balance\n  □ Technical guidance / repair instruction\n  □ Replacement and recharge of the production cost\n\n★固定条款｜1. 品质异议须于货物到货后 7 日内以书面形式提出并附照片或视频证据；逾期视为接受。2. 质保范围限于产品质量问题，非质量原因或使用不当造成的损坏不在质保范围内。3. 任何解决方案均不构成对其他订单品质问题的承诺。\n▸新手提示：售后函必须严格卡 7 日异议期。这条不写进去，客户半年后翻出来一张模糊照片要全额退款，你基本没有还手余地。\n▸新手提示：先收证据再谈方案。回信第一句不要是\"我们很抱歉\"，先把问题描述复述一遍——这是把对方拉回事实。","sub":false,"step":"结案复盘"},{"k":"ord:10#1","m":"ord","mn":"订单合同","s":10,"n":"索赔回复函 Claim Reply Letter","sc":"out","lay":"letter","d":"客户提出索赔后的正式回复：受理还是不受理、调查结论、我方方案与赔付上限。口头答复不算数 —— 函里写「已受理」就等于把处理时限压在自己身上，写错一句后面全被动。","t":"CLAIM REPLY LETTER\nOrder No.: SO-______　Our Ref.: CR-______　Date: ______\nTo: ____________ (Company)　Attn: ____________\n▸Tip: Reply with this letter first — never answer orally with \"we will look into it\". Writing \"accepted\" puts the handling deadline on us; writing \"rejected\" must cite the contract or an inspection report. One wrong sentence and everything after is reactive.\n▸Tip: Agree the liability finding and the cap on compensation with a colleague before sending. What goes out is the company's position, not the handler's personal view.\n\n1. The Buyer's Claim (copy the claim letter word for word; do not reword the buyer's demand)\n  Buyer's claim ref. / date: ____________ / ______\n  Goods concerned: ____________　Quantity: ________\n  Amount claimed: 【必填】________ (currency ______)　Remedy sought: □Replacement □Price reduction □Return and refund □Repair □Other ______\n  Grounds stated by the buyer: ____________\n\n2. Decision on Acceptance 【必填】\n  □Accepted (investigation opened)　□Partly accepted (accepted: ____________; not accepted: ____________)\n  □Rejected (basis: □clause __ of the contract □third-party inspection report □claim raised after the agreed period □other ______)\n  Response deadline: investigation findings shall be given within ______ working days from the date of this letter\n\n3. Investigation Findings and Allocation of Liability\n  Method: □review of outgoing inspection and retained samples □third-party inspection (SGS / BV / TUV) □on-site check □other ______\n  Cause established: □our quality □factory production □packing / carriage □buyer's use or storage □attributable to neither party\n  Liable party: □us □factory □buyer □carrier / forwarder □shared (ratio ______)\n\n4. Our Proposal 【必填】\n  Proposal: □Replacement □Spare parts □Return and refund □Allowance □Free repair □Original decision stands (not accepted)\n  Allowance / compensation: ________ (currency ______)　Spare parts qty: ________　Expected completion: ______\n  Buyer's confirmation deadline: please confirm this proposal in writing before ______; otherwise it lapses automatically\n\n5. Follow-up\n  Next reply date: ______　Handler / contact: ____________\n\n★CLAIM HANDLING TERMS (allocation of liability; not to be deleted or altered)\n1. Claim period. The buyer shall raise any quality objection within ______ days from arrival of the goods at the port of destination, with photos / video or a third-party inspection report; the seller may reject a claim raised after that period.\n2. Basis of inspection. Quality shall be judged against the sample confirmed and sealed by both parties and the technical standard agreed in the contract; a report commissioned by the buyer alone shall not determine liability — a third-party report accepted by both parties shall.\n3. Allocation of liability. Where the seller is found liable, the seller shall replace or repair the goods or grant an allowance; loss caused by carriage, insurance or the buyer shall be pursued with the seller's assistance but without liability on the seller.\n4. Cap on compensation. In no event shall the seller's liability exceed the contract value of the goods concerned, and it shall exclude indirect losses claimed by the buyer such as downtime, loss of profit and loss of goodwill.\n5. No set-off. The buyer shall not deduct the claimed amount from sums payable without the seller's written consent; any such deduction constitutes a breach by the buyer.\n6. Dispute resolution. Disputes arising from this letter are subject to the dispute resolution agreed in the main contract.\n\n▸Tip: Clause 4 on the cap is the most valuable sentence in the whole letter. Buyers routinely claim downtime and idle labour together with the direct loss; stating that only direct loss is compensated is where the negotiating room is.\n\nSIGNED\n  For the BUYER: Name ____　Title ____　Signature ____　Date ____\n  For the SELLER: Name ____　Title ____　Signature ____　Date ____","sub":true,"step":"结案复盘"},{"k":"ord:10#2","m":"ord","mn":"订单合同","s":10,"n":"退运申请与确认函 Return Cargo Application","sc":"out","lay":"letter","d":"决定退运时用。写清退运方式、运费与责任方、目的港交接安排 —— 这三件事没说清就发函，货到了没人接，滞港费按天涨，最后全算在货主头上。","t":"RETURN CARGO APPLICATION\nOrder No.: SO-______　Our Ref.: RC-______　Date: ______\nTo: ____________ (Company)　Attn: ____________\nCc: Forwarder ____________　Agent at destination ____________\n▸Tip: A return shipment sends the goods backwards — freight, duty and the liable party must be settled first. Without this confirmation the forwarder will not even book the vessel.\n\n1. Goods to be Returned\n  Product / specification: ____________　Quantity: ________　Packages / volume: ______ / ______ CBM\n  Original B/L No.: ____________　Original ETD / ETA: ______ / ______\n  Port of destination / place of storage: ____________\n\n2. Reason for Return (to match the conclusion in the Claim Reply Letter)\n  □Quality not in conformity □Wrong specification □Damage in transit □Buyer cancellation □Other ______\n  Liable party: □us □factory □buyer □carrier / forwarder □shared (ratio ______)\n\n3. Return Arrangements\n  Method: □Full container return □LCL return □Transfer to a third party / on-carriage □Destroy locally (use the Abandonment Notice instead)\n  Expected sailing: ______　Expected arrival: ______\n  Contact for collection / handover at destination: ____________　Tel: ____________\n  Customs procedure: □Customs clearance as returned goods □Other ______\n\n4. Allocation of Costs 【必填】\n  Sea freight: ________　Borne by: □us □buyer □factory □shared\n  Destination charges (demurrage / storage / devanning): ________　Borne by: ______\n  Import duty and VAT: ________　Borne by: ______\n  Total: ________　Currency: ______\n\n★RETURN SHIPMENT TERMS (allocation of liability; not to be deleted or altered)\n1. Deadline for collection. The buyer shall cooperate in completing collection or delivery to the nominated forwarder within ______ days from arrival of the goods at the port of destination; demurrage and storage charges arising thereafter shall be borne by the buyer.\n2. Allocation of costs. Where the return is attributable to the seller, the round-trip freight shall be borne by the seller; where it is attributable to the buyer (order cancellation, specification change, incomplete clearance documents), all freight and destination charges shall be borne by the buyer.\n3. Condition of the goods. Returned goods must remain in their original packing and unused, with packing photos retained; the seller may refuse acceptance of, or grant a reduced allowance for, goods that have been opened, used or are missing accessories.\n4. Duty and drawback. Import taxes arising from the return, and the obligation to repay any export drawback already claimed, shall be performed as agreed in writing by the parties.\n5. Passing of risk. Risk during the return voyage is allocated according to the trade term and insurance arrangements adopted; where the return is for the buyer's reason and no insurance is in place, risk rests with the buyer.\n6. Effectiveness. This letter becomes effective upon signature and return by both parties; arranging the return without a counter-signature is at one's own risk.\n▸Tip: Returned goods must be declared again when re-exported — do not assume that sending them back the same way needs no formalities. The export drawback must be handled in parallel: tax already refunded may have to be repaid.\n\nSIGNED\n  For the BUYER: Name ____　Title ____　Signature ____　Date ____\n  For the SELLER: Name ____　Title ____　Signature ____　Date ____","sub":true,"step":"结案复盘"},{"k":"ord:10#3","m":"ord","mn":"订单合同","s":10,"n":"目的港弃货处置函 Abandonment Notice","sc":"out","lay":"letter","d":"客户明确不要货时用。拿到客户「同意弃货并承担费用」的书面确认，才有资格处置这批货 —— 口头弃货不算数，堆存费和销毁费最后还是找货主。","t":"ABANDONMENT NOTICE\nOrder No.: SO-______　Our Ref.: AB-______　Date: ______\nTo: ____________ (Company)　Attn: ____________\nCc: Agent at destination ____________　Forwarder ____________\n▸Tip: Abandonment does not end with \"we do not want it\" — storage, destruction and clearance liability all remain attached to the holder of the bill of lading. A written confirmation from the buyer that he abandons the goods and bears the costs is indispensable; otherwise the charges come back to the owner (us).\n\n1. The Abandonment\n  Goods: ____________　Quantity / packages: ________ / ______\n  B/L No.: ____________　Date of arrival: ______　Stored at: ____________\n  Costs incurred (as at ______): demurrage / storage ________　other ________ (currency ______)\n\n2. Reason for Abandonment\n  □Buyer refuses acceptance □Clearance documents not in conformity □Market reasons □Quality dispute (see the Claim Reply Letter) □Other ______\n\n3. Disposal\n  □Destroy locally (planned date: ______　by: ____________)\n  □Resell to a third party (buyer: ____________　difference borne by: ____________)\n  □Return to the country of origin (use the Return Cargo Application instead)\n  □Hand over for sale by customs at the port of destination (expected recovery ________)\n\n4. Costs and Authority\n  Does the buyer bear the costs incurred and to be incurred: 【必填】□Yes □No (reason: ____________)\n  Authority granted: the buyer authorises us or our agent to handle □clearance □destruction □resale □sale by customs on his behalf\n  Authority valid until: ______\n\n★ABANDONMENT TERMS (allocation of liability; not to be deleted or altered)\n1. Effectiveness. Abandonment takes effect from the date of the buyer's written confirmation; an oral statement or a statement by telephone is not a basis for abandonment.\n2. Allocation of costs. Storage, demurrage, destruction and clearance charges arising from the buyer's refusal to accept or pay or his failure to collect within the period shall be borne by the buyer; if unpaid, the seller may deduct them from sums received or recover them separately.\n3. Title and right of disposal. After abandonment, title and the right of disposal vest in the seller, who may resell at a reduced price, destroy or return the goods without further consent from the buyer.\n4. Import taxes. Import duty, VAT and penalties arising from abandonment, destruction or resale shall be borne by the liable party.\n5. Insurance. Whether loss from abandonment falls within the cover is determined by the insurance terms; the buyer shall cooperate in providing the documents needed for a claim.\n6. Effect. This letter and its counter-signed copy form an annex to the main contract and have the same effect as the main contract.\n▸Tip: Clause 3 on title vesting in the seller must be there — without it, if you resell the goods, the buyer can come back later and say they were his.\n\nSIGNED\n  Confirmed by the buyer: Name ____　Title ____　Signature ____　Date ____\n\nSIGNED\n  For the BUYER: Name ____　Title ____　Signature ____　Date ____\n  For the SELLER: Name ____　Title ____　Signature ____　Date ____","sub":true,"step":"结案复盘"},{"k":"ord:10#4","m":"ord","mn":"订单合同","s":10,"n":"保险报案单 Insurance Claim Notice","sc":"out","lay":"letter","d":"投保或 CIF 成交的货出险时，向保险人报案用。险种、保单号、损失描述、随附单证、索赔金额一次报全，超过保单期限报案可能直接不赔。","t":"INSURANCE CLAIM NOTICE\nPolicy No.: ____________　Claim No. (for insurer): ____________　Date of notice: ______\nTo: ____________ (Insurer)　Attn: ____________\nInsured: ____________　Order No.: SO-______\n▸Tip: The first thing after a loss is to notify the insurer within the period stipulated in the policy (commonly 30 days after arrival; some short-period covers allow only 3). Miss the deadline and even complete documents may not be paid — file the notice first and supplement the documents afterwards.\n\n1. Insurance Particulars\n  Applicant / insured: ____________\n  Cover: □All risks □WPA □FPA □Rejection risk □Other ______\n  Sum insured: ________ (currency ______)　Percentage covered: ______%　Policy issued on: ______\n  Period of insurance: from ______ to ______\n\n2. Goods and Carriage\n  B/L No.: ____________　Vessel / voyage: ____________\n  Port of loading / discharge: ____________ / ____________　ETD / ETA: ______ / ______\n  Container / seal No.: ________ / ________　No. of packages: ______\n  Invoice No. / value: ____________ / ________\n\n3. Description of the Loss 【必填】\n  Time of loss: ______　Place of loss: ____________\n  Nature of loss: □Breakage □Shortage □Wetting □Total loss □Other ______\n  Quantity damaged / estimated amount: ________ / ________\n  Condition at site: ____________\n\n4. Documents Attached (none may be missing)\n  □Original policy □Bill of lading □Commercial invoice □Packing list □Third-party inspection report □Photos / video of the goods\n  □Statement of claim □Damage record / outturn report at destination □Other ______\n\n5. Claim\n  Amount claimed: ________　Currency: ________\n  Payment: □T/T to the insured's account □Other ______\n\n★CLAIM NOTICE TERMS (notice and claim; not to be deleted or altered)\n1. Time limit for notice. The insured shall notify the insurer within ______ days of discovering the loss and in any event not later than the claim period stipulated in the policy; where late notice prevents the insurer from assessing the loss, the insurer shall not be liable.\n2. Duty to mitigate. The insured shall take reasonable measures promptly to prevent further loss; loss increased by failure to mitigate shall not be compensated.\n3. Authenticity of documents. Documents submitted must be true and complete; the insurer may refuse payment and pursue liability where documents are false.\n4. Subrogation. After payment, the insured shall assign to the insurer his rights of recovery against the carrier and third parties and assist in the recovery.\n5. Deductible and proportion. The amount payable is calculated on the deductible and percentage covered stipulated in the policy and may be lower than the amount claimed.\n6. Basis of assessment. The extent of loss is determined by the inspection report of a surveyor accepted by the insurer.\n▸Tip: A \"damage record\" signed by the destination agent or the master carries far more weight than photographs taken by ourselves. Ask for it at discharge — once the vessel has sailed, no one will issue it.\n\nSIGNED & SEALED\n  Insured (seal): ____________　Handler: ________　Date: ______\n  Received by the insurer: ____________　Date: ______","sub":true,"step":"结案复盘"},{"k":"cust:0","m":"cust","mn":"客户名录","s":0,"n":"客户档案表 / KYC 调查表","sc":"in","lay":"form","d":"新客户建档一次，后面所有报价、合同、信用判断都读这份。KYC 那几栏是反洗钱与制裁筛查的留痕，也是高风险国家收款被银行拦下时唯一能自证的材料。","t":"【客户档案表 / KYC 调查表】CUS-______\n▸新手提示：这份表建档时填一次就行，但「信用与风险」那一栏要**每次出事前更新**。客户档案最怕的是建完就再没人看。\n\n一、主体信息\n  客户名称（英文，与合同一致）：【必填】____________\n  客户名称（中文 / 当地语言）：____________\n  国别 / 地区：【必填】____________　城市：____________\n  注册地址：____________\n  公司类型：□进口商 □批发商 □零售商 □品牌商 □制造商 □贸易商 □其他 ______\n  成立年份：______　员工规模：□1–10 □11–50 □51–200 □200+\n  官网：____________\n▸新手提示：客户名称必须记**英文全称**，且和将来合同、发票、提单上的抬头一字不差。写简称，开信用证和办产地证时对不上，改单要花钱。\n\n二、联系人\n  主要联系人 / 职位：____________　邮箱：____________\n  电话 / WhatsApp：____________　时区：____________\n  决策角色：□决策人 □影响者 □执行人 □未知\n  备用联系人：____________\n\n三、业务画像\n  主营产品：____________　目标市场：____________\n  与我方合作的品类：____________\n  年采购量（估算）：____________　采购频次：□ monthly □季度 □年度 □不定\n  是否要求独家 / 代理：□否 □是（区域 ______，期限 ______）\n  认证 / 合规要求：□CE □FDA □UL □REACH □其他 ______ □无\n\n四、商务条件（谈定的口径）\n  常用贸易术语：□EXW □FOB □CFR □CIF □DDP □其他 ______\n  结算币种：□USD □EUR □RMB □其他 ______\n  付款方式：□T/T □L/C at sight □L/C __ days □D/P □D/A □OA __ 天\n  账期：______ 天　信用额度：____________\n  定金比例：______%\n\n五、信用与风险\n  信用等级：□A（可放账）□B（款到发货）□C（预付全款）□D（黑名单，禁止交易）\n  历史逾期次数：______　当前逾期金额：____________　最长逾期天数：______\n  是否有过索赔 / 纠纷：□否 □是（说明 ____________）\n  风险备注：____________\n\n六、KYC / 合规筛查（必填，留痕用）\n  实际受益人（UBO）：____________　国籍：____________\n  □ 已完成受制裁国家 / 地区及实体清单筛查，无命中\n  □ 客户注册地不在高风险司法辖区\n  □ 非政治公众人物（PEP）；是 PEP 的已取得上级书面同意\n  □ 付款方与买方一致；存在第三方代付的已取得买方书面授权\n  筛查日期：______　筛查人：______\n▸新手提示：KYC 这几栏别嫌麻烦。高风险国家的款项被银行拦截时，能拿出来证明\"我做过筛查、留过痕\"的只有这张表 —— 没有它，钱冻在银行里几个月。\n\n七、建档\n  建档人：______　建档日期：______　复核人：______\n  下次复核日期：______\n▸新手提示：信用记录为 D 的客户，系统在订单「已出货」环节会直接拦住不让走。建档时判成 D，就等于提前把雷排掉。","sub":false},{"k":"sam:0","m":"sam","mn":"样品台账","s":0,"n":"样品申请单","sc":"in","lay":"form","d":"不问清楚就寄，客户收到说\"不是我想要的\"，白寄还亏运费。","t":"【样品申请单】SAM-______\n▸新手提示：寄样前一定要拿到客户的书面确认——颜色、尺寸、logo 位置、包装。这一步省掉的，后面全都要还回去。\n\n客户名称：【必填】____________　关联询盘：INQ-______\n收件人 / 电话 / 地址：____________________________\n────────────────────────────────────────\n产品名称：【必填】____________　规格：____________\n样品数量：________　样品单价：________\n样品成本预估：________\n收费方式：□免费 □收费（______）□退回后退还\n客户是否接受打样费：□是 □否 □未询问\n▸新手提示：客户说\"先寄来看看\"时，一定要顺势报价并问\"打样费是否接受\"。不问，等大货成了样品费就要不回来。\n────────────────────────────────────────\n定制要求\n  Logo：□无 □有（位置 ______，工艺 ______）\n  颜色 / 尺寸：____________\n  包装：□普通包装 □客户指定包装（说明 ____________）\n  其他：____________\n────────────────────────────────────────\n样品用途：□给客户看 □给客户测试 □寄给客户内部审批 □展会用\n期望寄出日：______\n申请人：______　日期：______　批准人：______","sub":false},{"k":"sam:1","m":"sam","mn":"样品台账","s":1,"n":"样品寄出单 / 样品发票","sc":"mixed","lay":"mixed","d":"快递单号当天发给客户。样品价值如实申报，低报被查会扣货。","t":"【样品寄出单】SAM-______\n▸新手提示：样品寄出当天必须把快递单号发给客户。客户在等样品，等不到物流信息就会重复问，重复问就会怀疑你没寄。\n\n样品编号：SAM-______　客户名称：____________\n收件人 / 电话 / 地址：____________________________\n────────────────────────────────────────\n快递公司：____________（常用 DHL / FedEx / UPS / 顺丰国际）\n快递单号：【必填】____________\n寄出日期：【必填】______　　预计到达日：______\n包裹描述（报关申报用）：____________\n申报价值：________（如实申报）\n运费：________　运费承担：□我方 □客户 □到付\n────────────────────────────────────────\n寄出后必须完成\n  单号是否已发给客户：【必填】□是（日期 ______）□否\n  客户是否确认收到：□是（日期 ______）□否\n  寄件人：______\n▸新手提示：申报价值如实写。样品低报被海关查到，整盒被扣，得不偿失。\n\n=== 样品发票（收费样品时随货附上） ===\n\nSAMPLE INVOICE\nInvoice No.：SAM-INV-______　Date：______\nTo：____________ (Consignee)\n────────────────────────────────────────\nDescription｜Qty｜Unit Price USD｜Amount USD\n____________｜____｜________｜________\n────────────────────────────────────────\nTOTAL：USD ________（大写：USD ________ only）\nSample Charge：□Paid in advance □To be deducted from the first order value\nShipping Terms：运费及保险费由客户承担，或为 ________ 工厂自提\n★固定条款｜1. 样品一经寄出，除质量问题外不接受退换。2. 样品费不予退还，但可在首个大货订单中抵扣。3. 样品不保证与最终大货完全一致，以最终确认的封样为准。\n▸新手提示：收费样品一定要出这份发票。这既是收钱的依据，也是日后抵扣大货的凭证。","sub":false},{"k":"sam:2","m":"sam","mn":"样品台账","s":2,"n":"签收跟踪记录","sc":"in","lay":"form","d":"客户不回消息不代表没收到，要主动跟。运输破损要立刻拍照取证。","t":"【样品签收跟踪】SAM-______\n▸新手提示：查快递要查三次以上。显示\"已签收\"但客户说没收到，往往是前台代收或地址不全。\n\n样品编号：SAM-______　快递单号：____________\n────────────────────────────────────────\n查询日期｜物流状态｜异常说明\n______｜________｜________________\n______｜________｜________________\n______｜________｜________________\n────────────────────────────────────────\n是否签收：【必填】□否 □是（签收日 ______）\n是否已向客户确认收到：□否 □是（日期 ______）\n开箱外观是否正常：□正常 □破损（是否拍照取证：□是 □否）\n破损描述：____________________________\n▸新手提示：破损必须当场开箱拍照或录像并保留外包装。快递公司理赔只认这个。\n异常处理：____________________________________","sub":false},{"k":"sam:3","m":"sam","mn":"样品台账","s":3,"n":"样品反馈确认单","sc":"out","lay":"form","d":"客户说\"还不错\"不算确认，要问到\"可以按这个做大货吗\"。","t":"SAMPLE FEEDBACK CONFIRMATION\nConfirmation No.: SAM-______\n\nDate: ______\nCustomer: ____________　Sample No.: SAM-______\nProduct / Specification: ____________\n────────────────────────────────────────\n1. Feedback Channel\n  Channel: □Email □Telephone □Video call □Messaging\n  Feedback Date: ______　Contact Person: ____________\n\n2. Customer Comments (copy word for word; do not summarise)\n  ______________________________________________________\n  ______________________________________________________\n\n3. Issues Raised by the Customer\n  Appearance: ____________\n  Material: ____________\n  Dimensions: ____________\n  Workmanship: ____________\n  Packing: ____________\n  Logo / customisation: ____________\n────────────────────────────────────────\n4. Conclusion\n  Confirmed for mass production as it stands: 【必填】□Yes □No □To be confirmed after revision\n  Revision required / second sample: ______________________________\n  Second sample No.: SAM-______\n★Standard notes｜1. Upon written confirmation by the buyer, this sheet becomes the sole quality basis for mass production. 2. Once mass production has started, the seller shall not be liable for quality objections arising from a sample that was never confirmed. 3. Should the craft or material of the sample differ from this sheet, this sheet shall prevail.\n\nFollowed by: ______　　Date: ______","sub":false},{"k":"sam:4","m":"sam","mn":"样品台账","s":4,"n":"样品转订单 / 放弃说明","sc":"in","lay":"form","d":"放弃的样品也要记录原因，这是判断客户质量的数据。","t":"【样品转单 / 放弃说明】SAM-______\n▸新手提示：放弃的样品也要认真记原因。一年下来，这些记录就是你的客户数据库。\n\n样品编号：SAM-______　客户名称：____________\n结果：【必填】□转订单 □客户放弃\n────────────────────────────────────────\n一、若转订单\n  新建报价单编号：QUO-______（先建好再回填）\n  数量：________　单价：________　订单金额：________\n  样品费处理：□冲抵货款 □不冲抵 □另收\n  客户是否书面确认按样品大货：□是 □否\n────────────────────────────────────────\n二、若客户放弃\n  放弃原因：□价格 □交期 □质量 □认证要求 □无长期需求 □其他 ______\n  放弃阶段：□未报价 □报价后 □打样后 □核价后\n  是否保留联系：□是 □否（下次跟进日 ______）\n  样品费是否收回：□不适用 □已收回 □未收回（________）\n────────────────────────────────────────\n客户价值初判：□高（值得长期维护）□中 □低（可降低跟进频率）\n经办人：______　日期：______","sub":false},{"k":"sup:0","m":"sup","mn":"供应商","s":0,"n":"供应商考察与建档表","sc":"in","lay":"form","d":"工厂不是聊得来就能用的。产能、资质、付款条件、有没有做过外贸单，考察一次写清楚，省得每次下单前重新问。","t":"【供应商考察与建档表】SUP-______\n▸新手提示：这张表考察时一次填完。最常被漏的是「有没有出口资质/做过外贸单」—— 没做过的工厂，报关资料、商检、英文唛头全要你教，交期至少多 10 天。\n\n一、基本信息\n  工厂名称：【必填】____________　统一社会信用代码：____________\n  联系人：____________　职务：____________　电话：____________　邮箱：____________\n  工厂地址：【必填】____________（省 / 市 / 工业区）\n  工厂类型：□生产厂家 □贸易商 □工贸一体\n  主营品类：□五金 □塑料 □陶瓷 □玻璃 □电子 □纺织 □家具 □其他 ______\n\n二、产能与资质\n  月产能：____________　当前负荷：□有空档 □排满 □超负荷\n  工人数：______　生产线：______ 条　是否自有厂房：□是 □租\n  主要设备：____________\n  质量体系：□ISO9001 □ISO14001 □无　验厂报告：□有 □无　有效期至：______\n  出口经验：□有（主要市场 ______）□无\n  能否做商检 / 报关资料：□能 □不能\n  MOQ：______　打样周期：______ 天　大货周期：______ 天\n\n三、商务条件\n  付款方式：□预付100% □货到付款 □月结30天 □月结60天 □见票付款\n  账期：______ 天　是否接受定金+尾款：□是 □否\n  开票：□增值税专票 □普票 □不能开票　税点：______%\n\n四、合作状态\n  状态：□考察中 □合格 □暂停 □黑名单　评级：□A □B □C □D\n  暂停 / 黑名单原因：【必填】____________（这一栏不写，半年后没人记得为什么停的）\n\n五、建档\n  考察人：______　考察日期：______　陪同人：______\n  建档日期：______　复核人：______　下次复核日期：______\n★固定条款｜合作状态一旦定为「黑名单」，不得再下采购单；已下单未完结的，先处理完手头再归档。要恢复合作，改状态前须经另一名同事确认。","sub":false},{"k":"sup:1","m":"sup","mn":"供应商","s":1,"n":"供应商绩效评估表","sc":"in","lay":"table","d":"A/B/C/D 不能靠印象。准时交货率、验货合格率、未付款都是采购单上现成的数，抄过来就是结论。","t":"【供应商绩效评估表】SUP-______\n▸新手提示：绩效栏**照系统统计填**，不要凭印象写。印象会说\"这家挺好的\"，采购单会说\"十单里迟了四单\"——年底复盘时两张纸打架，比没有表更糟。\n\n一、被评估供应商\n  供应商编号：SUP-______　工厂名称：____________\n  合作起始：______　本次评估区间：______ 至 ______\n\n二、交付绩效（按采购单统计，照抄系统数字）\n  区间内采购单数：______　取消单数：______\n  按时交货单数：______　迟交单数：______　准时交货率：______%\n  平均迟交天数：______　最长迟交天数：______\n\n三、质量绩效\n  验货合格单数：______　让步放行单数：______　不合格单数：______\n  验货合格率：______%　返工次数：______　返工费用合计：____________\n\n四、资金与配合度\n  区间内采购金额：____________　已付：____________　未付：____________\n  是否按约定账期配合：□配合 □需反复催 □动辄停货\n  出问题时的响应速度：□当天 □1-3 天 □3 天以上\n\n五、结论\n  综合评分：______ / 100（准时 40 + 合格 40 + 资金占用 20）\n  调整后评级：□A □B □C □D\n  处理决定：□维持 □增加份额 □减少份额 □暂停 □淘汰\n  理由与依据：【必填】____________\n\n六、签字\n  评估人：______　日期：______\n  复核人：______　日期：______\n▸新手提示：样本不足 2 单时不要评级。一单的数据不能给工厂贴标签，评低了是冤枉，评高了是后面所有单子替你买单。","sub":false},{"k":"po:0","m":"po","mn":"采购订单","s":0,"n":"采购订单 Purchase Order","sc":"sup","lay":"form","d":"发给工厂的正式下单文件。没有它，尺寸做错、延期交货、临时涨价，全都只能自己吃。","t":"【采购订单 PURCHASE ORDER】PO-______\n▸新手提示：客户催货时最容易跳过这一步——\"先让工厂做，合同回头补\"。补不上的那些，最后都变成了质量纠纷里你举不出的证据。\n\n一、双方\n  买方（我方）：____________　联系人：____________　电话：____________\n  卖方（工厂）：【必填】____________　联系人：____________　电话：____________\n  关联销售订单号：SO-______（填上，才知道这票货最终卖给谁、交期卡在哪）\n\n二、货物\n  产品名称：【必填】____________　规格型号：【必填】____________\n  材质 / 工艺：____________\n  数量：【必填】________　单位：□pcs □sets □ctn\n  单价：【必填】________（币种 ______）　金额：____________\n  包装要求：____________\n\n三、交期与交货\n  下单日：______　要求交货日：【必填】______\n  交货地点：____________　运输方式：□自提 □送货\n★固定条款｜卖方逾期交货的，每逾期一日按合同金额的 0.5% 支付违约金；逾期超过 15 日，买方有权解除本单并要求赔偿实际损失。\n\n四、质量\n  验收标准：□按确认样 □按双方确认的规格书 □行业标准 ______\n  验货方式：□我方到厂验货 □第三方验货 □工厂自检+到货抽检\n★固定条款｜货物不符约定的，买方有权要求返工、换货、退货或减价，由此产生的费用由卖方承担；让步放行须经买方书面确认，不免除卖方对隐蔽瑕疵的责任。\n\n五、付款\n  付款方式：□预付100% □定金 ______% + 发货前付尾款 □货到付款 □月结 ______ 天\n  已付：____________　未付：____________\n\n六、签字\n  买方：____________　日期：______\n  卖方（盖章）：____________　日期：______\n▸新手提示：金额、数量、交期三栏必须和系统里的采购单一致。不一致的话，付款时按合同付、系统按单记，两边对不上就要人工翻单据。","sub":false},{"k":"po:1","m":"po","mn":"采购订单","s":1,"n":"到货验收单","sc":"in","lay":"table","d":"货到不等于是\"合格的货\"。验完签字留痕，后面索赔才有凭据。","t":"【到货验收单】PO-______\n▸新手提示：不验货就投产，出问题时工厂一句话\"你们自己收的\"就把责任推干净了。验货单是唯一能证明\"当时就是坏的\"的东西。\n\n一、基本信息\n  采购单号：PO-______　供应商：____________\n  实际到货日：______　要求交货日：______　是否准时：□是 □否（迟 ______ 天）\n  到货数量：________　抽检数量：________\n\n二、检验项目\n  外观：□合格 □不合格（说明 ______）\n  尺寸 / 规格：□合格 □不合格（说明 ______）\n  功能 / 性能：□合格 □不合格 □不适用\n  包装与标识：□合格 □不合格（说明 ______）\n  数量核对：□一致 □不一致（实际 ______，订单 ______）\n\n三、结论\n  验货结果：【必填】□合格 □让步放行 □不合格\n  让步放行的理由与影响：【必填】____________（不放行的每一单都要写，别留模糊）\n  不合格的处理方式：□退货 □返工（责任方 ______）□扣款 □弃货\n  返工 / 处理费用：____________（记入这张采购单的成本）\n\n四、重新验货闭环\n  重新验货日期：______　结果：□合格 □仍不合格\n★固定条款｜不合格品未经买方书面确认不得出厂、不得并入下一批货。\n\n五、签字\n  验货人：______　日期：______\n  品质负责人：______　日期：______\n  工厂确认：______　日期：______","sub":false},{"k":"inv:0","m":"inv","mn":"进项发票","s":0,"n":"进项发票登记与认证跟踪表","sc":"in","lay":"table","d":"退税卡住八成卡在这里：发票没开、开错了、过了认证期。这张表就是盯着它。","t":"【进项发票登记与认证跟踪表】\n▸新手提示：增值税专票开出来 360 天内必须认证，过期就不能抵税了 —— 等于工厂多收了你一成货值的钱。所以这张表的核心是\"认证截止日\"那一栏。\n\n一、发票信息\n  发票号：INV-______　关联采购单号：PO-______\n  供应商：____________　纳税人识别号：____________\n  开票金额：____________　开票日期：______\n  发票类型：□增值税专用发票 □普通发票 □不能开票\n\n二、认证跟踪\n  认证状态：【必填】□未开票 □已开票 □已认证 □已抵扣\n  认证截止日：______（= 开票日 + 360 天）\n  认证日期：______　认证平台：□电子税务局 □办税服务厅\n  是否已过截止日：□否 □是（赶快找工厂确认能否重开）\n\n三、退税关联\n  对应报关单号：____________　退税率：______%\n  预计退税额：____________（= 开票金额 ÷ 1.13 × 退税率，不含税口径）\n  退税申报批次：______　退税到账日：______\n\n  算例：开票金额 ¥113000（含税）÷ 1.13 = 不含税 ¥100000 × 退税率 13% = 预计退税额 ¥13000。\n  ⚠ 拿含税金额直接乘税率（113000 × 13% = 14690）会把增值税也当成本退一遍，多估 1690 ——\n  2026-10-17 起系统按不含税口径自动算，纸面这张表与系统口径保持一致。\n\n四、异常与处理\n  异常情况：□无 □票面信息有误 □重复开票 □超期未认证 □其他 ______\n  处理记录：____________　处理人：______　日期：______\n\n五、签字\n  登记人：______　日期：______\n  复核人：______　日期：______\n★固定条款｜进项发票信息必须与采购合同、付款记录三者一致（票号、金额、供应商名称）。三者对不上，税务机关不予退税。","sub":false}];
@@ -2088,17 +2287,15 @@ function buildDocContext(order, lang, themeId, opts){
       photo: p.image || '',
       qty: +it.qty || 0, unit: it.unit || p.unit || 'PCS',
       price: +it.price || 0, currency: it.currency || order.terms.currency,
+      cost: +p.cost || 0,
       amount: line.amount, ctn: line.ctn, gw: line.gw, nw: line.nw, vol: line.vol
     };
   });
   var totals = calcTotals(order.items, order.terms.currency);
-  var cur = order.terms.currency;
-  var whole = Math.floor(totals.amount);
-  var frac = Math.round((totals.amount - whole) * 100);
-  var words = lang === 'zh' ? numToWordsCN(whole) : (lang === 'en' ? numToWordsEN(whole) : '');
-  var sayTotal = words ? (lang === 'zh'
-    ? words + '元' + (frac ? (frac < 10 ? '零' : '') + CN_DIGITS[frac] + '分' : '整')
-    : 'SAY ' + (CUR_NAMES[cur] || cur) + ' ' + words + (frac ? ' AND CENTS ' + (frac < 10 ? '0' : '') + frac : '') + ' ONLY') : '';
+  var cur = order.terms.currency || 'USD';
+  var sayTotal = '';
+  if(lang === 'zh') sayTotal = numToMoneyCN(totals.amount);
+  else sayTotal = numToMoneyEN(totals.amount, CUR_NAMES[cur] || cur);
   var theme = THEMES.filter(function(t){ return t.id === themeId; })[0] || THEMES[0];
   return {
     order: order, items: items, totals: totals, T: T, lang: lang, theme: theme, cur: cur,
@@ -2156,13 +2353,14 @@ function dItems(ctx, mode){
     return '<table class="d-items"><thead><tr>' +
       '<th class="c-no">' + esc(T.no) + '</th><th>' + esc(T.desc) + '</th>' +
       '<th class="c-q">' + esc(T.qty) + '</th><th class="c-u">' + esc(T.unit) + '</th>' +
-      '<th class="c-n">CTNS</th><th class="c-n">N.W. (KGS)</th>' +
+      '<th class="c-n">QTY/CTN</th><th class="c-n">CTNS</th><th class="c-n">N.W. (KGS)</th>' +
       '<th class="c-n">G.W. (KGS)</th><th class="c-n">CBM</th></tr></thead><tbody>' +
       items.map(function(it, i){
         return '<tr><td class="c-no">' + (i + 1) + '</td>' +
           '<td><div class="d-name">' + esc(it.name) + '</div><div class="d-sub">' + [it.spec, it.hs ? 'HS: ' + it.hs : '', it.model ? 'NO: ' + it.model : ''].filter(Boolean).join(' · ') + '</div></td>' +
           '<td class="c-q">' + fmtNum(it.qty, 0) + '</td><td class="c-u">' + esc(it.unit) + '</td>' +
-          '<td class="c-n">' + it.ctn + '</td><td class="c-n">' + fmtNum(it.nw, 2) + '</td>' +
+          '<td class="c-n">' + (it.ctn > 0 ? fmtNum(it.qty / it.ctn, 0) : '—') + '</td>' +
+          '<td class="c-n">' + fmtNum(it.ctn, 0) + '</td><td class="c-n">' + fmtNum(it.nw, 2) + '</td>' +
           '<td class="c-n">' + fmtNum(it.gw, 2) + '</td><td class="c-n">' + fmtNum(it.vol, 3) + '</td></tr>';
       }).join('') + '</tbody></table>';
   }
@@ -2195,7 +2393,12 @@ function dSummary(ctx, withAmount){
     '<div class="d-sumcell"><span>' + esc(T.vol) + '</span><b>' + fmtVol(t.vol) + '</b></div>';
   var total = withAmount ? '<div class="d-sumtotal"><span>' + esc(T.total) + '</span><b>' + fmtMoney(t.amount, ctx.cur) + '</b></div>' : '';
   var words = (withAmount && ctx.sayTotal) ? '<div class="d-words">' + esc(T.sayTotal) + ': ' + esc(ctx.sayTotal) + '</div>' : '';
-  return '<div class="d-sum">' + cells + total + '</div>' + words;
+  /* 明细含多种币种时标注折算，避免与合计对不上被质疑 */
+  var otherCur = {};
+  (ctx.items || []).forEach(function(it){ if(it.currency && it.currency !== ctx.cur) otherCur[it.currency] = 1; });
+  var curNote = Object.keys(otherCur).length
+    ? '<div class="d-cur-note">* 外币明细已按当日汇率折为 ' + esc(ctx.cur) + ' 计入合计</div>' : '';
+  return '<div class="d-sum">' + cells + total + '</div>' + words + curNote;
 }
 function dTerms(ctx, extraLines, withStd){
   var T = ctx.T;
@@ -2205,8 +2408,17 @@ function dTerms(ctx, extraLines, withStd){
   return '<div class="d-terms"><div class="d-terms-t">' + esc(T.terms) + '</div><ul>' +
     lines.map(function(l){ return '<li>' + esc(l) + '</li>'; }).join('') + '</ul></div>';
 }
-function dSign(ctx, force){
-  var show = force || ctx.opts.showSign;
+/* 贸易术语责任块：插在条款区末尾，避免与成交条件矛盾 */
+function incoBlock(ctx){
+  var term = (ctx.order && ctx.order.terms) ? ctx.order.terms.tradeTerm : '';
+  var lines = (typeof incoLines === 'function') ? incoLines(term, ctx.lang) : [];
+  if(!lines.length) return '';
+  var title = (ctx.lang === 'zh') ? '责任划分（按所选贸易术语）' : 'ALLOCATION OF RISK AND COST (' + String(term).toUpperCase() + ')';
+  return '<div class="d-clause"><div class="d-cl-t">' + esc(title) + '</div><div class="d-cl-b">' +
+    lines.map(esc).join('<br>') + '</div></div>';
+}
+
+function dSign(ctx, force){  var show = force || ctx.opts.showSign;
   if(!show) return '';
   if(!force && !ctx.signImage && !ctx.sealImage) return '';
   var T = ctx.T;
@@ -2220,7 +2432,9 @@ function dSign(ctx, force){
   '</div>';
 }
 function dFoot(ctx){
-  return '<footer class="d-foot"><span>' + esc(ctx.company.name) + ' · ' + esc(ctx.company.website || '') + '</span><span>' + esc(ctx.docNo || '') + '</span></footer>';
+  var ver = (typeof APP_VER !== 'undefined') ? APP_VER : '';
+  return '<footer class="d-foot"><span>' + esc(ctx.company.name) + ' · ' + esc(ctx.company.website || '') + '</span>' +
+    '<span>' + esc(ctx.docNo || '') + (ver ? ' · ' + esc(ver) : '') + '</span></footer>';
 }
 function dPage(ctx, inner){
   ctx.typeKey = ctx.typeKey || 'quotation';
@@ -2238,6 +2452,10 @@ function extraTermLines(ctx){
   if(o.warranty) arr.push(T.warranty + ': ' + o.warranty);
   if(o.packing) arr.push(T.packingM + ': ' + o.packing);
   if(o.remarks) arr.push(T.remarks + ': ' + o.remarks);
+  /* 按所选贸易术语插入责任划分，避免条款与实际成交条件矛盾 */
+  if(typeof incoLines === 'function'){
+    arr = arr.concat(incoLines(o.tradeTerm, ctx.lang));
+  }
   ((ctx.opts && ctx.opts.customFields) || []).forEach(function(f){
     if(f && f.label && f.value && arr.indexOf(f.label + ': ' + f.value) < 0) arr.push(f.label + ': ' + f.value);
   });
@@ -2287,7 +2505,7 @@ function renderContract(ctx){
     '<div class="d-sec">' + esc(T.items) + '</div>' + dItems(ctx) + dSummary(ctx, true) +
     '<div class="d-clauses">' + keys.map(function(k){
       return '<div class="d-clause"><div class="d-cl-t">' + esc(C[k]) + '</div><div class="d-cl-b">' + f(C[k + 'T']) + '</div></div>';
-    }).join('') + '</div>' +
+    }).join('') + incoBlock(ctx) + '</div>' +
     '<div class="d-cert">' + esc(T.contractCert) + '</div>' + dSign(ctx, true);
   return dPage(ctx, inner);
 }
@@ -2300,8 +2518,27 @@ function renderCommercial(ctx){
   if(o.terms.blNo) meta.push(['B/L No.', o.terms.blNo]);
   if(o.terms.vessel) meta.push([T.vessel, [o.terms.vessel, o.terms.voyage].filter(Boolean).join(' / ')]);
   if(o.terms.containerNo) meta.push(['Container No.', o.terms.containerNo]);
-  var inner = dHead(ctx, T.commercial, meta) + dParties(ctx) + kvMain(ctx) +
+  var inner = dHead(ctx, T.commercial + (ctx.lang === 'zh' ? ' · 正本' : ' — ORIGINAL'), meta) + dParties(ctx) + kvMain(ctx) +
     dItems(ctx) + dSummary(ctx, true) +
+    (function(){
+      /* CIF/CFR/CPT/CIP 发票须拆列 FOB 货值、运费、保险费，否则海关估价与信用证审单会被卡 */
+      var tm = o.terms || {};
+      var termUp = String(tm.tradeTerm || '').trim().toUpperCase();
+      if(!/^(CIF|CFR|CPT|CIP)/.test(termUp)) return '';
+      var fr = +tm.freight || 0, ins = +tm.insurance || 0;
+      if(!fr && !ins){
+        return '<div class="d-note-warn">' + (ctx.lang === 'zh'
+          ? '本单为 ' + esc(termUp) + ' 术语，请在「出运信息」中填写运费与保险费，发票将自动拆列 FOB 货值。'
+          : 'This invoice is issued on ' + esc(termUp) + ' terms. Enter freight and insurance in Shipment Details to show the FOB value breakdown.') + '</div>';
+      }
+      var fob = ctx.totals.amount - fr - ins;
+      return dKv([
+        ['FOB Value', fmtMoney(fob, ctx.cur)],
+        ['Freight', fmtMoney(fr, ctx.cur)],
+        ['Insurance', fmtMoney(ins, ctx.cur)],
+        [termUp + ' Value', fmtMoney(ctx.totals.amount, ctx.cur)]
+      ]);
+    })() +
     '<div class="d-cert">' + esc(T.certCI) + '</div>' +
     '<div class="d-marks"><span>' + esc(T.marks) + '</span><b>' + esc(o.terms.marks || 'N/M') + '</b></div>' +
     '<div class="doc-tail">' + dTerms(ctx, (function(){
@@ -2356,11 +2593,13 @@ function renderConfirmation(ctx){
       ['2. Shipment', 'Shipment shall be effected within the lead time stated above, counted from receipt of the deposit and confirmation of the pre-production sample. Partial shipment and transhipment are allowed unless otherwise stated.'],
       ['3. Payment', 'Payment shall be made strictly as stated above. Bank charges outside the Seller\u2019s bank are for the Buyer\u2019s account.'],
       ['4. Packing & Marks', 'Export standard packing, marked as per the Buyer\u2019s instruction confirmed by the Seller before production.'],
-      ['5. Claims', 'Any claim must be raised in writing within 7 days after arrival of the goods at the port of destination, supported by an inspection report issued by a recognised surveyor.'],
-      ['6. Confirmation', 'This Sales Confirmation is issued in response to the Buyer\u2019s purchase order. The Buyer shall sign and return one copy within 3 working days; production starts upon receipt of the signed copy and the deposit.']
+      ['5. Claims', 'Any claim must be raised in writing within 30 days after arrival of the goods at the port of destination, supported by an inspection report issued by a recognised surveyor.'],
+      ['6. Title & Documents', 'The goods remain the property of the Seller until payment is received in full. The Seller is not obliged to release the original bill of lading or any other document of title before such payment.'],
+      ['7. Confirmation', 'This Sales Confirmation is issued in response to the Buyer\u2019s purchase order. The Buyer shall sign and return one copy within 3 working days; production starts upon receipt of the signed copy and the deposit.'],
+      ['8. Governing Law', 'This Confirmation is governed by the laws of the People\u2019s Republic of China. Any dispute shall first be settled by negotiation; failing which it shall be submitted to CIETAC for arbitration.']
     ].map(function(c){
       return '<div class="d-clause"><div class="d-cl-t">' + esc(c[0]) + '</div><div class="d-cl-b">' + esc(c[1]) + '</div></div>';
-    }).join('') + '</div>' +
+    }).join('') + incoBlock(ctx) + '</div>' +
     dSign(ctx, true);
   return dPage(ctx, inner);
 }
@@ -2374,8 +2613,11 @@ function renderBooking(ctx){
     ['船名 / 航次', [tm.vessel, tm.voyage].filter(Boolean).join(' / ')],
     ['起运港', tm.portLoading], ['目的港', tm.portDest],
     ['开船日 ETD', tm.etd || tm.sailing], ['预计到港 ETA', tm.eta],
-    ['柜型柜量', tm.containerType || '1 × 40HQ'], ['贸易条款', tm.tradeTerm]
+    ['截关 / 截港时间', tm.cutoff], ['柜型柜量', tm.containerType || '1 × 40HQ'], ['贸易条款', tm.tradeTerm]
   ]);
+  /* 运费预付/到付必须与贸易术语一致：FOB/FAS/FCA/EXW 为到付 */
+  var termUp = String(tm.tradeTerm || '').trim().toUpperCase();
+  var prepaid = /^(CIF|CFR|CPT|CIP|DAP|DDP)/.test(termUp);
   var inner = dHead(ctx, '订舱委托书 BOOKING REQUEST', [['委托单号', ctx.docNo], ['日期', o.date], ['订舱号', tm.bookingNo]]) +
     '<div class="d-parties">' +
       '<div class="d-party"><div class="d-plabel">委托方（SHIPPER）</div>' +
@@ -2392,8 +2634,8 @@ function renderBooking(ctx){
       ['请按上述船期安排订舱，订舱确认后回传 SO。',
        '柜型柜量如有调整请提前 2 个工作日通知。',
        '危险品 / 冷藏 / 超重等特殊货物：' + (tm.specialReq || '无'),
-       '提单要求：' + (tm.blReq || '正本提单 3 正 3 副，运费预付（' + (tm.tradeTerm || 'FOB') + '）'),
-       '截关 / 截港时间以船公司通知为准，请提前安排拖车。'
+       '提单要求：' + (tm.blReq || ('正本提单 3 正 3 副，运费' + (prepaid ? '预付（FREIGHT PREPAID）' : '到付（FREIGHT COLLECT）'))),
+       '截关 / 截港时间：' + (tm.cutoff || '以船公司通知为准') + '；请据此提前安排拖车与报关。'
       ].map(function(l){ return '<li>' + esc(l) + '</li>'; }).join('') +
     '</ul></div>' +
     '<div class="d-sign"><div class="d-signbox"><div class="d-slabel">委托方签章</div><div class="d-sarea">' +
@@ -2418,7 +2660,8 @@ function renderCustoms(ctx){
         '<div class="d-plines">' + ['报关单号：' + (tm.declNo || '（报关后补填）'), '报关行联系人：' + (tm.brokerContact || '—')].join('<br>') + '</div></div>' +
     '</div>' +
     dKv([['成交方式', tm.tradeTerm], ['贸易方式', tm.tradeMode || '一般贸易'], ['币制', tm.currency],
-         ['装运港', tm.portLoading], ['目的国（地区）', tm.portDest], ['运输方式', tm.transport || '海运']]) +
+         ['装运港', tm.portLoading], ['目的国（地区）', tm.portDest], ['运输方式', tm.transport || '海运'],
+         ['征免性质', tm.exempt || '照章征税'], ['许可证号', tm.licenseNo || '无']]) +
     dItems(ctx) +
     '<div class="d-sum">' +
       '<div class="d-sumcell"><span>件数</span><b>' + fmtNum(totals.ctn, 0) + ' CTNS</b></div>' +
@@ -2427,6 +2670,15 @@ function renderCustoms(ctx){
       '<div class="d-sumcell"><span>体积</span><b>' + fmtVol(totals.vol) + '</b></div>' +
       '<div class="d-sumtotal"><span>总金额</span><b>' + fmtMoney(totals.amount, ctx.cur) + '</b></div>' +
     '</div>' +
+    '<div class="d-terms"><div class="d-terms-t">申报要素</div><ul>' +
+      (tm.declElements
+        ? String(tm.declElements).split(/[；;\n]/).filter(Boolean).map(function(s){ return '<li>' + esc(s.trim()) + '</li>'; }).join('')
+        : '<li style="color:#b45309">未填写。报关必需：品牌类型、出口享惠情况、用途、材质、规格型号等，请在上方「申报要素」中补充。</li>') +
+    '</ul></div>' +
+    '<div class="d-terms"><div class="d-terms-t">随附单据</div><ul>' +
+      ['出口货物报关单', '商业发票', '装箱单', '销售合同', '代理报关委托书', '提单 / 场站收据']
+        .map(function(s){ return '<li>☑ ' + esc(s) + '</li>'; }).join('') +
+    '</ul></div>' +
     '<div class="d-terms"><div class="d-terms-t">委托声明</div><ul>' +
       ['委托方保证所提供的货物名称、规格、数量、金额、原产地等信息真实、准确、完整，与实际货物一致。',
        '委托方授权受托方以委托方名义办理报关、报检、缴税等相关手续。',
@@ -2445,6 +2697,10 @@ function renderCustoms(ctx){
 function renderShipping(ctx){
   ctx.typeKey = 'shipping';
   var T = ctx.T, o = ctx.order, tm = o.terms || {}, cust = orderCustomer(o);
+  var termUp = String(tm.tradeTerm || '').trim().toUpperCase();
+  var sellerIns = /^(CIF|CIP)/.test(termUp);
+  var insLine = tm.insNo ? 'Insurance Policy No.: <b>' + esc(tm.insNo) + '</b>' : '';
+  var agentLine = tm.agentDest ? 'Destination Agent: ' + esc(tm.agentDest) : '';
   var inner = dHead(ctx, 'SHIPPING ADVICE', [['No.', ctx.docNo], [T.date, o.date], ['Invoice No.', o.docs && o.docs.filter(function(d){ return d.type === 'commercial'; })[0] ? o.docs.filter(function(d){ return d.type === 'commercial'; })[0].docNo : '—']]) +
     '<div class="d-parties">' +
       '<div class="d-party"><div class="d-plabel">TO (BUYER)</div>' +
@@ -2456,14 +2712,19 @@ function renderShipping(ctx){
            'B/L No.: <b>' + esc(tm.blNo || '—') + '</b>',
            'Container No. / Seal: <b>' + esc([tm.containerNo, tm.sealNo].filter(Boolean).join(' / ') || '—') + '</b>',
            'ETD: <b>' + esc(tm.etd || tm.sailing || '—') + '</b>　ETA: <b>' + esc(tm.eta || '—') + '</b>',
-           'Port: ' + esc([tm.portLoading, tm.portDest].filter(Boolean).join(' → '))
-          ].join('<br>') +
+           'Port: ' + esc([tm.portLoading, tm.portDest].filter(Boolean).join(' → ')),
+           insLine, agentLine
+          ].filter(Boolean).join('<br>') +
         '</div></div>' +
     '</div>' +
     dItems(ctx) + dSummary(ctx, true) +
     '<div class="d-terms"><div class="d-terms-t">REMARKS</div><ul>' +
       ['The above goods have been shipped on board on ' + esc(tm.etd || tm.sailing || 'the date shown above') + '. The carrier issued a clean on-board bill of lading; no damage or discrepancy was noted at the time of loading.',
-       'Please arrange insurance cover immediately upon receipt of this advice if the goods are shipped on ' + esc(tm.tradeTerm || 'FOB') + ' terms; the seller is not responsible for cover after the goods pass the ship rail.',
+       (sellerIns
+          ? 'Insurance has been effected by the Seller' + (tm.insNo ? ' under policy No. ' + esc(tm.insNo) : '') +
+            ' for 110% of the invoice value; the Buyer may claim directly against the insurer in the event of loss or damage.'
+          : 'Please arrange insurance cover immediately upon receipt of this advice; under ' + esc(termUp || 'FOB') +
+            ' terms the risk passes to the Buyer at the port of loading and cover is for the Buyer\'s account.'),
        'Shipping documents (Commercial Invoice, Packing List, Bill of Lading, Certificate of Origin where applicable) will be couriered to you within 3 working days after departure.',
        'Please take delivery against the original B/L and check the quantity and condition at the terminal before leaving; any shortage or damage must be noted on the delivery receipt and notified to us within 7 days.',
        'Kindly acknowledge receipt of this Shipping Advice by return so that we can close the shipment file.'
@@ -2498,12 +2759,13 @@ function renderPurchase(ctx){
     '</div>' +
     '<div class="d-terms"><div class="d-terms-t">合同条款</div><ul>' +
       ['1. 质量标准：按双方确认的样品及技术规格执行，甲方有权按 AQL 2.5 抽检；不合格批次乙方应无条件返工或换货。',
-       '2. 交货：乙方须于 ' + (tm.deliveryDate || '约定日期') + ' 前将货物送达甲方指定仓库，逾期每日按合同总额 0.3% 计违约金，累计不超过 5%。',
-       '3. 付款：' + (tm.supplierPayTerm || '货到验收合格并收到 13% 增值税专用发票后 30 天内电汇支付') + '。',
-       '4. 发票：乙方须开具税率 ' + taxRate + '% 的增值税专用发票，票面品名、规格、数量须与本合同一致；发票不合规导致甲方无法抵扣的，由乙方赔偿损失。',
+       '2. 交货：乙方须于 ' + (tm.deliveryDate || '约定日期') + ' 前将货物送达甲方指定地点（' + (tm.deliverAddr || c.address || '甲方仓库') + '），运费及卸货费用由乙方承担；逾期每日按合同总额 0.3% 计违约金，累计不超过 5%。',
+       '3. 付款：' + (tm.supplierPayTerm || '货到验收合格并收到增值税专用发票后 30 天内电汇支付') + '。收款账户：' + (tm.supplierBank || '见乙方开户信息') + '。',
+       '4. 发票：乙方须开具税率 ' + taxRate + '% 的增值税专用发票，票面品名、规格、数量须与本合同一致；发票不合规导致甲方无法抵扣或无法退税的，由乙方赔偿损失。',
        '5. 验收：甲方收货后 7 日内完成数量与外观验收；隐蔽质量问题的异议期为本合同项下货物出口后 6 个月内。',
-       '6. 知识产权：乙方保证所供货物不侵犯第三方知识产权，因侵权引起的索赔由乙方承担。',
-       '7. 争议：协商不成的，提交甲方所在地人民法院诉讼解决。'
+       '6. 质保：乙方保证货物自出口发运日起 12 个月内无材料及工艺缺陷，质保期内因乙方原因产生的维修、更换及运费由乙方承担。',
+       '7. 知识产权：乙方保证所供货物不侵犯第三方知识产权，因侵权引起的索赔由乙方承担。',
+       '8. 争议：协商不成的，提交甲方所在地人民法院诉讼解决。'
       ].map(function(l){ return '<li>' + esc(l) + '</li>'; }).join('') +
     '</ul></div>' +
     '<div class="d-sign"><div class="d-signbox"><div class="d-slabel">需方（甲方）盖章</div><div class="d-sarea">' +
@@ -2556,6 +2818,27 @@ function renderTaxFile(ctx){
     '</tbody></table>' +
     '<div class="d-sec">出口货物明细</div>' +
     dItems(ctx) + dSummary(ctx, true) +
+    (function(){
+      /* 退税测算：退税率、可退税额、换汇成本——这张表的核心用途 */
+      var vatRate = +tm.vatRate || 13;
+      var rebate = tm.taxRate !== undefined && tm.taxRate !== '' ? +tm.taxRate : null;
+      var costCNY = 0, hasCost = false;
+      (ctx.items || []).forEach(function(it){ if(it.cost > 0){ hasCost = true; costCNY += it.cost * it.qty; } });
+      var netCost = hasCost ? costCNY / (1 + vatRate / 100) : 0;
+      var refund = tm.taxRefund !== undefined && tm.taxRefund !== '' ? +tm.taxRefund : (netCost * (rebate || 0) / 100);
+      var fxRate = (S.settings.rates && S.settings.rates[ctx.cur]) || 1;
+      var fxCost = totals.amount > 0 ? netCost / totals.amount : 0;
+      return '<div class="d-sec">退税测算</div>' +
+        '<table class="d-items"><tbody>' +
+        '<tr><td style="width:38%">出口销售额（' + esc(ctx.cur) + '）</td><td class="mono">' + esc(fmtMoney(totals.amount, ctx.cur)) + '</td>' +
+          '<td style="width:26%">折人民币（汇率 ' + fmtNum(fxRate, 4) + '）</td><td class="mono">' + esc(fmtMoney(totals.amount * fxRate, 'CNY')) + '</td></tr>' +
+        '<tr><td>增值税率</td><td class="mono">' + vatRate + '%</td><td>出口退税率</td><td class="mono">' + (rebate === null ? '<span style="color:#b45309">待填</span>' : rebate + '%') + '</td></tr>' +
+        '<tr><td>采购成本（含税）</td><td class="mono">' + (hasCost ? esc(fmtMoney(costCNY, 'CNY')) : '<span style="color:#b45309">产品未填成本价</span>') + '</td>' +
+          '<td>不含税采购成本</td><td class="mono">' + (hasCost ? esc(fmtMoney(netCost, 'CNY')) : '—') + '</td></tr>' +
+        '<tr><td><b>可退税额</b></td><td class="mono"><b>' + esc(fmtMoney(refund, 'CNY')) + '</b></td>' +
+          '<td>换汇成本</td><td class="mono">' + (fxCost ? fmtNum(fxCost, 3) : '—') + '</td></tr>' +
+        '</tbody></table>';
+    })() +
     '<div class="doc-tail"><div class="d-terms"><div class="d-terms-t">说明</div><ul>' +
       ['本目录按《出口货物劳务增值税和消费税管理办法》要求整理，与备案单证一并留存备查，留存期 5 年。',
        '备案单证应为原件或加盖企业公章的复印件，内容须与报关单、发票一致。',
@@ -2583,6 +2866,435 @@ function renderDoc(order, type, lang, themeId, docNo, opts){
   ctx.docNo = docNo || '';
   var fn = DOC_RENDERERS[type] || renderQuotation;
   return fn(ctx);
+}
+
+/* ========== 报价计算器（独立工具，结果手工填入单据） ========== */
+/*
+  公式（全部以人民币为基准，最后按汇率折外币）：
+    不含税单价 = 含税单价 ÷ (1 + 增值税率)      [采购价选"不含税"时直接用]
+    不含税成本 = 不含税单价 × 数量
+    可退税额   = 不含税成本 × 退税率
+    实际成本   = 不含税成本 − 可退税额
+    费用合计   = 港杂+报关+拖车+商检+海运费+保险+其他
+    保本收入   = 实际成本 + 费用合计
+    报价(元)   = 保本收入 ÷ (1 − 目标净利率 − 佣金率)
+    报价(外币) = 报价(元) ÷ 汇率
+    单价(外币) = 报价(外币) ÷ 数量，再按尾数规则取整
+    毛利(含佣金) = 最终报价(元) − 保本收入
+    佣金         = 最终报价(元) × 佣金率
+    净利         = 毛利 − 佣金
+    换汇成本     = 实际成本 ÷ 报价(外币)
+*/
+var CALC_KEY = 'calc_v1';
+var CALC_FEES = ['port', 'customs', 'truck', 'inspect', 'freight', 'ins', 'other'];
+var CALC_FEE_LABEL = {port:'港杂费', customs:'报关费', truck:'拖车/内陆运输', inspect:'商检/认证', freight:'海运费', ins:'保险费', other:'其他费用'};
+var CALC_DEF = {
+  qty: 1000, unit: 'PCS', cur: 'USD', rate: 7.1,
+  mode: 'incl', price: 113, vat: 13, rebate: 13,
+  port: 0, customs: 0, truck: 0, inspect: 0, freight: 0, ins: 0, other: 0,
+  margin: 20, comm: 0, round: 'up0.01',
+  target: 0
+};
+var CALC = null;
+
+function calcLoad(){
+  if(CALC) return CALC;
+  var s = null;
+  try { s = JSON.parse(lsGet(CALC_KEY) || 'null'); } catch(e){}
+  CALC = {};
+  for(var k in CALC_DEF) CALC[k] = (s && s[k] !== undefined) ? s[k] : CALC_DEF[k];
+  return CALC;
+}
+function calcSave(){ lsSet(CALC_KEY, JSON.stringify(calcLoad())); }
+
+function calcRound(x, mode){
+  var step = 1;
+  if(mode.indexOf('0.01') >= 0) step = 0.01;
+  else if(mode.indexOf('0.1') >= 0) step = 0.1;
+  var n = x / step;
+  var k = (mode.indexOf('up') === 0) ? Math.ceil(n - 1e-9) : Math.round(n);
+  return k * step;
+}
+
+/* 纯计算，返回结果对象；不触碰 DOM */
+function calcRun(d){
+  var r = {ok:false, err:'', warn:[]};
+  var qty = +d.qty || 0, rate = +d.rate || 0, vat = +d.vat || 0, reb = +d.rebate || 0;
+  var m = +d.margin || 0, c = +d.comm || 0;
+
+  if(qty <= 0){ r.err = '数量必须大于 0'; return r; }
+  if(rate <= 0){ r.err = '汇率必须大于 0'; return r; }
+  if(m < 0 || c < 0){ r.err = '毛利率与佣金率不能为负数'; return r; }
+  if(m + c >= 95){ r.err = '毛利率 + 佣金率过高（需小于 95%）'; return r; }
+  if(vat < 0 || reb < 0){ r.err = '税率不能为负数'; return r; }
+  if(reb > vat) r.warn.push('退税率高于增值税率，实际申报中通常不出现，请核实');
+
+  var p = +d.price || 0;
+  var baseUnit = d.mode === 'incl' ? p / (1 + vat / 100) : p;
+  var baseTotal = baseUnit * qty;
+  var rebateAmt = baseTotal * reb / 100;
+  var realCost = baseTotal - rebateAmt;
+  var feeTotal = 0;
+  CALC_FEES.forEach(function(k){ feeTotal += (+d[k] || 0); });
+  var breakEven = realCost + feeTotal;
+  if(breakEven <= 0){ r.err = '成本与费用合计为 0，请检查输入'; return r; }
+
+  var quoteCNY = breakEven / (1 - m / 100 - c / 100);
+  var unitRaw = quoteCNY / rate / qty;
+  var unit = calcRound(unitRaw, d.round || 'up0.01');
+  var totalFX = unit * qty;
+  var totalCNY = totalFX * rate;
+
+  var gross = totalCNY - breakEven;
+  var commAmt = totalCNY * c / 100;
+  var net = gross - commAmt;
+
+  r.ok = true;
+  r.qty = qty;
+  r.baseUnit = baseUnit;
+  r.baseTotal = baseTotal;
+  r.rebateAmt = rebateAmt;
+  r.realCost = realCost;
+  r.realCostUnit = realCost / qty;
+  r.feeTotal = feeTotal;
+  r.breakEven = breakEven;
+  r.breakEvenUnit = breakEven / rate / qty;
+  r.quoteCNY = quoteCNY;
+  r.quoteFX = quoteCNY / rate;
+  r.unitRaw = unitRaw;
+  r.unit = unit;
+  r.totalFX = totalFX;
+  r.totalCNY = totalCNY;
+  r.gross = gross;
+  r.grossRate = totalCNY > 0 ? gross / totalCNY * 100 : 0;
+  r.commAmt = commAmt;
+  r.net = net;
+  r.netRate = totalCNY > 0 ? net / totalCNY * 100 : 0;
+  r.fxCost = totalFX > 0 ? realCost / totalFX : 0;
+
+  /* 客户还价反算 */
+  var tg = +d.target || 0;
+  if(tg > 0){
+    var tCNY = tg * qty * rate;
+    r.targetUnit = tg;
+    r.targetCNY = tCNY;
+    r.targetGross = tCNY - breakEven;
+    r.targetGrossRate = tCNY > 0 ? r.targetGross / tCNY * 100 : 0;
+    r.targetNet = r.targetGross - tCNY * c / 100;
+    r.targetNetRate = tCNY > 0 ? r.targetNet / tCNY * 100 : 0;
+    r.targetLoss = r.targetGross < 0;
+  }
+  return r;
+}
+
+function calcMoney(n, dec){
+  if(!isFinite(n)) return '—';
+  return n.toLocaleString('zh-CN', {minimumFractionDigits: dec === undefined ? 2 : dec, maximumFractionDigits: dec === undefined ? 2 : dec});
+}
+function calcSym(cur){
+  return {USD:'$', EUR:'€', CNY:'¥', GBP:'£', JPY:'¥'}[cur] || (cur + ' ');
+}
+
+function calcOutHtml(r){
+  var d = calcLoad();
+  if(!r.ok){
+    return '<div class="card"><div class="card-b"><div class="calc-err">' + esc(r.err) + '</div>' +
+      '<div class="hint">填好左侧参数后，这里会显示建议报价。</div></div></div>';
+  }
+  var sym = calcSym(d.cur);
+  var warn = r.warn.length ? '<div class="calc-warn">' + r.warn.map(esc).join('<br>') + '</div>' : '';
+
+  var target = '';
+  if(r.targetUnit){
+    var cls = r.targetLoss ? 'bad' : (r.targetNetRate < 5 ? 'warn' : 'ok');
+    target = '<div class="card"><div class="card-h"><h3>客户还价反算</h3><span class="xs faint">按 ' + sym + calcMoney(r.targetUnit) + ' / ' + esc(d.unit) + '</span></div>' +
+      '<div class="card-b"><div class="calc-list">' +
+        calcRow('毛利率（含佣金）', calcMoney(r.targetGrossRate, 2) + '%', cls) +
+        calcRow('净利率（扣佣金）', calcMoney(r.targetNetRate, 2) + '%', cls) +
+        calcRow('净利金额', '¥ ' + calcMoney(r.targetNet), cls) +
+        (r.targetLoss ? '<div class="calc-warn bad">按此价成交会亏本，亏损 ¥ ' + calcMoney(Math.abs(r.targetNet)) + '</div>' : '') +
+      '</div></div></div>';
+  }
+
+  return '<div class="calc-main">' +
+      '<div class="calc-hero">' +
+        '<div class="ch-label">建议单价</div>' +
+        '<div class="ch-val">' + sym + calcMoney(r.unit) + '</div>' +
+        '<div class="ch-sub">/ ' + esc(d.unit) + ' · 建议总价 ' + sym + calcMoney(r.totalFX) + '</div>' +
+      '</div>' + warn +
+      '<div class="calc-list">' +
+        calcRow('保本单价', sym + calcMoney(r.breakEvenUnit), '') +
+        calcRow('理论单价（未取整）', sym + calcMoney(r.unitRaw, 4), '') +
+        (r.commAmt > 0
+          ? calcRow('毛利（含佣金）', '¥ ' + calcMoney(r.gross) + '　' + calcMoney(r.grossRate, 2) + '%', 'ok') +
+            calcRow('其中佣金', '− ¥ ' + calcMoney(r.commAmt), '') +
+            calcRow('净利（扣佣金后）', '¥ ' + calcMoney(r.net) + '　' + calcMoney(r.netRate, 2) + '%', 'ok')
+          : calcRow('本单毛利', '¥ ' + calcMoney(r.gross) + '　' + calcMoney(r.grossRate, 2) + '%', 'ok')) +
+        calcRow('换汇成本', calcMoney(r.fxCost, 3) + ' 元/' + d.cur, (r.fxCost > 8 || r.fxCost < 4) ? 'warn' : '') +
+      '</div>' +
+      '<div class="calc-sep">成本拆解</div>' +
+      '<div class="calc-list">' +
+        calcRow('不含税单价', '¥ ' + calcMoney(r.baseUnit, 4), '') +
+        calcRow('不含税成本合计', '¥ ' + calcMoney(r.baseTotal), '') +
+        calcRow('可退税额', '− ¥ ' + calcMoney(r.rebateAmt), r.rebateAmt > 0 ? 'ok' : '') +
+        calcRow('实际成本', '¥ ' + calcMoney(r.realCost) + '　（' + calcMoney(r.realCostUnit) + '/件）', '') +
+        calcRow('费用合计', '¥ ' + calcMoney(r.feeTotal), '') +
+        calcRow('保本收入', '¥ ' + calcMoney(r.breakEven), '') +
+      '</div>' +
+      '<div class="calc-acts">' +
+        '<button class="btn btn-primary btn-sm" onclick="A.calcCopy(\'unit\')">复制单价</button>' +
+        '<button class="btn btn-ghost btn-sm" onclick="A.calcCopy(\'all\')">复制全部结果</button>' +
+        '<button class="btn btn-ghost btn-sm" onclick="A.calcReset()">恢复默认</button>' +
+      '</div>' +
+    '</div>' + target;
+}
+function calcRow(k, v, cls){
+  return '<div class="calc-row' + (cls ? ' ' + cls : '') + '"><span>' + esc(k) + '</span><b>' + esc(v) + '</b></div>';
+}
+
+function renderCalcPage(){
+  var d = calcLoad();
+  var curOpts = ['USD','EUR','CNY','GBP','JPY'].map(function(c){
+    return '<option value="' + c + '"' + (d.cur === c ? ' selected' : '') + '>' + c + '</option>';
+  }).join('');
+  var roundOpts = [
+    ['up0.01','向上取到 0.01'], ['near0.01','四舍五入到 0.01'],
+    ['up0.1','向上取到 0.1'], ['up1','向上取到整数']
+  ].map(function(o){
+    return '<option value="' + o[0] + '"' + (d.round === o[0] ? ' selected' : '') + '>' + o[1] + '</option>';
+  }).join('');
+
+  return '<div class="calc">' +
+    '<div class="calc-note">算好价格后，把「建议单价」填进单据的单价栏即可。本工具不改动任何单据数据。</div>' +
+    '<div class="calc-grid">' +
+      '<div class="calc-form">' +
+
+        '<div class="card"><div class="card-h"><h3>订单</h3></div><div class="card-b">' +
+          '<div class="grid3">' +
+            calcField('数量', 'qty', d.qty, 'number') +
+            calcField('单位', 'unit', d.unit, 'text') +
+            '<div class="field"><span>币种</span><select class="inp" onchange="A.calcSet(\'cur\',this.value)">' + curOpts + '</select></div>' +
+          '</div>' +
+          '<div class="grid2">' +
+            calcField('采购单价（元）', 'price', d.price, 'number') +
+            '<div class="field"><span>价格口径</span><select class="inp" onchange="A.calcSet(\'mode\',this.value)">' +
+              '<option value="incl"' + (d.mode === 'incl' ? ' selected' : '') + '>含税价（自动除税）</option>' +
+              '<option value="excl"' + (d.mode === 'excl' ? ' selected' : '') + '>不含税价（直接使用）</option>' +
+            '</select></div>' +
+          '</div>' +
+        '</div></div>' +
+
+        '<div class="card"><div class="card-h"><h3>税率与汇率</h3></div><div class="card-b">' +
+          '<div class="grid3">' +
+            calcField('增值税率 %', 'vat', d.vat, 'number') +
+            calcField('出口退税率 %', 'rebate', d.rebate, 'number') +
+            calcField('汇率（1 ' + d.cur + ' = ? 元）', 'rate', d.rate, 'number') +
+          '</div>' +
+          '<div class="hint">小规模纳税人或不退税时，退税率填 0。退税额按不含税成本 × 退税率计算。</div>' +
+        '</div></div>' +
+
+        '<div class="card"><div class="card-h"><h3>整单费用（元）</h3><span class="xs faint">按整票填写</span></div><div class="card-b">' +
+          '<div class="grid2">' + CALC_FEES.map(function(k){
+            return calcField(CALC_FEE_LABEL[k], k, d[k], 'number');
+          }).join('') + '</div>' +
+          '<div class="hint">保险费可按「CIF 价 × 110% × 费率」估算后填入；海运费按整票金额填，不分摊到件。</div>' +
+        '</div></div>' +
+
+        '<div class="card"><div class="card-h"><h3>目标与取整</h3></div><div class="card-b">' +
+          '<div class="grid2">' +
+            calcField('目标净利率 %', 'margin', d.margin, 'number') +
+            calcField('佣金率 %（按报价）', 'comm', d.comm, 'number') +
+          '</div>' +
+          '<div class="field"><span>单价尾数</span><select class="inp" onchange="A.calcSet(\'round\',this.value)">' + roundOpts + '</select></div>' +
+          '<div class="hint">净利率指扣掉佣金后你实际留下的比例。佣金率填 0 表示无中间人。</div>' +
+        '</div></div>' +
+
+        '<div class="card"><div class="card-h"><h3>客户还价（可选）</h3></div><div class="card-b">' +
+          calcField('客户目标单价（' + d.cur + '）', 'target', d.target, 'number') +
+          '<div class="hint">填客户给的价格，右侧会算出按此价成交的毛利率，判断能不能接。</div>' +
+        '</div></div>' +
+
+      '</div>' +
+      '<div class="calc-side" id="calcOut">' + calcOutHtml(calcRun(d)) + '</div>' +
+    '</div>' +
+    '<div class="calc-bar" id="calcBar" onclick="A.calcJump()">' + calcBarHtml(calcRun(d)) + '</div>' +
+  '</div>';
+}
+
+function calcBarHtml(r){
+  var d = calcLoad();
+  if(!r.ok) return '<span>参数不完整</span><i>查看明细 ↑</i>';
+  var sym = calcSym(d.cur);
+  return '<span>建议单价 <b>' + sym + calcMoney(r.unit) + '</b> / ' + esc(d.unit) + '</span>' +
+    '<i>毛利 ' + calcMoney(r.grossRate, 1) + '% ↑</i>';
+}
+
+function calcField(label, key, val, type){
+  return '<div class="field"><span>' + esc(label) + '</span>' +
+    '<input class="inp" type="' + type + '" inputmode="decimal" value="' + esc(String(val)) + '" ' +
+    'oninput="A.calcSet(\'' + key + '\',this.value)"></div>';
+}
+
+function calcPaint(){
+  var el = document.getElementById('calcOut');
+  if(!el) return;
+  var r = calcRun(calcLoad());
+  el.innerHTML = calcOutHtml(r);
+  var bar = document.getElementById('calcBar');
+  if(bar) bar.innerHTML = calcBarHtml(r);
+  calcBarPos();
+  setTimeout(calcBarPos, 60);
+}
+
+/* 手机端：吸底条要避开底部导航和授权提示条 */
+function calcBarPos(){
+  var bar = document.getElementById('calcBar');
+  if(!bar) return;
+  if(getComputedStyle(bar).display === 'none'){ bar.style.bottom = ''; return; }
+  var lic = document.getElementById('licBar');
+  var mob = document.querySelector('.mob-nav');
+  var base = mob ? mob.getBoundingClientRect().height : 60;
+  var extra = 0;
+  if(lic && getComputedStyle(lic).display !== 'none' && lic.getBoundingClientRect().height > 0){
+    extra = lic.getBoundingClientRect().height + 10;
+  }
+  bar.style.bottom = (base + extra) + 'px';
+}
+
+function copyText(txt, okMsg){
+  function done(){ toast(okMsg || '已复制'); }
+  function fallback(){
+    var ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); done(); }
+    catch(e){ toast('复制失败，请手动选中复制', false); }
+    ta.remove();
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done).catch(fallback);
+  } else {
+    fallback();
+  }
+}
+
+/* ========== 版本信息 ========== */
+var APP_VER = 'V3.3';
+var APP_DATE = '2026-10-23';
+var EULA_VER = '1.0';
+var EULA_DATE = '2026-10-23';
+var K_EULA = 'eula_agree_v1';
+
+/* 版本更新记录（设置页可查） */
+var VER_LOG = [
+  {v:'V3.3', d:'2026-10-23', items:[
+    '新增报价计算器：成本、退税、七项费用、目标净利、佣金，输出建议单价',
+    '新增客户还价反算，直接判断按客户价成交的毛利率',
+    '11 类单据补齐关键字段：申报要素、截关时间、保险单号、运费保险费拆分、退税测算',
+    '按贸易术语自动生成责任划分条款（风险转移、运费、保险、清关）',
+    '修正中文大写金额小数为 0.1–0.9 时显示异常的问题',
+    '统一质量异议期为 30 日，消除报价单与合同条款冲突',
+    '订舱委托书运费预付/到付随贸易术语自动判断',
+    '商业发票增加正本标识与 FOB 货值拆分',
+    '装箱单增加每箱数量列',
+    '新增使用条款确认与同意记录'
+  ]},
+  {v:'V3.2', d:'2026-10-23', items:[
+    '授权策略改为导出锁定：新建、编辑、预览全开放，仅导出需授权',
+    '模板导出纳入授权校验',
+    '修复折线图因日期格式冲突显示为直线的问题',
+    '界面重构：设计令牌、待办式指标、面板折叠、骨架屏'
+  ]},
+  {v:'V3.1', d:'2026-09-20', items:[
+    '新增 59 份单证模板库',
+    '单据扩展至 11 类，支持 11 种语言',
+    '导出 PDF 色彩保真修复'
+  ]},
+  {v:'V3.0', d:'2026-08-30', items:[
+    '首个正式版：单文件离线架构',
+    'TD2 离线授权（ECDSA 签名校验）'
+  ]}
+];
+
+/* ========== 使用条款 ========== */
+var EULA_SECTIONS = [
+  ['一、授权范围', '本授权仅限购买者本人及其所在企业自用。不得转售、出租、出借、赠与本软件或授权码；不得反编译、逆向工程、去除授权校验；不得利用本软件对外提供收费制单服务。'],
+  ['二、软件性质', '本软件为单证排版与计算辅助工具。内置条款为通用商务模板，不构成法律、税务、报关、保险或投资意见。'],
+  ['三、数据核对义务', '使用者应在导出及对外发送前，自行核对商品描述、数量、单价、金额、币种、贸易术语、收发货人、银行信息等全部内容。软件的计算结果以使用者录入的数据为基础，录入错误将直接导致单据错误。'],
+  ['四、责任限制', '因使用者录入数据错误、选用不适当的贸易术语或条款、未按目的国法规调整单据内容、汇率或税率变动、承运人或银行等第三方行为导致的任何损失，卖方不承担责任。卖方对因使用本软件产生的间接损失、利润损失、商誉损失不承担赔偿责任；如经生效裁判认定卖方应承担责任的，赔偿总额以购买者实际支付的授权费用为上限。'],
+  ['五、合规责任', '单据所载内容的真实性、合法性，以及出口报关、原产地、认证、税务申报的合规性，由使用者自行负责。'],
+  ['六、数据存储', '全部数据仅保存在使用者本机，不上传至任何服务器。卖方无法访问、备份或恢复使用者数据。因设备损坏、系统重装、清理浏览器缓存、误操作删除导致的数据丢失，卖方不承担责任。建议定期通过「设置 → 导出备份」保存。'],
+  ['七、授权有效期', '授权类型与到期日以「设置 → 授权」显示为准。到期后停止导出功能，但不影响已有数据的查看与备份。授权码不绑定设备，可在新设备重新激活。'],
+  ['八、授权终止', '使用者违反第一条约定的，卖方有权终止授权且不予退款。'],
+  ['九、版本与更新', '购买获得的是当前版本在授权期内的使用授权。卖方不承诺提供后续功能更新；已发布的更新，使用者可自行选择是否使用。'],
+  ['十、模板条款效力', '软件生成的条款为通用模板，使用者应根据实际交易修改。不同国家/地区的强制性法律规定可能不同，出口前应确认目的国要求。'],
+  ['十一、争议解决', '本条款适用中华人民共和国法律。因本条款产生的争议，双方协商解决；协商不成的，提交卖方所在地有管辖权的人民法院。'],
+  ['十二、条款版本', '本条款版本号 ' + EULA_VER + '，发布日期 ' + EULA_DATE + '。条款修订后，软件将在下次启动时提示重新确认；修订不影响已导出单据的效力。'],
+  ['十三、著作权', '本软件的著作权归作者所有。购买获得的是使用授权，不转让著作权与源代码。作者自行留存源代码、构建脚本与逐版更新记录，作为独立开发事实的证明材料。']
+];
+
+function eulaGet(){
+  try { return JSON.parse(lsGet(K_EULA) || 'null'); } catch(e){ return null; }
+}
+function eulaAgreed(){
+  var r = eulaGet();
+  return !!(r && r.ver === EULA_VER && r.at);
+}
+function eulaAgree(){
+  var now = new Date();
+  var at = now.getFullYear() + '-' + pad2(now.getMonth() + 1) + '-' + pad2(now.getDate()) +
+    ' ' + pad2(now.getHours()) + ':' + pad2(now.getMinutes());
+  lsSet(K_EULA, JSON.stringify({ver: EULA_VER, at: at, app: APP_VER}));
+  var el = document.getElementById('eulaWrap');
+  if(el) el.parentNode.removeChild(el);
+  boot();
+}
+function eulaHtml(){
+  return '<div class="eula" id="eulaWrap">' +
+    '<div class="eula-card">' +
+      '<div class="eula-h"><div class="eula-mark">TD</div>' +
+        '<div><b>外贸制单助手 · 使用条款</b><span>版本 ' + EULA_VER + ' · ' + EULA_DATE + '</span></div></div>' +
+      '<div class="eula-body">' +
+        '<p class="eula-lead">首次使用前请阅读以下条款。勾选同意后，你的同意记录（版本号与时间）将保存在本机，可随时在「设置 → 关于」查看。</p>' +
+        EULA_SECTIONS.map(function(s){
+          return '<div class="eula-sec"><h4>' + esc(s[0]) + '</h4><p>' + esc(s[1]) + '</p></div>';
+        }).join('') +
+        '<div class="eula-foot-note">本条款为通用商务模板，若单笔交易金额较大，建议另行咨询专业人士。</div>' +
+      '</div>' +
+      '<div class="eula-acts">' +
+        '<div class="eula-tip">点击下方按钮即表示你已阅读并同意上述全部条款，同意记录（版本号与时间）将保存在本机。</div>' +
+        '<button class="btn btn-primary" onclick="eulaAgree()">我已阅读并同意，开始使用</button>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+function pad2(n){ return (n < 10 ? '0' : '') + n; }
+
+/* 设置页展示块 */
+function versionCard(){
+  var e = eulaGet();
+  var rows = [
+    ['软件版本', APP_VER + '（' + APP_DATE + '）'],
+    ['条款版本', 'v' + EULA_VER + '（' + EULA_DATE + '）'],
+    ['同意时间', e && e.at ? e.at : '未记录'],
+    ['运行环境', '单文件离线版']
+  ];
+  return '<div class="card" style="margin-bottom:14px"><div class="card-h"><h3>版本信息</h3>' +
+    '<span class="xs faint">可用于售后核对</span></div><div class="card-b">' +
+    '<table class="ver-table">' + rows.map(function(r){
+      return '<tr><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td></tr>';
+    }).join('') + '</table>' +
+    '<details class="legal" style="margin-top:10px"><summary>查看版本更新记录</summary>' +
+      VER_LOG.map(function(v){
+        return '<div class="verlog"><b>' + esc(v.v) + '</b><span>' + esc(v.d) + '</span><ul>' +
+          v.items.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul></div>';
+      }).join('') +
+    '</details>' +
+    '<details class="legal"><summary>查看使用条款全文</summary>' +
+      EULA_SECTIONS.map(function(s){ return '<p><b>' + esc(s[0]) + '</b>　' + esc(s[1]) + '</p>'; }).join('') +
+    '</details>' +
+  '</div></div>';
 }
 
 /* ========== 视图 1/3：框架 · 单据列表 · 制单工作台 ========== */
@@ -2616,12 +3328,14 @@ function ic(name, size){
     close:'<path d="M6 6l12 12M18 6L6 18"/>',
     bell:'<path d="M6 9a6 6 0 1 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 21h4"/>',
     search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/>',
-    tpl:'<rect x="3" y="3" width="12" height="15" rx="1.6"/><path d="M7 7.5h4M7 11h4M7 14.5h2.5"/><path d="M17.5 7v12a2 2 0 0 1-2 2H7.5"/>'
+    tpl:'<rect x="3" y="3" width="12" height="15" rx="1.6"/><path d="M7 7.5h4M7 11h4M7 14.5h2.5"/><path d="M17.5 7v12a2 2 0 0 1-2 2H7.5"/>',
+    calc:'<rect x="4.5" y="2.5" width="15" height="19" rx="2.2"/><path d="M8 6.5h8"/><path d="M8.6 11.5h.01M12 11.5h.01M15.4 11.5h.01M8.6 15.2h.01M12 15.2h.01M15.4 15.2h.01M8.6 18.6h6.8"/>'
   }[name] || '';
   return '<svg viewBox="0 0 24 24" width="' + (size || 16) + '" height="' + (size || 16) + '" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + '</svg>';
 }
 var NAV = [
   {r:'docs', ic:'doc', label:'单据'},
+  {r:'calc', ic:'calc', label:'算价'},
   {r:'tpl', ic:'tpl', label:'模板'},
   {r:'library', ic:'lib', label:'资料库'},
   {r:'insights', ic:'chart', label:'分析'},
@@ -2641,8 +3355,8 @@ function render(){
     window.scrollTo(0, 0);
     return;
   }
-  var page = {docs:renderDocsPage, tpl:renderTplPage, library:renderLibraryPage, insights:renderInsightsPage, settings:renderSettingsPage}[ROUTE] || renderDocsPage;
-  var title = {docs:'单据', tpl:'单证模板', library:'资料库', insights:'分析', settings:'设置'}[ROUTE] || '';
+  var page = {docs:renderDocsPage, calc:renderCalcPage, tpl:renderTplPage, library:renderLibraryPage, insights:renderInsightsPage, settings:renderSettingsPage}[ROUTE] || renderDocsPage;
+  var title = {docs:'单据', calc:'报价计算', tpl:'单证模板', library:'资料库', insights:'分析', settings:'设置'}[ROUTE] || '';
   document.getElementById('app').innerHTML =
     '<div class="app">' + sideHtml() +
       '<div class="main">' +
@@ -2655,6 +3369,7 @@ function render(){
     '</div>' + mobNavHtml();
   window.scrollTo(0, 0);
   if(ROUTE === 'insights') setTimeout(drawInsights, 30);
+  if(ROUTE === 'calc') setTimeout(calcBarPos, 40);
 }
 function sideHtml(){
   return '<aside class="side" id="side">' +
@@ -3007,7 +3722,16 @@ function panelHtml(){
       '<div class="field"><span>货代</span><input class="inp" value="' + esc(o.terms.forwarder || '') + '" onchange="A.setTerm(\'forwarder\', this.value)"></div>' +
       '<div class="field"><span>报关行</span><input class="inp" value="' + esc(o.terms.customsBroker || '') + '" onchange="A.setTerm(\'customsBroker\', this.value)"></div>' +
       '<div class="field"><span>报关单号</span><input class="inp" value="' + esc(o.terms.declNo || '') + '" onchange="A.setTerm(\'declNo\', this.value)" placeholder="报关后补填"></div>' +
+      '<div class="field"><span>截关时间</span><input class="inp" value="' + esc(o.terms.cutoff || '') + '" onchange="A.setTerm(\'cutoff\', this.value)" placeholder="2026-10-28 17:00"></div>' +
+      '<div class="field"><span>保险单号</span><input class="inp" value="' + esc(o.terms.insNo || '') + '" onchange="A.setTerm(\'insNo\', this.value)" placeholder="CIF/CIP 时填写"></div>' +
+      '<div class="field"><span>目的港代理</span><input class="inp" value="' + esc(o.terms.agentDest || '') + '" onchange="A.setTerm(\'agentDest\', this.value)"></div>' +
+      '<div class="field"><span>运费（发票币种）</span><input class="inp" type="number" step="0.01" value="' + esc(o.terms.freight || '') + '" onchange="A.setTerm(\'freight\', this.value)" placeholder="CIF/CFR 需拆列"></div>' +
+      '<div class="field"><span>保险费（发票币种）</span><input class="inp" type="number" step="0.01" value="' + esc(o.terms.insurance || '') + '" onchange="A.setTerm(\'insurance\', this.value)"></div>' +
+      '<div class="field"><span>出口退税率 %</span><input class="inp" type="number" step="0.1" value="' + esc(o.terms.taxRate || '') + '" onchange="A.setTerm(\'taxRate\', this.value)" placeholder="如 13"></div>' +
+      '<div class="field"><span>可退税额</span><input class="inp" type="number" step="0.01" value="' + esc(o.terms.taxRefund || '') + '" onchange="A.setTerm(\'taxRefund\', this.value)" placeholder="退税备案用"></div>' +
     '</div>' +
+    '<div class="field" style="margin-top:8px"><span>申报要素（报关用：品牌 / 型号 / 用途 / 成分 / 材质）</span>' +
+      '<textarea class="inp" rows="2" style="resize:vertical" onchange="A.setTerm(\'declElements\', this.value)" placeholder="例：品牌：无牌；型号：BC-500；用途：日常饮水；材质：304不锈钢；容积：500ml">' + esc(o.terms.declElements || '') + '</textarea></div>' +
     '<div class="field" style="margin-top:10px"><span>供应商（采购合同用）</span><div class="row">' +
       '<select class="inp" onchange="A.setSupplier(this.value)">' +
         '<option value="">— 选择供应商 —</option>' +
@@ -3543,12 +4267,12 @@ function exportICS(){
 
 /* ---------- 设置 ---------- */
 function renderSettingsPage(){
-  var tabs = [['company','公司资料'],['defaults','制单默认'],['themes','模板配色'],['data','数据与推送'],['license','授权']];
+  var tabs = [['company','公司资料'],['defaults','制单默认'],['themes','模板配色'],['data','数据与推送'],['license','授权'],['about','版本与条款']];
   return '<div class="page-head"><div><h2>设置</h2><p>固定信息只维护一次，之后制单自动填充</p></div></div>' +
     '<div class="tabs">' + tabs.map(function(t){
       return '<div class="tab' + (SET_TAB === t[0] ? ' active' : '') + '" onclick="A.setTab(\'' + t[0] + '\')">' + t[1] + '</div>';
     }).join('') + '</div>' +
-    (SET_TAB === 'company' ? setCompanyTab() : SET_TAB === 'defaults' ? setDefaultsTab() : SET_TAB === 'themes' ? setThemesTab() : SET_TAB === 'license' ? LIC.settingsCard() : setDataTab()) +
+    (SET_TAB === 'company' ? setCompanyTab() : SET_TAB === 'defaults' ? setDefaultsTab() : SET_TAB === 'themes' ? setThemesTab() : SET_TAB === 'license' ? LIC.settingsCard() : SET_TAB === 'about' ? versionCard() : setDataTab()) +
     '<details class="legal"><summary>使用条款 · 版本信息</summary>' +
       '<p>1. 本工具为单证排版与计算辅助工具，内置条款为通用商务模板，<b>不构成法律、税务、报关或投资意见</b>。单据中的金额、数量、条款适用性请使用者自行核对，必要时咨询专业人士。</p>' +
       '<p>2. 因使用本工具生成的单据所引起的一切商业与法律后果，由使用者自行承担。</p>' +
@@ -4560,6 +5284,7 @@ var A = {
     toast('已导出 ' + fname, true);
   },
   goPrint: function(){
+    if(typeof LIC !== 'undefined' && !LIC.canExport()){ LIC.blockExport(); return; }
     var cb = document.getElementById('printTipOff');
     if(cb && cb.checked){ S.settings.printTip = false; saveState(); }
     A.closeModal();
@@ -4571,6 +5296,50 @@ var A = {
   },
   printOne: function(){
     doPrint([WS.tab]);
+  },
+
+  /* ---------- 报价计算器 ---------- */
+  calcSet: function(k, v){
+    var d = calcLoad();
+    if(k === 'mode' || k === 'round' || k === 'cur' || k === 'unit') d[k] = v;
+    else d[k] = (v === '' || v === null) ? 0 : +v;
+    calcSave();
+    calcPaint();
+  },
+  calcReset: function(){
+    CALC = null;
+    lsDel(CALC_KEY);
+    render();
+    toast('已恢复默认参数');
+  },
+  calcJump: function(){
+    var el = document.getElementById('calcOut');
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  },
+  calcCopy: function(what){
+    var d = calcLoad(), r = calcRun(d);
+    if(!r.ok){ toast(r.err); return; }
+    var sym = calcSym(d.cur), txt;
+    if(what === 'unit'){
+      txt = String(r.unit);
+    } else {
+      txt = '【报价计算结果】\n' +
+        '数量：' + r.qty + ' ' + d.unit + '\n' +
+        '采购单价：' + d.price + ' 元（' + (d.mode === 'incl' ? '含税' : '不含税') + '）\n' +
+        '增值税率：' + d.vat + '%　退税率：' + d.rebate + '%　汇率：' + d.rate + '\n' +
+        '不含税成本：' + calcMoney(r.baseTotal) + ' 元\n' +
+        '可退税额：' + calcMoney(r.rebateAmt) + ' 元\n' +
+        '实际成本：' + calcMoney(r.realCost) + ' 元\n' +
+        '费用合计：' + calcMoney(r.feeTotal) + ' 元\n' +
+        '保本收入：' + calcMoney(r.breakEven) + ' 元\n' +
+        '建议单价：' + sym + calcMoney(r.unit) + ' / ' + d.unit + '\n' +
+        '建议总价：' + sym + calcMoney(r.totalFX) + '\n' +
+        '本单毛利：' + calcMoney(r.gross) + ' 元（' + calcMoney(r.grossRate, 2) + '%）\n' +
+        (r.commAmt > 0 ? '其中佣金：' + calcMoney(r.commAmt) + ' 元\n' : '') +
+        '净利：' + calcMoney(r.net) + ' 元（' + calcMoney(r.netRate, 2) + '%）\n' +
+        '换汇成本：' + calcMoney(r.fxCost, 3);
+    }
+    copyText(txt, what === 'unit' ? '单价已复制' : '结果已复制');
   },
 
   /* ---------- 工作台 ---------- */
@@ -4730,7 +5499,13 @@ var A = {
     if(!p.name){ toast('请填写产品名称', false); return; }
     if(id){ p.id = id; var idx = S.products.findIndex(function(x){ return x.id === id; }); if(idx >= 0) S.products[idx] = p; }
     else { p.id = uid(); S.products.push(p); }
-    saveState(); A.closeModal(); render(); toast('已保存', true);
+    saveState(); A.closeModal(); render();
+    /* 装箱参数缺失会导致单据上的箱数/重量失真，保存时提醒 */
+    var warn = '';
+    if(!(+p.pcsPerCtn > 0)) warn = '未填每箱数量，箱数按 1 件/箱计算';
+    else if(!(+p.gwPerCtn > 0)) warn = '未填每箱毛重，单据上的毛重会显示 0';
+    else if(!(+p.nwPerCtn > 0)) warn = '未填每箱净重，单据上的净重会显示 0';
+    toast(warn ? ('已保存 · 注意：' + warn) : '已保存', true);
   },
   delProduct: function(id){
     confirmBox('删除该产品？删除后无法恢复，已生成的单据不受影响。', function(){
@@ -5037,10 +5812,11 @@ function confirmBox(msg, onOk){
   A._ok = function(){ A.closeModal(); onOk(); };
 }
 function doPrint(types){
+  if(typeof LIC !== 'undefined' && !LIC.canExport()){ LIC.blockExport(); return; }
   if(!WORK || !WORK.items.length){ toast('请先添加产品', false); return; }
   var html = types.map(function(t){
     return renderDoc(WORK, t, WS.lang, WS.theme, wsDocNo(t), WS.opts);
-  }).join('<div class="pb"></div>');
+  }).join('');   /* 不再插 .pb：.doc 自带 page-break-after，双分页会产生空白页 */
   document.getElementById('printArea').innerHTML = html;
   if(S.settings.printTip === false){ setTimeout(function(){ window.print(); }, 150); return; }
   openModal('<div class="modal-h"><h3>导出为 PDF</h3><button class="close" onclick="A.closeModal()">' + ic('close', 14) + '</button></div>' +
@@ -5189,7 +5965,11 @@ function boot(){
 }
 window.boot = boot;
 LIC.init();
-boot();
+if(!eulaAgreed()){
+  document.getElementById('app').innerHTML = eulaHtml();
+} else {
+  boot();
+}
 LIC.reguard && LIC.reguard();   /* 模板导出函数是 boot 里才创建的，启动后再包一次 */
 
 </script>
