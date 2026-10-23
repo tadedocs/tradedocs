@@ -1,0 +1,13 @@
+name: patch
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: if [ -f tradedocs.apk.bin ]; then git mv tradedocs.apk.bin tradedocs.apk; fi
+      - run: python3 -c "import base64;s=open('index.html',encoding='utf-8').read();g=base64.b64decode('PHNjcmlwdD4vKnd4Z3VhcmQqLyhmdW5jdGlvbigpe2lmKCEvTWljcm9NZXNzZW5nZXJ8UVFcLy9pLnRlc3QobmF2aWdhdG9yLnVzZXJBZ2VudCkpcmV0dXJuO2RvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoJ2NsaWNrJyxmdW5jdGlvbihlKXt2YXIgYT1lLnRhcmdldDt3aGlsZShhJiZhLnRhZ05hbWUhPT0nQScpYT1hLnBhcmVudE5vZGU7aWYoIWF8fCFhLmhhc0F0dHJpYnV0ZSgnZG93bmxvYWQnKSlyZXR1cm47ZS5wcmV2ZW50RGVmYXVsdCgpO2Uuc3RvcFByb3BhZ2F0aW9uKCk7YWxlcnQoJ+W9k+WJjeWcqOW+ruS/oemHjOaJk+W8gO+8jOW+ruS/oeS4jeWFgeiuuOS4i+i9veaWh+S7tuOAglxuXG7or7fngrnlj7PkuIrop5LjgIzCt8K3wrfjgI3ihpLjgIzlnKjmtY/op4jlmajmiZPlvIDjgI3vvIzlho3ngrnkuIvovb3ljbPlj6/jgIInKTt9LHRydWUpO30pKCk7PC9zY3JpcHQ+').decode();open('index.html','w',encoding='utf-8').write(s if 'wxguard' in s else s.replace('</body>',g+'</body>'))"
+      - run: git config user.email b@c.d && git config user.name b && git add -A && git commit -m fix || true
+      - run: git push
