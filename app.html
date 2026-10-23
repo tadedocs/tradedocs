@@ -870,6 +870,59 @@ b,strong{font-weight:600;}
 .verlog ul{margin:4px 0 0 16px;padding:0;line-height:1.7;color:var(--ink2)}
 .d-cur-note{font-size:9px;color:#7A8394;margin-top:3px;text-align:right}
 
+/* ========== 单据自动适配 ==========
+   内容略超一页时，整份单据的间距、表格行高、条款字号统一收一档，
+   把它压回一页；压两档仍放不下说明确实要多页，JS 会撤销压缩、正常分页。 */
+
+/* 第一档：轻度收紧 */
+.doc.fit-tight .d-head{padding-bottom:6px}
+.doc.fit-tight .d-parties{margin:8px 0 7px}
+.doc.fit-tight .d-kv{margin:7px 0}
+.doc.fit-tight .d-kvitem{padding:5px 0}
+.doc.fit-tight .d-items th{padding:5px 6px}
+.doc.fit-tight .d-items td{padding:4.6px 6px}
+.doc.fit-tight .d-sum{margin-top:7px}
+.doc.fit-tight .d-sumcell{padding:5px 8px}
+.doc.fit-tight .d-bank{margin-top:9px;padding:7px 10px}
+.doc.fit-tight .d-bankitem{padding:3px 0}
+.doc.fit-tight .d-sec{margin:9px 0 4px}
+.doc.fit-tight .d-terms{margin-top:9px;padding-top:6px}
+.doc.fit-tight .d-terms li{font-size:7.1pt;line-height:1.46;margin-bottom:1.2px}
+.doc.fit-tight .d-clauses{margin-top:9px}
+.doc.fit-tight .d-clause{margin-bottom:4px}
+.doc.fit-tight .d-cl-t{font-size:7.4pt}
+.doc.fit-tight .d-cl-b{font-size:7.2pt;line-height:1.48}
+.doc.fit-tight .d-cert{margin-top:8px;padding:5px 10px;font-size:7.1pt}
+.doc.fit-tight .d-marks{margin:6px 0;padding:4px 9px}
+.doc.fit-tight .d-sign{margin-top:10px}
+
+/* 第二档：明显收紧（仍在可读范围） */
+.doc.fit-tighter .d-head{padding-bottom:4px}
+.doc.fit-tighter .d-parties{margin:6px 0 5px}
+.doc.fit-tighter .d-kv{margin:5px 0}
+.doc.fit-tighter .d-kvitem{padding:3.5px 0}
+.doc.fit-tighter .d-items th{padding:4px 5px;font-size:6.3pt}
+.doc.fit-tighter .d-items td{padding:2.6px 5px;font-size:8.2pt}
+.doc.fit-tighter .d-items .d-sub{font-size:6.6pt}
+.doc.fit-tighter .d-sum{margin-top:5px}
+.doc.fit-tighter .d-sumcell{padding:4px 7px}
+.doc.fit-tighter .d-sumcell b{font-size:8.2pt}
+.doc.fit-tighter .d-bank{margin-top:7px;padding:6px 9px}
+.doc.fit-tighter .d-bankitem{padding:2px 0}
+.doc.fit-tighter .d-sec{margin:5px 0 2px;font-size:8.2pt}
+.doc.fit-tighter .d-terms{margin-top:7px;padding-top:5px}
+.doc.fit-tighter .d-terms li{font-size:6.7pt;line-height:1.38;margin-bottom:.8px}
+.doc.fit-tighter .d-terms-t{margin-bottom:3px;font-size:6.4pt}
+.doc.fit-tighter .d-clauses{margin-top:7px}
+.doc.fit-tighter .d-clause{margin-bottom:3px}
+.doc.fit-tighter .d-cl-t{font-size:7pt}
+.doc.fit-tighter .d-cl-b{font-size:6.8pt;line-height:1.4}
+.doc.fit-tighter .d-cert{margin-top:6px;padding:4px 8px;font-size:6.8pt}
+.doc.fit-tighter .d-marks{margin:5px 0;padding:3px 8px}
+.doc.fit-tighter .d-sign{margin-top:8px}
+.doc.fit-tighter .d-signbox .d-sarea{height:42px}
+.doc.fit-tighter .d-words{font-size:7pt;margin-top:3px}
+
 </style>
 </head>
 <body>
@@ -953,17 +1006,64 @@ function loadState(){
   if(!raw && typeof AndroidBridge !== 'undefined'){
     try{ raw = AndroidBridge.loadData(); }catch(e){}
   }
-  if(raw){ try{ var d = JSON.parse(raw); if(d && d.version === 1){ S = normDates(Object.assign(defaultState(), d)); return S; } }catch(e){} }
-  S = defaultState(); return S;
+  if(raw){ try{ var d = JSON.parse(raw); if(d && d.version === 1){ S = normDates(Object.assign(defaultState(), d)); STORE_REV = lsGet(REV_KEY) || d._rev || ''; return S; } }catch(e){} }
+  S = defaultState(); STORE_REV = '';
+  return S;
 }
-function saveState(){
+/* ---------- 多窗口并发保护 ----------
+   Mac / Windows 版本质是浏览器窗口，双击两次就是两个窗口，共用同一份本地存储。
+   不做保护时，后保存的会静默覆盖先保存的。这里用修订号做乐观锁。 */
+var STORE_REV = '';         /* 本窗口认为存储中应有的修订号 */
+var REV_KEY = LS_KEY + '__rev';   /* 修订号单独存，避免每次保存解析整份数据 */
+var CONFLICT_OPEN = false;  /* 冲突弹窗是否已弹出，避免重复 */
+
+function saveState(force){
+  if(!force && STORE_REV){
+    var curRev = lsGet(REV_KEY) || '';
+    if(curRev && curRev !== STORE_REV){
+      showConflict();
+      return false;
+    }
+  }
+  S._rev = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
   var json = JSON.stringify(S);
   var ok = lsSet(LS_KEY, json);
+  lsSet(REV_KEY, S._rev);
+  STORE_REV = S._rev;
   if(typeof AndroidBridge !== 'undefined'){
     try{ AndroidBridge.saveData(json); ok = true; }catch(e){}
   }
   if(!ok){ toast('本地存储不可用，数据仅保留在本次会话中，请立即导出备份', false); }
+  return true;
 }
+
+function showConflict(){
+  if(CONFLICT_OPEN) return;
+  CONFLICT_OPEN = true;
+  openModal('<div class="modal-h"><h3>数据已在另一个窗口更新</h3>' +
+    '<button class="close" onclick="A.closeConflict()">' + ic('close', 14) + '</button></div>' +
+    '<div class="modal-b" style="padding:18px"><p style="font-size:13px;color:var(--ink2);line-height:1.8">' +
+    '你在另一个窗口改过数据（双击应用会打开多个窗口，它们共用同一份数据）。<br><br>' +
+    '如果继续保存，会用<b>当前窗口</b>的内容覆盖另一窗口的改动；如果加载最新，当前窗口没保存的修改会丢弃。</p></div>' +
+    '<div class="modal-f"><button class="btn btn-ghost btn-sm" onclick="A.reloadStore()">加载最新（放弃本窗口改动）</button>' +
+    '<button class="btn btn-primary btn-sm" onclick="A.forceSave()">保留本窗口，覆盖保存</button></div>');
+}
+function resetConflict(){
+  CONFLICT_OPEN = false;
+  var m = document.getElementById('modalRoot');
+  if(m && m.classList.contains('open')) A.closeModal();
+}
+/* 另一窗口写入时给出提示（storage 事件只在本窗口之外的写入时触发）*/
+var _LAST_SYNC_TIP = 0;
+try{
+  window.addEventListener('storage', function(e){
+    if(e.key !== LS_KEY || !e.newValue) return;
+    var now = Date.now();
+    if(now - _LAST_SYNC_TIP < 10000) return;
+    _LAST_SYNC_TIP = now;
+    if(typeof toast === 'function') toast('另一窗口刚修改过数据；本窗口保存时会先提示', false);
+  });
+}catch(e){}
 function deepCopy(o){ return JSON.parse(JSON.stringify(o)); }
 function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
 function fmtMoney(n, cur){
@@ -2431,6 +2531,39 @@ function dSign(ctx, force){  var show = force || ctx.opts.showSign;
     (force ? '<div class="d-signbox"><div class="d-slabel">' + esc(T.buyerSign) + '</div><div class="d-sarea"><div class="d-sline"></div></div><div class="d-shint">' + esc(T.accepted) + '</div></div>' : '') +
   '</div>';
 }
+/* ---------- 单页自适应 ----------
+   条款区多出一两行时，整份单据会多出一页只印一行，很难看。
+   这里测量实际高度，超过 A4 就逐级压缩条款排版；压到最紧仍超，才允许正常分页。 */
+/* .doc 自身 min-height 是 297mm，内容少时高度正好等于它；
+   内容溢出才会超过。所以阈值必须用 297mm，不能按 296mm 算。 */
+var PAGE_PX = 297 * 96 / 25.4;   /* ≈ 1122.5px */
+
+function fitDocEl(el){
+  if(!el) return;
+  el.classList.remove('fit-tight', 'fit-tighter');
+  if(el.offsetHeight <= PAGE_PX + 2) return;          /* 本来就一页 */
+  el.classList.add('fit-tight');
+  if(el.offsetHeight <= PAGE_PX + 2) return;          /* 压一档够了 */
+  el.classList.add('fit-tighter');
+  if(el.offsetHeight <= PAGE_PX + 2) return;          /* 压两档够了 */
+  /* 压到最紧仍超页：内容确实要多页，恢复原样，让它正常分页 */
+  el.classList.remove('fit-tight', 'fit-tighter');
+}
+function fitDocsIn(host){
+  if(!host) return;
+  var list = host.querySelectorAll('.doc');
+  for(var i = 0; i < list.length; i++) fitDocEl(list[i]);
+}
+/* 打印区在屏幕上 display:none，量不到高度；临时挪到屏幕外测量 */
+function fitPrintArea(){
+  var pa = document.getElementById('printArea');
+  if(!pa || !pa.innerHTML) return;
+  var css = pa.style.cssText;
+  pa.style.cssText = 'display:block;position:absolute;left:-9999px;top:0;width:210mm;';
+  fitDocsIn(pa);
+  pa.style.cssText = css;
+}
+
 function dFoot(ctx){
   var ver = (typeof APP_VER !== 'undefined') ? APP_VER : '';
   return '<footer class="d-foot"><span>' + esc(ctx.company.name) + ' · ' + esc(ctx.company.website || '') + '</span>' +
@@ -3778,6 +3911,7 @@ function paintPreview(){
   var html = renderDoc(WORK, WS.tab, WS.lang, WS.theme, wsDocNo(WS.tab), WS.opts);
   host.innerHTML = '<div class="doc-scaler" id="scaler"><div class="doc-zoom" style="transform:scale(' + WS.zoom + ')">' + html + '</div></div>';
   var doc = host.querySelector('.doc'), scaler = document.getElementById('scaler');
+  fitDocEl(doc);
   if(doc && scaler){
     scaler.style.width = Math.round(doc.offsetWidth * WS.zoom) + 'px';
     scaler.style.height = Math.round(doc.offsetHeight * WS.zoom) + 'px';
@@ -5298,6 +5432,25 @@ var A = {
     doPrint([WS.tab]);
   },
 
+  /* ---------- 多窗口冲突处理 ---------- */
+  reloadStore: function(){
+    resetConflict();
+    loadState();
+    WORK = null;
+    ROUTE = 'docs';
+    render();
+    toast('已加载另一窗口的最新数据', true);
+  },
+  forceSave: function(){
+    resetConflict();
+    saveState(true);
+    render();
+    toast('已用本窗口内容覆盖保存', true);
+  },
+  closeConflict: function(){
+    resetConflict();
+  },
+
   /* ---------- 报价计算器 ---------- */
   calcSet: function(k, v){
     var d = calcLoad();
@@ -5818,6 +5971,7 @@ function doPrint(types){
     return renderDoc(WORK, t, WS.lang, WS.theme, wsDocNo(t), WS.opts);
   }).join('');   /* 不再插 .pb：.doc 自带 page-break-after，双分页会产生空白页 */
   document.getElementById('printArea').innerHTML = html;
+  fitPrintArea();
   if(S.settings.printTip === false){ setTimeout(function(){ window.print(); }, 150); return; }
   openModal('<div class="modal-h"><h3>导出为 PDF</h3><button class="close" onclick="A.closeModal()">' + ic('close', 14) + '</button></div>' +
     '<div class="modal-b" style="font-size:12.5px;color:var(--ink2);line-height:1.85">' +
