@@ -1632,11 +1632,13 @@ var LIC = (function(){
   function guard(){
     EXPORT_LOCKED.forEach(function(n){
       var fn = A[n];
-      if(typeof fn !== 'function') return;
-      A[n] = function(){
+      if(typeof fn !== 'function' || fn.__licGuarded) return;
+      var w = function(){
         if(!canExport()){ blockExport(); return; }
         return fn.apply(this, arguments);
       };
+      w.__licGuarded = true;
+      A[n] = w;
     });
   }
   function blockExport(){
@@ -1663,7 +1665,7 @@ var LIC = (function(){
   return {
     init:init, compute:compute, canEdit:canEdit, canExport:canExport, activate:activate,
     openActivate:openActivate, showHelp:showHelp,
-    settingsCard:settingsCard, copyCode:copyCode,
+    settingsCard:settingsCard, copyCode:copyCode, blockExport:blockExport, reguard:guard,
     paintBar:paintBar, verifyAsync:verifyAsync, needsAsyncCheck:needsAsyncCheck,
     state:function(){ return ST; },
     model:function(){ return {mode:ST.mode, days:ST.days, exp:ST.exp, plan:ST.plan, forever:!!ST.forever}; }
@@ -4089,6 +4091,7 @@ function tplHooks(){
     toast('已带入公司/银行信息；买方填的是「' + (cu.company || '（客户库为空）') + '」，发出去前请核对');
   };
   A.tplCopy = function(){
+    if(!LIC.canExport()){ LIC.blockExport(); return; }
     if(!TPL_DOC) return;
     var t = TPL_OUT ? tplOutText(TPL_DOC.text) : TPL_DOC.text;
     if(navigator.clipboard && navigator.clipboard.writeText){
@@ -4097,6 +4100,7 @@ function tplHooks(){
     } else tplCopyFallback(t);
   };
   A.tplWord = function(){
+    if(!LIC.canExport()){ LIC.blockExport(); return; }
     if(!TPL_DOC) return;
     var html = tplAsHtmlDocument(TPL_DOC);
     var nm = tplNameParts(TPL_DOC.n).cn;
@@ -4104,6 +4108,7 @@ function tplHooks(){
     toast('Word 文档已导出');
   };
   A.tplExcel = function(){
+    if(!LIC.canExport()){ LIC.blockExport(); return; }
     if(!TPL_DOC) return;
     var lines = TPL_DOC.text.split(/\r?\n/);
     var rows = lines.map(function(l){
@@ -4117,6 +4122,7 @@ function tplHooks(){
     toast('Excel 已导出');
   };
   A.tplPdf = function(){
+    if(!LIC.canExport()){ LIC.blockExport(); return; }
     if(!TPL_DOC) return;
     var area = document.getElementById('printArea');
     area.innerHTML = '<div class="tdoc tdoc-print">' + tplRenderDoc(TPL_DOC.text, TPL_OUT) + '</div>';
@@ -5184,6 +5190,7 @@ function boot(){
 window.boot = boot;
 LIC.init();
 boot();
+LIC.reguard && LIC.reguard();   /* 模板导出函数是 boot 里才创建的，启动后再包一次 */
 
 </script>
 </body>
