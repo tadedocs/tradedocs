@@ -114,13 +114,6 @@ code{background:#FDF2F2;border-radius:4px;padding:1px 5px;font-size:11.5px;font-
     <span class="sz">173KB</span><span class="ar">↓</span>
   </a>
 
-  <a class="btn" id="dl-app" href="app.html" data-file>
-    <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8l4 4-4 4"/></svg></span>
-    <span class="tx"><span class="t">什么都不装，直接用</span><span class="d">浏览器打开，功能完全一样 · iPhone 也能用</span></span>
-    <span class="ar">→</span>
-  </a>
-  <p class="iosnote">iPhone / iPad：请用 Safari 打开并「添加到主屏幕」，且每周至少打开一次、定期导出备份（iOS 会清理长期不访问的本地数据）。</p>
-
   <a class="btn" id="dl-win" href="tradedocs-windows.bin" download="外贸制单助手-Windows免安装版.zip" data-file>
     <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 6.5l8-1.2v6.2H3zM13 5l8-1.2v7.7h-8zM3 13.2h8v6.2l-8-1.2zM13 13.2h8v7.7L13 19.7z"/></svg></span>
     <span class="tx"><span class="t">Windows 10 / 11</span><span class="d">免安装压缩包 · 解压后双击 exe</span></span>
@@ -131,6 +124,12 @@ code{background:#FDF2F2;border-radius:4px;padding:1px 5px;font-size:11.5px;font-
     <span class="ic"><svg viewBox="0 0 24 24"><path d="M16 3.5c-1 1.2-1.6 2.3-1.5 3.8 1.6.1 2.9-.7 3.7-1.8"/><path d="M12.2 7.3c-2.6 0-4 1.5-5.2 1.5S5 7.5 3.6 7.5C1.6 7.5.6 9.6.6 12c0 3.6 2.8 8 4.6 8 1 0 1.7-.7 3-.7s2 .7 3 .7c1.9 0 4.5-4.4 4.5-6.6 0-1.9-.9-3-2.2-3.7"/><path d="M8 4.2c-.3 1.7.9 3 2.3 3.3.3-1.6-.9-3-2.3-3.3"/></svg></span>
     <span class="tx"><span class="t">macOS</span><span class="d">.app 压缩包 · 首次右键「打开」</span></span>
     <span class="sz">1.4MB</span><span class="ar">↓</span>
+  </a>
+
+  <a class="btn" href="app.html" download="外贸制单助手.html" data-file>
+    <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8l4 4-4 4"/></svg></span>
+    <span class="tx"><span class="t">网页版（iPhone 用这个）</span><span class="d">下载 HTML 文件 · 双击或分享到手机后用浏览器打开</span></span>
+    <span class="sz">506KB</span><span class="ar">↓</span>
   </a>
 
   <div class="card">
@@ -258,7 +257,7 @@ var FILES = [
   });
 
   /* 再扫描页面上所有链接，凡是指向本地文件的都换成内嵌地址
-     （这样连「什么都不装，直接用」和「使用手册」也不会 404） */
+     （页面上的所有入口都不会再 404） */
   Array.prototype.forEach.call(document.querySelectorAll('a[href]'), function(a){
     var h = a.getAttribute('href');
     if(!h) return;
@@ -272,7 +271,29 @@ var FILES = [
     if(tag) tag.textContent = sz(m.size);
     a.addEventListener('click', function(e){
       if(IN_WX){ e.preventDefault(); showWx(); return; }
-      toast('正在下载「' + m.name + '」，完成后到「下载」文件夹查看', m.url);
+      e.preventDefault();
+      if(a._busy) return;                 /* 防连点：准备期间忽略后续点击 */
+      a._busy = true;
+      var tEl = a.querySelector('.t');
+      if(!a._txt && tEl) a._txt = tEl.textContent;
+      if(tEl) tEl.textContent = '正在准备…';
+      a.style.opacity = '0.7';
+      toast('正在准备「' + m.name + '」，马上开始…', null);
+      setTimeout(function(){
+        try{
+          var tmp = document.createElement('a');
+          tmp.href = m.url; tmp.download = m.name; tmp.style.display = 'none';
+          document.body.appendChild(tmp); tmp.click();
+          setTimeout(function(){ if(tmp.parentNode) tmp.parentNode.removeChild(tmp); }, 8000);
+          toast('已开始下载「' + m.name + '」，到「下载」文件夹查看', m.url);
+        }catch(err){
+          toast('生成文件失败，请换 Chrome 或系统浏览器打开本页');
+        }
+        setTimeout(function(){
+          a._busy = false; a.style.opacity = '1';
+          if(tEl && a._txt) tEl.textContent = a._txt;
+        }, 1500);
+      }, 0);
     });
   });
 
