@@ -129,6 +129,8 @@ select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns
 .ws-body{flex:1;display:flex;min-height:0;}
 .ws-panel{width:360px;background:#fff;border-right:1px solid var(--line);overflow-y:auto;flex-shrink:0;}
 .ws-main{flex:1;display:flex;flex-direction:column;min-width:0;}
+/* 单据选择器：桌面用横排标签，手机用下拉 */
+.ws-picker{display:none;}
 .ws-tabs{height:46px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:2px;padding:0 8px;overflow-x:auto;flex-shrink:0;}
 .ws-tab{height:46px;display:flex;align-items:center;gap:6px;padding:0 12px;font-size:13px;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;}
 .ws-tab:hover{color:var(--ink);}
@@ -213,9 +215,13 @@ details[open] .chev{transform:rotate(90deg);}
 /* ---------- 资料卡片 ---------- */
 .prods{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px;}
 .prod{border:1px solid var(--line);border-radius:11px;background:#fff;overflow:hidden;display:flex;flex-direction:column;}
-.prod .ph{height:104px;background:#f7f8fa;display:grid;place-items:center;color:#c9ced6;font-size:11px;border-bottom:1px solid var(--line2);}
-.prod .ph:empty{display:none;}
-.prod .ph img{width:100%;height:100%;object-fit:cover;}
+/* 产品图统一 4:3：比例固定，任何长宽比都按中心裁切，不再撑高卡片盖住文字 */
+.prod .ph{position:relative;height:0;padding-bottom:75%;background:#f7f8fa;border-bottom:1px solid var(--line2);overflow:hidden;}
+.prod .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
+.ph-txt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  color:#cdd3db;background:#fafbfc;}
+.ph-txt i{font-style:normal;font-size:10.5px;letter-spacing:.06em;}
+.img-acts{display:flex;flex-direction:column;gap:6px;padding-top:2px;}
 .prod .bd{padding:10px 12px;flex:1;}
 .prod .nm{font-size:13px;font-weight:600;line-height:1.35;}
 .prod .en{font-size:11px;color:var(--faint);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -230,7 +236,8 @@ details[open] .chev{transform:rotate(90deg);}
 .cust .bd{margin-top:9px;font-size:11.5px;color:#475467;display:flex;flex-direction:column;gap:3px;line-height:1.5;}
 .cust .ft{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:11px;padding-top:9px;border-top:1px dashed var(--line2);flex-wrap:wrap;}
 .imgbox{display:flex;gap:12px;align-items:flex-start;margin-top:10px;}
-.prev{width:100px;height:100px;border:1px dashed #d5d9e0;border-radius:9px;display:grid;place-items:center;color:var(--faint);font-size:11px;overflow:hidden;background:#fbfbfc;}
+.imgbox .prev{width:132px;height:99px;}
+.prev{position:relative;width:100px;height:100px;border:1px dashed #d5d9e0;border-radius:9px;display:grid;place-items:center;color:var(--faint);font-size:11px;overflow:hidden;background:#fbfbfc;}
 .prev img{width:100%;height:100%;object-fit:cover;}
 .logobox{display:flex;gap:14px;align-items:center;margin-bottom:14px;}
 .logobox .prev{width:132px;height:58px;}
@@ -303,8 +310,14 @@ details[open] .chev{transform:rotate(90deg);}
   .ws-tools .check{display:none;}
   .ws-tools .divider{display:none;}
   .ws-tools .xs.faint{display:none;}
-  .ws-tabs{height:42px;}
-  .ws-tab{height:42px;padding:0 9px;font-size:12px;}
+  .ws-picker{display:flex;align-items:center;gap:8px;height:46px;padding:0 10px;background:#fff;
+    border-bottom:1px solid var(--line);flex-shrink:0;}
+  .ws-picker .step{width:32px;height:32px;flex:none;border:1px solid var(--line);border-radius:8px;background:#fff;
+    color:var(--muted);font-size:17px;line-height:1;display:grid;place-items:center;}
+  .ws-picker select{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:8px;background:#fff;
+    font-size:13px;color:var(--ink);padding:0 8px;}
+  .ws-picker .idx{font-size:11px;color:var(--faint);flex:none;}
+  .ws-tabs{display:none;}
   .ws-seg{display:flex;}
   .ws-body{flex-direction:column;}
   .ws-panel{width:100%;flex:1;border-right:none;}
@@ -356,7 +369,9 @@ details[open] .chev{transform:rotate(90deg);}
 .d-pcn{font-size:8pt;color:#5b6169;margin-top:1px;}
 .d-plines{font-size:7.8pt;color:#4b5563;line-height:1.6;margin-top:3px;}
 
-.d-kv{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid #eceef1;border-bottom:1px solid #eceef1;margin:13px 0 12px;}
+.d-kv{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1px solid #eceef1;border-bottom:1px solid #eceef1;margin:13px 0 12px;}
+/* 贸易信息 5 项按内容定宽：付款条件最长、币种最短，均分会让长文本贴到下一列 */
+.d-kv.kv5{grid-template-columns:0.8fr 1fr 1.6fr 1.3fr 0.6fr;}
 .d-kvitem{padding:7px 9px 7px 0;min-width:0;}
 .d-kvl{font-size:6.4pt;letter-spacing:.13em;text-transform:uppercase;color:#9aa1ab;}
 .d-kvv{font-size:8.3pt;font-weight:600;margin-top:1px;line-height:1.4;word-break:break-word;}
@@ -376,15 +391,23 @@ details[open] .chev{transform:rotate(90deg);}
 .d-items .c-q,.d-items .c-n{width:60px;text-align:right;font-variant-numeric:tabular-nums;}
 .d-items .c-p,.d-items .c-a{width:78px;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
 .d-items .c-a{font-weight:600;}
+/* 退税测算等表内金额：与明细金额同一字体，右对齐，右侧留白避免贴住相邻标签 */
+.d-items td.d-amtn{text-align:right;font-variant-numeric:tabular-nums;padding-right:12px;}
 .d-empty{padding:26px;text-align:center;color:#b6bcc5;border:1px dashed #e5e7eb;font-size:8.5pt;}
 
 .d-sum{display:flex;justify-content:flex-end;align-items:stretch;border-bottom:1.5px solid var(--dm);padding:7px 0 8px;margin-top:2px;}
-.d-sumcell{padding:0 11px;border-right:1px solid #eceef1;text-align:right;min-width:74px;}
+.d-sumcell{padding:0 11px;border-right:1px solid #eceef1;text-align:center;min-width:74px;}
+/* 标签带字距，末尾会多出半个字宽；居中后需回补，否则视觉重心偏左 */
+.d-sumcell span{margin-right:-.1em;}
 .d-sumcell span{display:block;font-size:6.2pt;letter-spacing:.1em;text-transform:uppercase;color:#9aa1ab;}
 .d-sumcell b{font-size:8.2pt;font-weight:600;font-variant-numeric:tabular-nums;}
-.d-sumtotal{padding-left:14px;text-align:right;}
+.d-sumtotal{padding-left:14px;padding-right:6px;text-align:right;}
+/* 合计金额右边缘与明细「金额」列右边缘（td 右内边距 6px）齐平；标签字距回补，避免右对齐后重心偏左 */
+.d-sumtotal span{margin-right:-.14em;}
 .d-sumtotal span{display:block;font-size:6.6pt;letter-spacing:.14em;text-transform:uppercase;color:var(--dm);font-weight:700;}
-.d-sumtotal b{font-family:var(--serif);font-size:13pt;color:var(--dm);font-variant-numeric:tabular-nums;line-height:1.2;}
+.d-sumtotal b{font-size:13.5pt;font-weight:700;color:#14181d;font-variant-numeric:tabular-nums;line-height:1.2;letter-spacing:-.2px;}
+/* 金额与明细行数字同为无衬线，避免同一数字两种字形；TOTAL 标签保留主题色 */
+.d-sumtotal span{color:var(--dm);}
 .d-words{text-align:right;font-size:7.2pt;color:#8b919b;font-style:italic;margin-top:5px;line-height:1.5;}
 
 .d-terms{margin-top:15px;padding-top:10px;border-top:1px solid #eceef1;}
@@ -859,6 +882,10 @@ b,strong{font-weight:600;}
   .eula-acts{flex-direction:column;align-items:stretch;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
   .eula-acts .btn{width:100%}
 }
+/* 手机单列时产品图略扁，一屏能多看到两个产品 */
+@media (max-width:600px){
+  .prod .ph{padding-bottom:62%;}
+}
 /* 版本信息表 */
 .ver-table{width:100%;border-collapse:collapse;font-size:12.5px}
 .ver-table td{padding:7px 0;border-bottom:1px solid #F1F4F8;color:var(--ink2)}
@@ -1070,7 +1097,7 @@ function fmtMoney(n, cur){
   if(n == null || isNaN(n)) n = 0;
   var v = Math.round(n * 100) / 100;
   var s = v.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
-  return cur ? s + ' ' + cur : s;
+  return cur ? cur + ' ' + s : s;   /* 国际单据惯例：币种在前，银行审单按币种起读 */
 }
 function fmtNum(n, d){
   if(n == null || isNaN(n)) n = 0;
@@ -1079,8 +1106,13 @@ function fmtNum(n, d){
   return String(v);
 }
 function fmtInt(n){ return Math.round(+n || 0).toLocaleString('en-US'); }
-function fmtWeight(n){ return fmtNum(n, 2) + ' KGS'; }
-function fmtVol(n){ return fmtNum(n, 3) + ' CBM'; }
+/* 单证数字规范：同一列小数位必须固定，不能出现 2.7 与 1.92 混排 */
+function fmtFixed(n, d){
+  if(n == null || isNaN(n)) n = 0;
+  return Number(n).toLocaleString('en-US', {minimumFractionDigits:d, maximumFractionDigits:d});
+}
+function fmtWeight(n){ return fmtFixed(n, 2) + ' KGS'; }
+function fmtVol(n){ return fmtFixed(n, 3) + ' CBM'; }
 function todayStr(off){
   var d = new Date(); if(off) d.setDate(d.getDate() + off);
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
@@ -1312,12 +1344,12 @@ function loadSampleData(){
   st.settings.bank = {beneficiary:'Demo Trading Co., Ltd.', bankName:'Example Bank, XX Branch', accountNo:'0000 0000 0000 0000', swiftCode:'EXAMPLEXX', bankAddress:'1 Example Road, XX District, XX City, China'};
   st.settings.defaults.portDest = 'HAMBURG, GERMANY';
   st.products = [
-    {id:uid(), name:'便携式电动螺丝刀', nameEn:'Cordless Electric Screwdriver', hsCode:'8467.21.00', model:'CS-001', spec:'3.6V 充电式 双电池', specEn:'3.6V Rechargeable, 2 Batteries', price:15.80, currency:'USD', unit:'PCS', pcsPerCtn:20, nwPerCtn:8.5, gwPerCtn:9.8, cbmPerCtn:0.032, category:'电动工具', supplier:'宁波精工五金厂', image:'', notes:''},
-    {id:uid(), name:'不锈钢保温杯 500ml', nameEn:'Stainless Steel Vacuum Flask 500ml', hsCode:'9617.00.10', model:'VF-500', spec:'双层真空 白色/黑色', specEn:'Double-wall, White/Black', price:4.20, currency:'USD', unit:'PCS', pcsPerCtn:50, nwPerCtn:6.2, gwPerCtn:7.5, cbmPerCtn:0.045, category:'家居用品', supplier:'永康杯业', image:'', notes:'可定制LOGO'},
-    {id:uid(), name:'LED 太阳能路灯', nameEn:'LED Solar Street Light', hsCode:'9405.40.90', model:'SL-30', spec:'30W 智能光控 IP65', specEn:'30W, Light Sensor, IP65', price:38.00, currency:'USD', unit:'PCS', pcsPerCtn:4, nwPerCtn:18.0, gwPerCtn:20.5, cbmPerCtn:0.12, category:'照明设备', supplier:'中山光电科技', image:'', notes:''},
-    {id:uid(), name:'竹制砧板套装', nameEn:'Bamboo Cutting Board Set', hsCode:'4419.90.90', model:'CB-3', spec:'3件套 天然竹', specEn:'3-Piece Set, Natural Bamboo', price:6.50, currency:'USD', unit:'SET', pcsPerCtn:24, nwPerCtn:5.4, gwPerCtn:6.8, cbmPerCtn:0.028, category:'家居用品', supplier:'福建竹制品厂', image:'', notes:''},
-    {id:uid(), name:'蓝牙音箱 TWS', nameEn:'Bluetooth Speaker TWS', hsCode:'8518.22.00', model:'BS-5', spec:'5W 防水 IPX7', specEn:'5W, Waterproof IPX7', price:11.50, currency:'USD', unit:'PCS', pcsPerCtn:40, nwPerCtn:9.2, gwPerCtn:10.6, cbmPerCtn:0.05, category:'消费电子', supplier:'东莞声学电子', image:'', notes:''},
-    {id:uid(), name:'户外折叠露营椅', nameEn:'Outdoor Folding Camping Chair', hsCode:'9401.79.00', model:'FC-12', spec:'承重120KG 铝合金', specEn:'120KG Load, Aluminum Alloy', price:8.90, currency:'USD', unit:'PCS', pcsPerCtn:12, nwPerCtn:10.5, gwPerCtn:12.0, cbmPerCtn:0.065, category:'户外用品', supplier:'浙江休闲用品厂', image:'', notes:''}
+    {id:uid(), name:'便携式电动螺丝刀', nameEn:'Cordless Electric Screwdriver', hsCode:'8467.21.00', model:'CS-001', spec:'3.6V 充电式 双电池', specEn:'3.6V Rechargeable, 2 Batteries', cost:78, price:15.80, currency:'USD', unit:'PCS', pcsPerCtn:20, nwPerCtn:8.5, gwPerCtn:9.8, cbmPerCtn:0.032, category:'电动工具', supplier:'宁波精工五金厂', image:'', notes:''},
+    {id:uid(), name:'不锈钢保温杯 500ml', nameEn:'Stainless Steel Vacuum Flask 500ml', hsCode:'9617.00.10', model:'VF-500', spec:'双层真空 白色/黑色', specEn:'Double-wall, White/Black', cost:20.5, price:4.20, currency:'USD', unit:'PCS', pcsPerCtn:50, nwPerCtn:6.2, gwPerCtn:7.5, cbmPerCtn:0.045, category:'家居用品', supplier:'永康杯业', image:'', notes:'可定制LOGO'},
+    {id:uid(), name:'LED 太阳能路灯', nameEn:'LED Solar Street Light', hsCode:'9405.40.90', model:'SL-30', spec:'30W 智能光控 IP65', specEn:'30W, Light Sensor, IP65', cost:188, price:38.00, currency:'USD', unit:'PCS', pcsPerCtn:4, nwPerCtn:18.0, gwPerCtn:20.5, cbmPerCtn:0.12, category:'照明设备', supplier:'中山光电科技', image:'', notes:''},
+    {id:uid(), name:'竹制砧板套装', nameEn:'Bamboo Cutting Board Set', hsCode:'4419.90.90', model:'CB-3', spec:'3件套 天然竹', specEn:'3-Piece Set, Natural Bamboo', cost:31, price:6.50, currency:'USD', unit:'SET', pcsPerCtn:24, nwPerCtn:5.4, gwPerCtn:6.8, cbmPerCtn:0.028, category:'家居用品', supplier:'福建竹制品厂', image:'', notes:''},
+    {id:uid(), name:'蓝牙音箱 TWS', nameEn:'Bluetooth Speaker TWS', hsCode:'8518.22.00', model:'BS-5', spec:'5W 防水 IPX7', specEn:'5W, Waterproof IPX7', cost:56.5, price:11.50, currency:'USD', unit:'PCS', pcsPerCtn:40, nwPerCtn:9.2, gwPerCtn:10.6, cbmPerCtn:0.05, category:'消费电子', supplier:'东莞声学电子', image:'', notes:''},
+    {id:uid(), name:'户外折叠露营椅', nameEn:'Outdoor Folding Camping Chair', hsCode:'9401.79.00', model:'FC-12', spec:'承重120KG 铝合金', specEn:'120KG Load, Aluminum Alloy', cost:43.5, price:8.90, currency:'USD', unit:'PCS', pcsPerCtn:12, nwPerCtn:10.5, gwPerCtn:12.0, cbmPerCtn:0.065, category:'户外用品', supplier:'浙江休闲用品厂', image:'', notes:''}
   ];
   st.suppliers = [
   {id: uid(), name: '示例工具制造厂（演示）', shortName: '示例工具厂', contact: '示例联系人', tel: '0000-0000000', email: 'factory@example.com',
@@ -1887,7 +1919,7 @@ zh: {
   clauses: {
     parties:'一、合同双方', partiesT:'卖方（甲方）：{seller}；买方（乙方）：{buyer}。经双方友好协商，就下列商品买卖事宜达成如下协议：',
     products:'二、商品', productsT:'商品名称、规格、数量、单价详见本合同商品明细表，为本合同不可分割之组成部分。',
-    price:'三、价格', priceT:'本合同货物总金额为 {totalAmount} {currency}（大写：{sayTotal}）。贸易术语：{tradeTerms}。价格构成包含上述货物包装费及标准出口文件费用。',
+    price:'三、价格', priceT:'本合同货物总金额为 {totalAmount}（大写：{sayTotal}）。贸易术语：{tradeTerms}。价格构成包含上述货物包装费及标准出口文件费用。',
     payment:'四、付款条件', paymentT:'买方应按以下约定支付货款：{paymentTerms}。所有银行费用由买方承担。',
     delivery:'五、交货', deliveryT:'交货期：{deliveryTime}；装运港：{portLoading}；目的港：{portDest}。卖方应在约定期限内完成备货并通知买方。',
     packing:'六、包装与唛头', packingT:'货物应采用适合长途运输及多次搬运的出口标准包装，每件包装应清晰标注唛头、件号、毛重、净重及尺寸。每箱内应附装箱单一份。',
@@ -1917,7 +1949,7 @@ en: {
   clauses: {
     parties:'1. PARTIES', partiesT:'Seller: {seller}. Buyer: {buyer}. Through friendly negotiation, the two parties agree to enter into this contract on the following terms:',
     products:'2. PRODUCTS', productsT:'The name, specification, quantity and unit price of the goods are set out in the Items table of this contract, which forms an integral part hereof.',
-    price:'3. PRICE', priceT:'The total contract value is {totalAmount} {currency} ({sayTotal}). Trade Terms: {tradeTerms}. The price includes standard export packing and documentation charges.',
+    price:'3. PRICE', priceT:'The total contract value is {totalAmount} ({sayTotal}). Trade Terms: {tradeTerms}. The price includes standard export packing and documentation charges.',
     payment:'4. PAYMENT', paymentT:'The Buyer shall effect payment as follows: {paymentTerms}. All banking charges are for the Buyer\'s account.',
     delivery:'5. DELIVERY', deliveryT:'Delivery time: {deliveryTime}. Port of loading: {portLoading}. Port of destination: {portDest}. The Seller shall complete production and notify the Buyer in advance.',
     packing:'6. PACKING & MARKS', packingT:'The goods shall be packed in export standard packing suitable for long-distance transportation and repeated handling. Each package shall be clearly marked with shipping marks, package number, gross weight, net weight and measurements. One packing list shall be enclosed in each carton.',
@@ -1947,7 +1979,7 @@ ja: {
   clauses: {
     parties:'1. 契約当事者', partiesT:'売り主（甲）：{seller}；買い主（乙）：{buyer}。双方は友好交渉の上、以下の商品売買に関し本契約を締結する：',
     products:'2. 商品', productsT:'商品名・規格・数量・単価は本契約の商品明細表に記載され、その一部を構成する。',
-    price:'3. 価格', priceT:'本契約の総金額は {totalAmount} {currency}（字数表示：{sayTotal}）。貿易条件：{tradeTerms}。価格には標準輸出包装及び書類費用を含む。',
+    price:'3. 価格', priceT:'本契約の総金額は {totalAmount}（字数表示：{sayTotal}）。貿易条件：{tradeTerms}。価格には標準輸出包装及び書類費用を含む。',
     payment:'4. 支払条件', paymentT:'買い主は以下の通り支払うものとする：{paymentTerms}。銀行手数料は買い主負担とする。',
     delivery:'5. 納品', deliveryT:'納期：{deliveryTime}；積出港：{portLoading}；仕向港：{portDest}。売り主は納期までに生産を完了し買い主に通知する。',
     packing:'6. 包装とマーク', packingT:'貨物は長距離輸送に適した輸出標準包装とし、各包装にはシャンニングマーク、個口番号、総重量、正味重量及び容積を明記する。各箱にパッキングリスト1通を同封する。',
@@ -1977,7 +2009,7 @@ ko: {
   clauses: {
     parties:'1. 계약 당사자', partiesT:'판매자(갑): {seller}; 구매자(을): {buyer}. 쌍방은 우호 협의를 통해 다음 상품 매매에 관한 본 계약을 체결한다.',
     products:'2. 상품', productsT:'상품명, 사양, 수량, 단가는 본 계약의 품목표에 기재하며 이는 계약의 불가분 부분이다.',
-    price:'3. 가격', priceT:'본 계약 총액은 {totalAmount} {currency} (한글: {sayTotal})이다. 무역 조건: {tradeTerms}. 가격에는 표준 수출 포장 및 서류 비용이 포함된다.',
+    price:'3. 가격', priceT:'본 계약 총액은 {totalAmount} (한글: {sayTotal})이다. 무역 조건: {tradeTerms}. 가격에는 표준 수출 포장 및 서류 비용이 포함된다.',
     payment:'4. 지급 조건', paymentT:'구매자는 다음과 같이 대금을 지급한다: {paymentTerms}. 모든 수수료는 구매자 부담이다.',
     delivery:'5. 인도', deliveryT:'납기: {deliveryTime}; 선적항: {portLoading}; 목적항: {portDest}. 판매자는 기한 내 생산을 완료하고 구매자에게 통지한다.',
     packing:'6. 포장 및 마크', packingT:'화물은 장거리 운송에 적합한 수출 표준 포장을 하며, 각 포장에는 선적 마크, 포장 번호, 총중량, 순중량 및 치수를 명기한다. 각 박스에 패킹 리스트 1부를 동봉한다.',
@@ -2007,7 +2039,7 @@ de: {
   clauses: {
     parties:'1. PARTEIEN', partiesT:'Verkäufer: {seller}. Käufer: {buyer}. Im freundschaftlichen Verhandlungswege vereinbaren die Parteien den folgenden Kaufvertrag:',
     products:'2. WAREN', productsT:'Bezeichnung, Spezifikation, Menge und Einzelpreis der Waren sind der Artikeltabelle dieses Vertrags zu entnehmen, die Bestandteil dieses Vertrags ist.',
-    price:'3. PREIS', priceT:'Der Gesamtauftragswert beträgt {totalAmount} {currency} (in Worten: {sayTotal}). Handelsbedingungen: {tradeTerms}. Der Preis enthält Standard-Exportverpackung und Dokumentationskosten.',
+    price:'3. PREIS', priceT:'Der Gesamtauftragswert beträgt {totalAmount} (in Worten: {sayTotal}). Handelsbedingungen: {tradeTerms}. Der Preis enthält Standard-Exportverpackung und Dokumentationskosten.',
     payment:'4. ZAHLUNG', paymentT:'Der Käufer leistet die Zahlung wie folgt: {paymentTerms}. Alle Bankspesen gehen zu Lasten des Käufers.',
     delivery:'5. LIEFERUNG', deliveryT:'Lieferzeit: {deliveryTime}. Verladehafen: {portLoading}. Bestimmungshafen: {portDest}. Der Verkäufer wird die Ware fristgerecht fertigstellen und den Käufer benachrichtigen.',
     packing:'6. VERPACKUNG & MARKEN', packingT:'Die Ware ist in Export-Standardverpackung, geeignet für Langstreckentransport, zu verpacken. Jede Verpackung ist mit Versandmarken, Packstücknummer, Brutto-, Nettogewicht und Abmessungen zu kennzeichnen. Jedem Karton liegt eine Packliste bei.',
@@ -2037,7 +2069,7 @@ fr: {
   clauses: {
     parties:'1. PARTIES', partiesT:'Vendeur : {seller}. Acheteur : {buyer}. Par négociation amicale, les parties concluent le présent contrat dans les conditions suivantes :',
     products:'2. MARCHANDISES', productsT:'La désignation, la spécification, la quantité et le prix unitaire figurent au tableau des articles du présent contrat, qui en fait partie intégrante.',
-    price:'3. PRIX', priceT:'La valeur totale du contrat s\'élève à {totalAmount} {currency} (en lettres : {sayTotal}). Incoterms : {tradeTerms}. Le prix comprend l\'emballage d\'exportation standard et les frais de documentation.',
+    price:'3. PRIX', priceT:'La valeur totale du contrat s\'élève à {totalAmount} (en lettres : {sayTotal}). Incoterms : {tradeTerms}. Le prix comprend l\'emballage d\'exportation standard et les frais de documentation.',
     payment:'4. PAIEMENT', paymentT:'L\'Acheteur effectuera le paiement comme suit : {paymentTerms}. Tous les frais bancaires sont à la charge de l\'Acheteur.',
     delivery:'5. LIVRAISON', deliveryT:'Délai : {deliveryTime}. Port d\'embarquement : {portLoading}. Port de destination : {portDest}. Le Vendeur terminera la production et informera l\'Acheteur en temps utile.',
     packing:'6. EMBALLAGE & MARQUES', packingT:'Les marchandises seront emballées selon la norme d\'exportation, adaptées au transport longue distance. Chaque colis portera les marques d\'expédition, le numéro de colis, les poids brut et net et les dimensions. Une liste de colisage est jointe à chaque carton.',
@@ -2067,7 +2099,7 @@ es: {
   clauses: {
     parties:'1. PARTES', partiesT:'Vendedor: {seller}. Comprador: {buyer}. Mediante negociación amistosa, las partes celebran el presente contrato en los siguientes términos:',
     products:'2. MERCANCÍAS', productsT:'La denominación, especificación, cantidad y precio unitario figuran en la tabla de artículos del presente contrato, que forma parte integrante del mismo.',
-    price:'3. PRECIO', priceT:'El valor total del contrato asciende a {totalAmount} {currency} (en letras: {sayTotal}). Términos comerciales: {tradeTerms}. El precio incluye el embalaje estándar de exportación y los gastos de documentación.',
+    price:'3. PRECIO', priceT:'El valor total del contrato asciende a {totalAmount} (en letras: {sayTotal}). Términos comerciales: {tradeTerms}. El precio incluye el embalaje estándar de exportación y los gastos de documentación.',
     payment:'4. PAGO', paymentT:'El Comprador efectuará el pago de la siguiente manera: {paymentTerms}. Todos los gastos bancarios corren a cargo del Comprador.',
     delivery:'5. ENTREGA', deliveryT:'Plazo de entrega: {deliveryTime}. Puerto de embarque: {portLoading}. Puerto de destino: {portDest}. El Vendedor completará la producción y notificará al Comprador con antelación.',
     packing:'6. EMBALAJE Y MARCAS', packingT:'Las mercancías se embalarán según la norma de exportación, aptas para transporte de larga distancia. Cada bulto llevará marcas de envío, número de bulto, peso bruto, peso neto y medidas. Se adjuntará una lista de embalaje en cada caja.',
@@ -2097,7 +2129,7 @@ it: {
   clauses: {
     parties:'1. PARTI', partiesT:'Venditore: {seller}. Compratore: {buyer}. Con trattativa amichevole, le parti concludono il presente contratto come segue:',
     products:'2. MERCI', productsT:'La denominazione, specifica, quantità e prezzo unitario sono riportati nella tabella articoli del presente contratto, che ne è parte integrante.',
-    price:'3. PREZZO', priceT:'Il valore totale del contratto è di {totalAmount} {currency} (in lettere: {sayTotal}). Termini commerciali: {tradeTerms}. Il prezzo include imballaggio standard di esportazione e spese documentali.',
+    price:'3. PREZZO', priceT:'Il valore totale del contratto è di {totalAmount} (in lettere: {sayTotal}). Termini commerciali: {tradeTerms}. Il prezzo include imballaggio standard di esportazione e spese documentali.',
     payment:'4. PAGAMENTO', paymentT:'Il Compratore effettuerà il pagamento come segue: {paymentTerms}. Tutte le spese bancarie sono a carico del Compratore.',
     delivery:'5. CONSEGNA', deliveryT:'Termine di consegna: {deliveryTime}. Porto di imbarco: {portLoading}. Porto di destinazione: {portDest}. Il Venditore completerà la produzione e ne informerà il Compratore.',
     packing:'6. IMBALLAGGIO E MARCHE', packingT:'Le merci saranno imballate secondo lo standard di esportazione, idonee al trasporto a lunga distanza. Ogni collo riporterà marche di spedizione, numero di collo, peso lordo, peso netto e misure. In ogni cartone sarà inserita una packing list.',
@@ -2127,7 +2159,7 @@ pt: {
   clauses: {
     parties:'1. PARTES', partiesT:'Vendedor: {seller}. Comprador: {buyer}. Por negociação amistosa, as partes celebram o presente contrato nos seguintes termos:',
     products:'2. MERCADORIAS', productsT:'A denominação, especificação, quantidade e preço unitário constam da tabela de itens do presente contrato, que dela é parte integrante.',
-    price:'3. PREÇO', priceT:'O valor total do contrato é de {totalAmount} {currency} (por extenso: {sayTotal}). Termos comerciais: {tradeTerms}. O preço inclui embalagem padrão de exportação e despesas de documentação.',
+    price:'3. PREÇO', priceT:'O valor total do contrato é de {totalAmount} (por extenso: {sayTotal}). Termos comerciais: {tradeTerms}. O preço inclui embalagem padrão de exportação e despesas de documentação.',
     payment:'4. PAGAMENTO', paymentT:'O Comprador efetuará o pagamento da seguinte forma: {paymentTerms}. Todas as despesas bancárias correm por conta do Comprador.',
     delivery:'5. ENTREGA', deliveryT:'Prazo de entrega: {deliveryTime}. Porto de embarque: {portLoading}. Porto de destino: {portDest}. O Vendedor concluirá a produção e informará o Comprador com antecedência.',
     packing:'6. EMBALAGEM E MARCAS', packingT:'As mercadorias serão embaladas conforme o padrão de exportação, adequadas ao transporte de longa distância. Cada volume conterá marcas de envio, número do volume, peso bruto, peso líquido e medidas. Uma lista de embalagem acompanhará cada caixa.',
@@ -2157,7 +2189,7 @@ ru: {
   clauses: {
     parties:'1. СТОРОНЫ', partiesT:'Продавец: {seller}. Покупатель: {buyer}. Путем дружественных переговоров стороны заключили настоящий договор на следующих условиях:',
     products:'2. ТОВАР', productsT:'Наименование, спецификация, количество и цена за единицу товара указаны в таблице позиций настоящего договора, являющейся его неотъемлемой частью.',
-    price:'3. ЦЕНА', priceT:'Общая сумма договора составляет {totalAmount} {currency} (прописью: {sayTotal}). Условия торговли: {tradeTerms}. Цена включает стандартную экспортную упаковку и расходы на документы.',
+    price:'3. ЦЕНА', priceT:'Общая сумма договора составляет {totalAmount} (прописью: {sayTotal}). Условия торговли: {tradeTerms}. Цена включает стандартную экспортную упаковку и расходы на документы.',
     payment:'4. ОПЛАТА', paymentT:'Покупатель осуществляет оплату в следующем порядке: {paymentTerms}. Все банковские расходы несет Покупатель.',
     delivery:'5. ПОСТАВКА', deliveryT:'Срок поставки: {deliveryTime}. Порт погрузки: {portLoading}. Порт назначения: {portDest}. Продавец завершит производство и уведомит Покупателя заблаговременно.',
     packing:'6. УПАКОВКА И МАРКИРОВКА', packingT:'Товар упаковывается в стандартную экспортную упаковку, пригодную для дальних перевозок. На каждом грузовом месте указываются отгрузочные марки, номер места, вес брутто, вес нетто и габариты. В каждую коробку вкладывается упаковочный лист.',
@@ -2187,7 +2219,7 @@ ar: {
   clauses: {
     parties:'1. الطرفان', partiesT:'البائع: {seller}. المشتري: {buyer}. وبناءً على مفاوضات ودية، يبرم الطرفان هذا العقد على الشروط التالية:',
     products:'2. البضاعة', productsT:'اسم البضاعة ومواصفاتها وكميتها وسعر وحدتها موضحة في جدول البنود بهذا العقد، وهو جزء لا يتجزأ منه.',
-    price:'3. الثمن', priceT:'القيمة الإجمالية للعقد هي {totalAmount} {currency} (كتابةً: {sayTotal}). شروط التجارة: {tradeTerms}. ويشمل الثمن التعبئة القياسية للتصدير ورسوم المستندات.',
+    price:'3. الثمن', priceT:'القيمة الإجمالية للعقد هي {totalAmount} (كتابةً: {sayTotal}). شروط التجارة: {tradeTerms}. ويشمل الثمن التعبئة القياسية للتصدير ورسوم المستندات.',
     payment:'4. الدفع', paymentT:'يدفع المشتري قيمة البضاعة على النحو التالي: {paymentTerms}. جميع الرسوم البنكية على حساب المشتري.',
     delivery:'5. التسليم', deliveryT:'مدة التسليم: {deliveryTime}؛ ميناء الشحن: {portLoading}؛ ميناء الوصول: {portDest}. ويقوم البائع بإكمال الإنتاج وإخطار المشتري مسبقاً.',
     packing:'6. التعبئة والعلامات', packingT:'تعبأ البضاعة وفق المعيار القياسي للتصدير وملائمة للنقل لمسافات طويلة. ويوسم كل طرف بعلامات الشحن ورقمه والوزن القائم والصافي والأبعاد. وترفق قائمة تعبئة في كل صندوق.',
@@ -2440,7 +2472,7 @@ function dParties(ctx){
   '</div>';
 }
 function dKv(items){
-  return '<div class="d-kv">' + items.map(function(kv){
+  return '<div class="d-kv' + (items.length === 5 ? ' kv5' : '') + '">' + items.map(function(kv){
     return '<div class="d-kvitem"><div class="d-kvl">' + esc(kv[0]) + '</div><div class="d-kvv">' + esc(kv[1] || '—') + '</div></div>';
   }).join('') + '</div>';
 }
@@ -2460,8 +2492,24 @@ function dItems(ctx, mode){
           '<td><div class="d-name">' + esc(it.name) + '</div><div class="d-sub">' + [it.spec, it.hs ? 'HS: ' + it.hs : '', it.model ? 'NO: ' + it.model : ''].filter(Boolean).join(' · ') + '</div></td>' +
           '<td class="c-q">' + fmtNum(it.qty, 0) + '</td><td class="c-u">' + esc(it.unit) + '</td>' +
           '<td class="c-n">' + (it.ctn > 0 ? fmtNum(it.qty / it.ctn, 0) : '—') + '</td>' +
-          '<td class="c-n">' + fmtNum(it.ctn, 0) + '</td><td class="c-n">' + fmtNum(it.nw, 2) + '</td>' +
-          '<td class="c-n">' + fmtNum(it.gw, 2) + '</td><td class="c-n">' + fmtNum(it.vol, 3) + '</td></tr>';
+          '<td class="c-n">' + fmtNum(it.ctn, 0) + '</td><td class="c-n">' + fmtFixed(it.nw, 2) + '</td>' +
+          '<td class="c-n">' + fmtFixed(it.gw, 2) + '</td><td class="c-n">' + fmtFixed(it.vol, 3) + '</td></tr>';
+      }).join('') + '</tbody></table>';
+  }
+  if(mode === 'purchase'){
+    /* 采购合同列的是向工厂采购的含税成本，不是对外销售价 */
+    return '<table class="d-items"><thead><tr>' +
+      '<th>' + esc(T.desc) + '</th><th class="c-no">' + esc(T.no) + '</th><th class="c-u">' + esc(T.unit) + '</th>' +
+      '<th class="c-q">' + esc(T.qty) + '</th><th class="c-p">含税单价 CNY</th><th class="c-a">含税金额 CNY</th></tr></thead><tbody>' +
+      items.map(function(it, i){
+        var has = it.cost > 0;
+        return '<tr><td><div class="d-name">' + esc(it.name) + '</div><div class="d-sub">' +
+            [it.spec, it.hs ? 'HS: ' + it.hs : '', it.model ? 'NO: ' + it.model : ''].filter(Boolean).join(' · ') + '</div></td>' +
+          '<td class="c-no">' + esc(it.model || '—') + '</td>' +
+          '<td class="c-u">' + esc(it.unit) + '</td>' +
+          '<td class="c-q">' + fmtNum(it.qty, 0) + '</td>' +
+          '<td class="c-p">' + (has ? fmtMoney(it.cost) : '<span style="color:#b45309">未填</span>') + '</td>' +
+          '<td class="c-a">' + (has ? fmtMoney(it.cost * it.qty) : '—') + '</td></tr>';
       }).join('') + '</tbody></table>';
   }
   return '<table class="d-items"><thead><tr>' +
@@ -2872,8 +2920,11 @@ function renderPurchase(ctx){
   var T = ctx.T, o = ctx.order, tm = o.terms || {}, c = ctx.company;
   var totals = ctx.totals;
   var taxRate = +(tm.taxRate || 13);
-  var gross = totals.amount, net = gross / (1 + taxRate / 100);
-  var inner = dHead(ctx, '采购合同 PURCHASE CONTRACT', [['合同编号', ctx.docNo], ['签订日期', o.date], ['交货日期', tm.deliveryDate]]) +
+  /* 采购合同金额来自产品资料里的含税成本价（人民币），不能用对外销售价倒算 */
+  var hasCost = false, gross = 0;
+  (ctx.items || []).forEach(function(it){ if(it.cost > 0){ hasCost = true; gross += it.cost * it.qty; } });
+  var net = gross / (1 + taxRate / 100);
+  var inner = dHead(ctx, '采购合同 PURCHASE CONTRACT', [['合同编号', ctx.docNo], ['签订日期', o.date], ['交货日期', tm.deliveryDate], ['币种', 'CNY']]) +
     '<div class="d-parties">' +
       '<div class="d-party"><div class="d-plabel">需方（甲方）</div>' +
         '<div class="d-pname">' + esc(c.name) + '</div>' +
@@ -2883,13 +2934,14 @@ function renderPurchase(ctx){
         '<div class="d-plines">' + ['联系人：' + (tm.supplierContact || '—'), '电话：' + (tm.supplierTel || '—'),
           '地址：' + (tm.supplierAddr || '—')].join('<br>') + '</div></div>' +
     '</div>' +
-    dItems(ctx) +
+    dItems(ctx, 'purchase') +
     '<div class="d-sum">' +
       '<div class="d-sumcell"><span>数量合计</span><b>' + esc(Object.keys(totals.qtyByUnit || {}).map(function(u){ return fmtNum(totals.qtyByUnit[u], 0) + ' ' + u; }).join(' + ') || '—') + '</b></div>' +
-      '<div class="d-sumcell"><span>不含税金额</span><b>' + fmtMoney(net, ctx.cur) + '</b></div>' +
+      '<div class="d-sumcell"><span>不含税金额</span><b>' + (hasCost ? fmtMoney(net, 'CNY') : '待填') + '</b></div>' +
       '<div class="d-sumcell"><span>税率</span><b>' + taxRate + '%</b></div>' +
-      '<div class="d-sumtotal"><span>含税总额</span><b>' + fmtMoney(gross, ctx.cur) + '</b></div>' +
+      '<div class="d-sumtotal"><span>含税总额</span><b>' + (hasCost ? fmtMoney(gross, 'CNY') : '待填') + '</b></div>' +
     '</div>' +
+    (hasCost ? '' : '<div class="d-note-warn">本单按产品资料中的「含税成本价」计价。当前所选产品未填写成本价，采购金额无法计算，请先到「产品」中补充成本价后再出单。</div>') +
     '<div class="d-terms"><div class="d-terms-t">合同条款</div><ul>' +
       ['1. 质量标准：按双方确认的样品及技术规格执行，甲方有权按 AQL 2.5 抽检；不合格批次乙方应无条件返工或换货。',
        '2. 交货：乙方须于 ' + (tm.deliveryDate || '约定日期') + ' 前将货物送达甲方指定地点（' + (tm.deliverAddr || c.address || '甲方仓库') + '），运费及卸货费用由乙方承担；逾期每日按合同总额 0.3% 计违约金，累计不超过 5%。',
@@ -2943,7 +2995,7 @@ function renderTaxFile(ctx){
     '</div>' +
     '<div class="d-sec">备案单证清单</div>' +
     '<table class="d-items"><thead><tr>' +
-      '<th style="width:38px">序号</th><th>单证名称</th><th style="width:170px">单证编号 / 号码</th><th style="width:54px">已备</th>' +
+      '<th class="c-n" style="width:38px">序号</th><th>单证名称</th><th style="width:170px">单证编号 / 号码</th><th class="c-n" style="width:54px">已备</th>' +
     '</tr></thead><tbody>' +
     rows.map(function(r){
       return '<tr><td class="c-n">' + r[0] + '</td><td>' + esc(r[1]) + '</td><td class="mono">' + esc(r[2] || '—') + '</td><td class="c-n">' + r[3] + '</td></tr>';
@@ -2963,13 +3015,13 @@ function renderTaxFile(ctx){
       var fxCost = totals.amount > 0 ? netCost / totals.amount : 0;
       return '<div class="d-sec">退税测算</div>' +
         '<table class="d-items"><tbody>' +
-        '<tr><td style="width:38%">出口销售额（' + esc(ctx.cur) + '）</td><td class="mono">' + esc(fmtMoney(totals.amount, ctx.cur)) + '</td>' +
-          '<td style="width:26%">折人民币（汇率 ' + fmtNum(fxRate, 4) + '）</td><td class="mono">' + esc(fmtMoney(totals.amount * fxRate, 'CNY')) + '</td></tr>' +
-        '<tr><td>增值税率</td><td class="mono">' + vatRate + '%</td><td>出口退税率</td><td class="mono">' + (rebate === null ? '<span style="color:#b45309">待填</span>' : rebate + '%') + '</td></tr>' +
-        '<tr><td>采购成本（含税）</td><td class="mono">' + (hasCost ? esc(fmtMoney(costCNY, 'CNY')) : '<span style="color:#b45309">产品未填成本价</span>') + '</td>' +
-          '<td>不含税采购成本</td><td class="mono">' + (hasCost ? esc(fmtMoney(netCost, 'CNY')) : '—') + '</td></tr>' +
-        '<tr><td><b>可退税额</b></td><td class="mono"><b>' + esc(fmtMoney(refund, 'CNY')) + '</b></td>' +
-          '<td>换汇成本</td><td class="mono">' + (fxCost ? fmtNum(fxCost, 3) : '—') + '</td></tr>' +
+        '<tr><td style="width:38%">出口销售额（' + esc(ctx.cur) + '）</td><td class="d-amtn">' + esc(fmtMoney(totals.amount, ctx.cur)) + '</td>' +
+          '<td style="width:26%">折人民币（汇率 ' + fmtNum(fxRate, 4) + '）</td><td class="d-amtn">' + esc(fmtMoney(totals.amount * fxRate, 'CNY')) + '</td></tr>' +
+        '<tr><td>增值税率</td><td class="d-amtn">' + vatRate + '%</td><td>出口退税率</td><td class="d-amtn">' + (rebate === null ? '<span style="color:#b45309">待填</span>' : rebate + '%') + '</td></tr>' +
+        '<tr><td>采购成本（含税）</td><td class="d-amtn">' + (hasCost ? esc(fmtMoney(costCNY, 'CNY')) : '<span style="color:#b45309">产品未填成本价</span>') + '</td>' +
+          '<td>不含税采购成本</td><td class="d-amtn">' + (hasCost ? esc(fmtMoney(netCost, 'CNY')) : '—') + '</td></tr>' +
+        '<tr><td><b>可退税额</b></td><td class="d-amtn"><b>' + esc(fmtMoney(refund, 'CNY')) + '</b></td>' +
+          '<td>换汇成本</td><td class="d-amtn">' + (fxCost ? fmtNum(fxCost, 3) : '—') + '</td></tr>' +
         '</tbody></table>';
     })() +
     '<div class="doc-tail"><div class="d-terms"><div class="d-terms-t">说明</div><ul>' +
@@ -3313,7 +3365,7 @@ function copyText(txt, okMsg){
 }
 
 /* ========== 版本信息 ========== */
-var APP_VER = 'V3.3';
+var APP_VER = 'V3.4';
 var APP_DATE = '2026-10-23';
 var EULA_VER = '1.0';
 var EULA_DATE = '2026-10-23';
@@ -3321,6 +3373,14 @@ var K_EULA = 'eula_agree_v1';
 
 /* 版本更新记录（设置页可查） */
 var VER_LOG = [
+  {v:'V3.4', d:'2026-10-23', items:[
+    '金额书写统一为币种前置（USD 13,350.00），修正合同条款中币种重复显示',
+    '合计金额右边缘与明细「金额」列对齐；退税备案表头与数值对齐',
+    '金额统一使用无衬线数字；同列小数位固定（重量 2 位、体积 3 位）',
+    '采购合同改按产品含税成本价、人民币计价（原误用对外销售价与美元）',
+    '产品图统一 4:3 比例，无图显示占位，资料库卡片高度一致、不再压字',
+    '手机端单据切换改为下拉选择器，可逐份翻看、选中即预览'
+  ]},
   {v:'V3.3', d:'2026-10-23', items:[
     '新增报价计算器：成本、退税、七项费用、目标净利、佣金，输出建议单价',
     '新增客户还价反算，直接判断按客户价成交的毛利率',
@@ -3736,10 +3796,33 @@ function wsHtml(){
         '<button class="btn btn-primary btn-sm" onclick="A.printOne()" title="导出当前标签页这一份单据">' + ic('print', 14) + '<span class="lbl">导出 PDF</span></button>' +
       '</div>' +
     '</div>' +
+    wsPickerHtml() +
     '<div class="ws-body">' +
       '<div class="ws-panel" id="wsPanel"' + (WS.fold ? ' style="display:none"' : '') + '>' + panelHtml() + '</div>' +
       '<div class="ws-main">' + wsTabsHtml() + wsToolsHtml() + '<div class="ws-canvas" id="wsCanvas"></div></div>' +
     '</div>' +
+  '</div>';
+}
+/* 手机端单据选择器：11 份单据横排滑不完，改成下拉 + 上一份/下一份 */
+function wsPickerHtml(){
+  var keys = DOC_TYPES.map(function(d){ return d.key; });
+  var idx = keys.indexOf(WS.tab) + 1;
+  var groups = [], last = null;
+  DOC_TYPES.forEach(function(d){
+    if(d.grp !== last){ groups.push({g: d.grp, items: []}); last = d.grp; }
+    groups[groups.length - 1].items.push(d);
+  });
+  return '<div class="ws-picker">' +
+    '<button class="step" onclick="A.wsStep(-1)" title="上一份">‹</button>' +
+    '<select onchange="A.wsPick(this.value)">' +
+      groups.map(function(g){
+        return '<optgroup label="' + esc(g.g) + '">' + g.items.map(function(d){
+          return '<option value="' + d.key + '"' + (d.key === WS.tab ? ' selected' : '') + '>' + esc(d.label) + '（' + esc(d.short) + '）</option>';
+        }).join('') + '</optgroup>';
+      }).join('') +
+    '</select>' +
+    '<button class="step" onclick="A.wsStep(1)" title="下一份">›</button>' +
+    '<span class="idx">' + idx + '/' + DOC_TYPES.length + '</span>' +
   '</div>';
 }
 function wsTabsHtml(){
@@ -3947,6 +4030,10 @@ function refreshPreviewAndTotals(){
 }
 
 /* ========== 视图 2/3：资料库（产品 / 客户 / HS编码） ========== */
+/* 产品图占位：列表卡与表单预览共用同一套图标，避免两处样式走样 */
+function phPlaceholder(txt){
+  return '<span class="ph-txt"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2.2"/><circle cx="8.6" cy="10" r="1.6"/><path d="M21 15.5l-4.6-4.6L5 19"/></svg><i>' + (txt || '产品图') + '</i></span>';
+}
 var PROD_IMG = '', QA_IMG = '';
 var PICKER = {q:'', sel:{}};
 
@@ -3979,7 +4066,9 @@ function productsTab(){
   if(f.cat) list = list.filter(function(p){ return (p.category || '未分类') === f.cat; });
   var cards = list.map(function(p){
     return '<div class="prod">' +
-      (p.image ? '<div class="ph"><img src="' + p.image + '"></div>' : '') +
+      '<div class="ph">' + (p.image
+        ? '<img src="' + p.image + '" alt="">'
+        : phPlaceholder('暂无图片')) + '</div>' +
       '<div class="bd"><div class="nm">' + esc(p.name) + '</div><div class="en">' + esc(p.nameEn || '') + '</div>' +
         '<div class="mt">' + (p.model ? '<span class="tag">' + esc(p.model) + '</span>' : '') + (p.hsCode ? '<span class="tag">HS ' + esc(p.hsCode) + '</span>' : '') + '</div>' +
         '<div class="mt"><span class="pr">' + fmtMoney(p.price, p.currency || 'USD') + '</span><span class="xs faint">/ ' + esc(p.unit || 'PCS') + '</span></div>' +
@@ -4014,9 +4103,14 @@ function productFormHtml(p){
     '<label class="field"><span>分类</span><input class="inp" id="pf-cat" value="' + esc(p.category) + '" list="catList" placeholder="如 电动工具"><datalist id="catList">' + Object.keys(productCats()).map(function(c){ return '<option value="' + esc(c) + '">'; }).join('') + '</datalist></label>' +
     '<label class="field"><span>供应商</span><input class="inp" id="pf-sup" value="' + esc(p.supplier) + '"></label>' +
   '</div>' +
-  '<div class="imgbox"><div class="prev" id="pf-imgPreview">' + (p.image ? '<img src="' + p.image + '">' : '产品图') + '</div>' +
-    '<div><input type="file" id="pf-img" accept="image/*" onchange="A.uploadProdImg(this)"><div class="hint">自动压缩，可显示在单据产品图列</div>' +
-    (p.image ? '<button class="btn btn-ghost btn-xs btn-danger" style="margin-top:6px" onclick="A.clearProdImg()">移除图片</button>' : '') + '</div></div>';
+  '<div class="imgbox"><div class="prev" id="pf-imgPreview">' + (p.image ? '<img src="' + p.image + '">' : phPlaceholder('产品图')) + '</div>' +
+    '<div class="img-acts"><input type="file" id="pf-img" accept="image/*" hidden onchange="A.uploadProdImg(this)">' +
+      '<div class="row" id="pf-imgActs" style="gap:8px">' +
+        '<button class="btn btn-ghost btn-sm" onclick="document.getElementById(\'pf-img\').click()">' + (p.image ? '更换图片' : '上传图片') + '</button>' +
+        (p.image ? '<button class="btn btn-ghost btn-sm btn-danger" onclick="A.clearProdImg()">移除</button>' : '') +
+      '</div>' +
+      '<div class="hint">建议 4:3 横图；自动压缩，可显示在单据产品图列</div>' +
+    '</div></div>';
 }
 function openPicker(){
   PICKER = {q:'', sel:{}};
@@ -5508,6 +5602,17 @@ var A = {
     document.querySelectorAll('.ws-tab').forEach(function(el, i){ el.classList.toggle('active', DOC_TYPES[i].key === k); });
     paintPreview();
   },
+  /* 手机端选单据：顺手切到预览，因为录入面板是订单级的、不随单据变 */
+  wsPick: function(k){
+    WS.tab = k;
+    if(window.matchMedia('(max-width:900px)').matches) WS.mode = 'preview';
+    render();
+  },
+  wsStep: function(dir){
+    var keys = DOC_TYPES.map(function(d){ return d.key; });
+    var i = keys.indexOf(WS.tab);
+    A.wsPick(keys[(i + dir + keys.length) % keys.length]);
+  },
   wsMode: function(m){
     WS.mode = m;
     var ws = document.getElementById('ws');
@@ -5673,12 +5778,19 @@ var A = {
       PROD_IMG = url;
       var pv = document.getElementById('pf-imgPreview');
       if(pv) pv.innerHTML = '<img src="' + url + '">';
+      var acts = document.getElementById('pf-imgActs');
+      if(acts) acts.innerHTML = '<button class="btn btn-ghost btn-sm" onclick="document.getElementById(\'pf-img\').click()">更换图片</button>' +
+        '<button class="btn btn-ghost btn-sm btn-danger" onclick="A.clearProdImg()">移除</button>';
     });
   },
   clearProdImg: function(){
     PROD_IMG = '';
     var pv = document.getElementById('pf-imgPreview');
-    if(pv) pv.innerHTML = '产品图';
+    if(pv) pv.innerHTML = phPlaceholder('产品图');
+    var file = document.getElementById('pf-img');
+    if(file) file.value = '';
+    var acts = document.getElementById('pf-imgActs');
+    if(acts) acts.innerHTML = '<button class="btn btn-ghost btn-sm" onclick="document.getElementById(\'pf-img\').click()">上传图片</button>';
   },
   importProducts: function(){
     openModal('<div class="modal-h"><h3>批量导入产品</h3><button class="close" onclick="A.closeModal()">' + ic('close', 14) + '</button></div>' +
