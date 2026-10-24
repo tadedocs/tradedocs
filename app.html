@@ -631,6 +631,7 @@ details[open] .chev{transform:rotate(90deg);}
 .lic-contact{margin-top:12px;text-align:center;font-size:12px;color:var(--ink2);}
 .lic-msg{font-size:12px;color:var(--brand);min-height:16px;margin-top:8px;line-height:1.5;}
 .lic-note{font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:12px;}
+.lic-reg{margin:0 0 10px;padding:8px 10px;border-radius:8px;background:#fff7ed;border:1px solid #fde3c8;color:#b45309;font-size:11.5px;line-height:1.6;}
 .lic-help p{font-size:12.5px;color:var(--ink2);line-height:1.75;margin-bottom:10px;}
 .lic-row{display:flex;align-items:center;gap:12px;}
 .lic-badge{flex:none;font-size:11px;font-weight:600;padding:4px 9px;border-radius:999px;}
@@ -1800,6 +1801,7 @@ var LIC = (function(){
     openModal('<div class="modal-h"><h3>输入授权码</h3><button class="close" onclick="A.closeModal()">' + ic('close', 14) + '</button></div>' +
       '<div class="modal-b">' +
         '<p class="lic-note">把卖家发给你的授权码整段粘贴进来，点「激活」。授权码只校验、不联网，一次激活后长期保存在本机。</p>' +
+        '<p class="lic-reg">本授权已登记购买信息，仅限购买者本人使用；转售或共享将导致授权失效。</p>' +
         '<input class="inp lic-inp" id="licInput" placeholder="TD2-Y-271031-8F3K2Q-…（整段粘贴）" spellcheck="false" autocomplete="off" onkeydown="if(event.key===\'Enter\')A.activateLic()">' +
         '<div class="lic-msg" id="licMsg"></div>' +
       '</div>' +
@@ -3427,14 +3429,18 @@ function copyText(txt, okMsg){
 }
 
 /* ========== 版本信息 ========== */
-var APP_VER = 'V3.6';
+var APP_VER = 'V3.7';
 var APP_DATE = '2026-10-23';
-var EULA_VER = '1.1';
+var EULA_VER = '1.2';
 var EULA_DATE = '2026-10-23';
 var K_EULA = 'eula_agree_v1';
 
 /* 版本更新记录（设置页可查） */
 var VER_LOG = [
+  {v:'V3.7', d:'2026-10-24', items:[
+    '使用条款明确禁止任何形式的转售与二次销售，授权码与购买记录可追溯',
+    '激活界面提示授权已登记购买信息，仅限本人使用'
+  ]},
   {v:'V3.6', d:'2026-10-24', items:[
     '销售确认书、装船通知改为跟随界面语言（原来被固定为英文，切语言不生效）',
     '销售确认书条款接入多语言，编号统一为 1–5，中文版压回一页'
@@ -3484,7 +3490,7 @@ var VER_LOG = [
 
 /* ========== 使用条款 ========== */
 var EULA_SECTIONS = [
-  ['一、授权范围', '本授权仅限购买者本人及其所在企业自用。不得转售、出租、出借、赠与本软件或授权码；不得反编译、逆向工程、去除授权校验；不得利用本软件对外提供收费制单服务。'],
+  ['一、授权范围', '本授权仅限购买者本人及其所在企业自用。不得转售、出租、出借、赠与本软件或授权码，不得在任何第三方平台（含二手交易平台）进行二次销售。每份授权码与购买记录一一对应，可追溯至原始购买者；经查实存在转售、共享或代他人激活行为的，授权即时终止且不予退款，卖方保留追究法律责任的权利。不得反编译、逆向工程、去除授权校验；不得利用本软件对外提供收费制单服务。'],
   ['二、软件性质', '本软件为单证排版与计算辅助工具。内置条款为通用商务模板，不构成法律、税务、报关、保险或投资意见。'],
   ['三、数据核对义务', '使用者应在导出及对外发送前，自行核对商品描述、数量、单价、金额、币种、贸易术语、收发货人、银行信息等全部内容。软件的计算结果以使用者录入的数据为基础，录入错误将直接导致单据错误。'],
   ['四、责任限制', '因使用者录入数据错误、选用不适当的贸易术语或条款、未按目的国法规调整单据内容、汇率或税率变动、承运人或银行等第三方行为导致的任何损失，卖方不承担责任。卖方对因使用本软件产生的间接损失、利润损失、商誉损失不承担赔偿责任；如经生效裁判认定卖方应承担责任的，赔偿总额以购买者实际支付的授权费用为上限。'],
