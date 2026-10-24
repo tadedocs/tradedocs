@@ -1930,6 +1930,7 @@ var LIC = (function(){
 /* 每种语言覆盖 5 套单据所需的全部字段标签、合同条款模板 */
 var DOC_I18N = {
 zh: {
+  sc:{title:'销售确认书',no:'确认书号',buyerPo:'买方订单号',ourOrder:'我方订单号'},sa:{title:'装船通知',to:'致：买方',details:'装运详情',remarks:'备注',clauses:['上述货物已按本通知载明的船名航次装船，承运人签发清洁已装船提单，装船时未发现残损或异议。','随附单据：商业发票、装箱单、提单副本、原产地证（如需）。','请买方在收到本通知后核对上述信息，如有不符请于 3 个工作日内书面提出。']},
   quotation:'报价单', proforma:'形式发票', contract:'销售合同', commercial:'商业发票', packing:'装箱单',
   no:'编号', date:'日期', lInco:'贸易术语', lLead:'交货期', lPay:'付款条件', lPort:'装运 → 目的', lCur:'币种', std:['报价有效期以本单载明为准；逾期后如原材料成本变动，卖方有权重新议价。','货款以电汇（T/T）支付；卖方银行以外的银行费用由买方承担。','交期自收到全额定金并书面确认样品与规格之日起算；因买方确认延迟造成的误期，不由卖方承担。','实际发货数量允许 ±3% 公差，按实际装运数量结算。','质量以双方确认封存的样品为准；异议须在货物到港后 30 日内书面提出，并附照片或视频。','货款付清前，货物所有权归卖方所有，卖方无义务交付正本提单及其他物权凭证。','因不可抗力（自然灾害、罢工、战争、疫情、政府行为、港口封闭）导致不能履行的，卖方不承担责任。','本单据适用中华人民共和国法律；争议先协商解决，协商不成提交卖方所在地法院。'], validDays:'天（自报价日起）', validUntil:'有效期至', orderNo:'订单号',
   from:'卖方', to:'买方', contact:'联系人', address:'地址', tel:'电话', email:'邮箱', web:'网址',
@@ -1960,6 +1961,7 @@ zh: {
   signatureTitle:'签署栏', sellerRep:'卖方代表', buyerRep:'买方代表'
 },
 en: {
+  sc:{title:'SALES CONFIRMATION',no:'S/C No.',buyerPo:"Buyer's P.O. No.",ourOrder:'Our Order No.'},sa:{title:'SHIPPING ADVICE',to:'TO (BUYER)',details:'SHIPMENT DETAILS',remarks:'REMARKS',clauses:['The above goods have been shipped on board on {date}. The carrier issued a clean on-board bill of lading; no damage or discrepancy was noted at the time of loading.','Documents attached: commercial invoice, packing list, copy of bill of lading, certificate of origin (if required).','The Buyer shall check the above particulars upon receipt of this advice and raise any discrepancy in writing within 3 working days.']},
   quotation:'QUOTATION', proforma:'PROFORMA INVOICE', contract:'SALES CONTRACT', commercial:'COMMERCIAL INVOICE', packing:'PACKING LIST',
   no:'No.', date:'Date', lInco:'Incoterms', lLead:'Lead Time', lPay:'Payment Terms', lPort:'POL → POD', lCur:'Currency', std:['Validity: this quotation is valid for the period stated above. After expiry the seller may renegotiate the price if the cost of raw material has changed.','Payment: all sums shall be paid by T/T. Bank charges outside the seller bank are for the buyer account.','Lead time: counted from receipt of the full deposit and written confirmation of the sample and specification; delay caused by late buyer confirmation is not attributable to the seller.','Quantity: a tolerance of plus or minus 3 percent is permitted; settlement against the quantity actually shipped.','Quality: goods shall conform to the sample confirmed by both parties; any objection must be raised in writing within 30 days after arrival, with photo or video evidence.','Title: goods remain the property of the seller until payment is received in full; the seller is not obliged to release the original bill of lading before such payment.','Force majeure: the seller is not liable for failure caused by natural disaster, strike, war, epidemic, act of government or port closure.','Governing law: this document is governed by the laws of the People\'s Republic of China; disputes shall first be settled by negotiation.'], validDays:'days from date of offer', validUntil:'Valid Until', orderNo:'Order No.',
   from:'From (Seller)', to:'To (Buyer)', contact:'Contact', address:'Address', tel:'Tel', email:'Email', web:'Web',
@@ -1990,6 +1992,7 @@ en: {
   signatureTitle:'SIGNATURES', sellerRep:'For the Seller', buyerRep:'For the Buyer'
 },
 ja: {
+  sc:{title:'売買確認書',no:'確認書番号',buyerPo:'買方注文番号',ourOrder:'当方注文番号'},sa:{title:'船積通知書',to:'宛先（買方）',details:'船積明細',remarks:'備考',clauses:['上記貨物は {date} に本船積みされ、運送人は無故障の船積済船荷証券を発行しました。船積時に損傷・相違は認められませんでした。','添付書類：商業送り状、パッキングリスト、船荷証券のコピー、原産地証明書（必要な場合）。','買方は本通知受領後、上記内容をご確認ください。相違がある場合は 3 営業日以内に書面でご連絡ください。']},
   quotation:'見積書', proforma:'プロフォーマインボイス', contract:'売買契約書', commercial:'コマーシャルインボイス', packing:'パッキングリスト',
   no:'番号', date:'日付', lInco:'貿易条件', lLead:'納期', lPay:'支払条件', lPort:'積出 → 仕向', lCur:'通貨', std:['見積の有効期間は本状記載のとおり。期間経過後、原材料費が変動した場合、売主は価格を再協議する権利を有する。','代金は電信送金（T/T）による。売主銀行以外の銀行手数料は買主負担とする。','納期は手付金全額入金及びサンプル・仕様の書面確認日から起算する。買主の確認遅延による遅れは売主の責に帰さない。','出荷数量は±3%の許容範囲を認め、実際出荷数量で精算する。','品質は双方確認のサンプルによる。異議は到着後30日以内に写真・動画を添えて書面で提出する。','代金完済まで貨物の所有権は売主に帰属する。','不可抗力（自然災害、ストライキ、戦争、疫病、政府行為、港湾閉鎖）による不履行について売主は責任を負わない。','本書は中華人民共和国法に準拠する。紛争はまず協議により解決する。'], validDays:'日間（見積日から）', validUntil:'有効期限', orderNo:'注文番号',
   from:'売り主（From）', to:'買い主（To）', contact:'連絡先', address:'住所', tel:'電話', email:'メール', web:'ウェブ',
@@ -2020,6 +2023,7 @@ ja: {
   signatureTitle:'署名欄', sellerRep:'売り主', buyerRep:'買い主'
 },
 ko: {
+  sc:{title:'판매확인서',no:'확인서 번호',buyerPo:'구매자 주문번호',ourOrder:'당사 주문번호'},sa:{title:'선적통지서',to:'수신(구매자)',details:'선적 세부사항',remarks:'비고',clauses:['상기 화물은 {date}에 본선 적재되었으며, 운송인은 무고장 선적 선하증권을 발행했습니다. 적재 시 손상이나 불일치는 발견되지 않았습니다.','첨부 서류: 상업송장, 포장명세서, 선하증권 사본, 원산지증명서(필요 시).','구매자는 본 통지를 받은 후 위 내용을 확인하시고, 불일치가 있으면 3영업일 이내에 서면으로 통지하여 주십시오.']},
   quotation:'견적서', proforma:'프로포마 인보이스', contract:'판매 계약서', commercial:'상업 송장', packing:'패킹 리스트',
   no:'번호', date:'날짜', lInco:'무역조건', lLead:'납기', lPay:'지급조건', lPort:'선적 → 목적', lCur:'통화', std:['견적 유효기간은 본 문서에 기재된 기간으로 한다. 기간 경과 후 원자재 비용이 변동된 경우 판매자는 가격을 재협상할 권리가 있다.','대금은 전신송금(T/T)으로 지급한다. 판매자 은행 외의 은행 수수료는 구매자가 부담한다.','납기는 계약금 전액 입금 및 샘플·사양 서면 확인일부터 기산한다. 구매자 확인 지연으로 인한 지연은 판매자 책임이 아니다.','출하 수량은 ±3% 공차를 허용하며 실제 선적 수량으로 정산한다.','품질은 양측이 확인한 샘플에 따른다. 이의는 도착 후 7일 이내에 사진·영상과 함께 서면으로 제기한다.','대금 완납 전까지 화물 소유권은 판매자에게 있다.','불가항력(자연재해, 파업, 전쟁, 전염병, 정부 조치, 항만 폐쇄)으로 인한 불이행에 대해 판매자는 책임지지 않는다.','본 문서는 중화인민공화국 법률에 따른다. 분쟁은 우선 협의로 해결한다.'], validDays:'일（견적일로부터）', validUntil:'유효기간', orderNo:'주문번호',
   from:'판매자(From)', to:'구매자(To)', contact:'연락처', address:'주소', tel:'전화', email:'이메일', web:'웹',
@@ -2050,6 +2054,7 @@ ko: {
   signatureTitle:'서명란', sellerRep:'판매자', buyerRep:'구매자'
 },
 de: {
+  sc:{title:'VERKAUFSBESTÄTIGUNG',no:'Bestätigungsnr.',buyerPo:'Bestellnr. des Käufers',ourOrder:'Unsere Auftragsnr.'},sa:{title:'VERSANDANZEIGE',to:'AN (KÄUFER)',details:'VERSANDDETAILS',remarks:'ANMERKUNGEN',clauses:['Die oben genannte Ware wurde am {date} an Bord verladen. Der Frachtführer hat ein reines Bordkonnossement ausgestellt; bei der Verladung wurden keine Schäden oder Abweichungen festgestellt.','Beigefügte Dokumente: Handelsrechnung, Packliste, Kopie des Konnossements, Ursprungszeugnis (falls erforderlich).','Der Käufer prüft die vorstehenden Angaben nach Erhalt dieser Anzeige und meldet Abweichungen innerhalb von 3 Werktagen schriftlich.']},
   quotation:'ANGEBOT', proforma:'PROFORMA-RECHNUNG', contract:'KAUFVERTRAG', commercial:'HANDELSRECHNUNG', packing:'PACKLISTE',
   no:'Nr.', date:'Datum', lInco:'Incoterms', lLead:'Lieferzeit', lPay:'Zahlung', lPort:'Verladung → Ziel', lCur:'Währung', std:['Gültigkeit: Das Angebot gilt für die oben genannte Frist. Nach Ablauf ist der Verkäufer bei geänderten Materialkosten zur Neuverhandlung des Preises berechtigt.','Zahlung: sämtliche Beträge per T/T. Bankgebühren außerhalb der Verkäuferbank trägt der Käufer.','Lieferzeit: ab Eingang der vollständigen Anzahlung und schriftlicher Bestätigung von Muster und Spezifikation; Verzögerungen durch verspätete Käuferbestätigung gehen nicht zu Lasten des Verkäufers.','Menge: eine Toleranz von ±3 % ist zulässig; abgerechnet wird die tatsächlich verschiffte Menge.','Qualität: entsprechend dem von beiden Seiten bestätigten Muster; Beanstandungen binnen 7 Tagen nach Ankunft schriftlich mit Foto- oder Video-Nachweis.','Eigentum: Die Ware bleibt bis zur vollständigen Zahlung Eigentum des Verkäufers.','Höhere Gewalt: keine Haftung des Verkäufers bei Naturkatastrophe, Streik, Krieg, Epidemie, staatlicher Maßnahme oder Hafenschließung.','Anwendbares Recht: Recht der Volksrepublik China; Streitigkeiten zunächst gütlich.'], validDays:'Tage ab Angebotsdatum', validUntil:'Gültig bis', orderNo:'Auftrags-Nr.',
   from:'Von (Verkäufer)', to:'An (Käufer)', contact:'Kontakt', address:'Adresse', tel:'Tel', email:'E-Mail', web:'Web',
@@ -2080,6 +2085,7 @@ de: {
   signatureTitle:'UNTERSCHRIFTEN', sellerRep:'Für den Verkäufer', buyerRep:'Für den Käufer'
 },
 fr: {
+  sc:{title:'CONFIRMATION DE VENTE',no:'N° de confirmation',buyerPo:'N° de commande acheteur',ourOrder:'Notre n° de commande'},sa:{title:"AVIS D'EXPÉDITION",to:'À (ACHETEUR)',details:"DÉTAILS D'EXPÉDITION",remarks:'REMARQUES',clauses:['Les marchandises ci-dessus ont été chargées à bord le {date}. Le transporteur a délivré un connaissement net à bord ; aucun dommage ni écart n\'a été constaté au chargement.','Documents joints : facture commerciale, liste de colisage, copie du connaissement, certificat d\'origine (si requis).','L\'acheteur vérifie les informations ci-dessus à réception du présent avis et signale tout écart par écrit dans les 3 jours ouvrables.']},
   quotation:'DEVIS', proforma:'FACTURE PROFORMA', contract:'CONTRAT DE VENTE', commercial:'FACTURE COMMERCIALE', packing:'LISTE DE COLISAGE',
   no:'N°', date:'Date', lInco:'Incoterms', lLead:'Délai', lPay:'Paiement', lPort:'Chargement → Destination', lCur:'Devise', std:['Validité : la présente offre est valable pour la période indiquée ci-dessus. Après expiration, le vendeur peut renégocier le prix en cas de variation du coût des matières premières.','Paiement : tous les montants par virement T/T. Les frais bancaires hors banque du vendeur sont à la charge de l\'acheteur.','Délai : à compter de la réception de l\'acompte intégral et de la confirmation écrite de l\'échantillon et des spécifications ; les retards dus à une confirmation tardive de l\'acheteur ne sont pas imputables au vendeur.','Quantité : tolérance de ±3 % admise ; règlement sur la quantité réellement expédiée.','Qualité : conforme à l\'échantillon approuvé par les deux parties ; réclamation écrite dans les 7 jours suivant l\'arrivée, avec photo ou vidéo.','Propriété : la marchandise reste la propriété du vendeur jusqu\'au paiement intégral.','Force majeure : le vendeur n\'est pas responsable en cas de catastrophe naturelle, grève, guerre, épidémie, acte gouvernemental ou fermeture portuaire.','Droit applicable : droit de la République populaire de Chine ; litiges réglés d\'abord à l\'amiable.'], validDays:'jours à compter de la date du devis', validUntil:'Valable jusqu\'au', orderNo:'N° de commande',
   from:'De (Vendeur)', to:'À (Acheteur)', contact:'Contact', address:'Adresse', tel:'Tél', email:'E-mail', web:'Web',
@@ -2110,6 +2116,7 @@ fr: {
   signatureTitle:'SIGNATURES', sellerRep:'Pour le Vendeur', buyerRep:'Pour l\'Acheteur'
 },
 es: {
+  sc:{title:'CONFIRMACIÓN DE VENTA',no:'N.º de confirmación',buyerPo:'N.º de pedido del comprador',ourOrder:'Nuestro n.º de pedido'},sa:{title:'AVISO DE EMBARQUE',to:'A (COMPRADOR)',details:'DATOS DEL EMBARQUE',remarks:'OBSERVACIONES',clauses:['La mercancía indicada fue cargada a bordo el {date}. El transportista emitió un conocimiento de embarque limpio; no se observaron daños ni discrepancias durante la carga.','Documentos adjuntos: factura comercial, lista de empaque, copia del conocimiento de embarque, certificado de origen (si procede).','El comprador verificará los datos anteriores al recibir este aviso y comunicará por escrito cualquier discrepancia en 3 días hábiles.']},
   quotation:'COTIZACIÓN', proforma:'FACTURA PROFORMA', contract:'CONTRATO DE COMPRAVENTA', commercial:'FACTURA COMERCIAL', packing:'LISTA DE EMBALAJE',
   no:'N.º', date:'Fecha', lInco:'Incoterms', lLead:'Plazo', lPay:'Pago', lPort:'Embarque → Destino', lCur:'Moneda', std:['Validez: la presente cotización es válida por el plazo indicado arriba. Transcurrido este, el vendedor podrá renegociar el precio si varía el coste de las materias primas.','Pago: todos los importes mediante transferencia T/T. Los gastos bancarios fuera del banco del vendedor corren por cuenta del comprador.','Plazo: desde la recepción del anticipo total y la confirmación escrita de la muestra y especificaciones; los retrasos por confirmación tardía del comprador no son imputables al vendedor.','Cantidad: se admite una tolerancia de ±3 %; liquidación sobre la cantidad realmente embarcada.','Calidad: conforme a la muestra aprobada por ambas partes; reclamación por escrito en 7 días desde la llegada, con foto o vídeo.','Propiedad: la mercancía sigue siendo del vendedor hasta el pago íntegro.','Fuerza mayor: el vendedor no responde por catástrofe natural, huelga, guerra, epidemia, acto de gobierno o cierre portuario.','Ley aplicable: legislación de la República Popular China; controversias resueltas primero por negociación.'], validDays:'días desde la fecha de la oferta', validUntil:'Válido hasta', orderNo:'N.º de pedido',
   from:'De (Vendedor)', to:'A (Comprador)', contact:'Contacto', address:'Dirección', tel:'Tel', email:'Correo', web:'Web',
@@ -2140,6 +2147,7 @@ es: {
   signatureTitle:'FIRMAS', sellerRep:'Por el Vendedor', buyerRep:'Por el Comprador'
 },
 it: {
+  sc:{title:'CONFERMA DI VENDITA',no:'N. conferma',buyerPo:'N. ordine acquirente',ourOrder:'Ns. n. ordine'},sa:{title:'AVVISO DI SPEDIZIONE',to:'A (ACQUIRENTE)',details:'DETTAGLI SPEDIZIONE',remarks:'NOTE',clauses:['La merce sopra indicata è stata caricata a bordo il {date}. Il vettore ha emesso una polizza di carico netta; al momento del carico non sono stati rilevati danni o difformità.','Documenti allegati: fattura commerciale, packing list, copia della polizza di carico, certificato di origine (se richiesto).','L\'acquirente verifichi i dati sopra riportati al ricevimento del presente avviso e segnali per iscritto eventuali difformità entro 3 giorni lavorativi.']},
   quotation:'PREVENTIVO', proforma:'FATTURA PROFORMA', contract:'CONTRATTO DI VENDITA', commercial:'FATTURA COMMERCIALE', packing:'PACKING LIST',
   no:'N.', date:'Data', lInco:'Incoterms', lLead:'Consegna', lPay:'Pagamento', lPort:'Imbarco → Destino', lCur:'Valuta', std:['Validità: l\'offerta è valida per il periodo sopra indicato. Dopo la scadenza il venditore può rinegoziare il prezzo in caso di variazione del costo delle materie prime.','Pagamento: tutti gli importi tramite bonifico T/T. Le spese bancarie fuori dalla banca del venditore sono a carico dell\'acquirente.','Termine: dalla ricezione dell\'acconto integrale e dalla conferma scritta di campione e specifiche; i ritardi dovuti a conferma tardiva dell\'acquirente non sono imputabili al venditore.','Quantità: tolleranza del ±3% ammessa; regolamento sulla quantità effettivamente spedita.','Qualità: conforme al campione approvato da entrambe le parti; reclamo scritto entro 7 giorni dall\'arrivo, con foto o video.','Proprietà: la merce resta del venditore fino al pagamento integrale.','Forza maggiore: il venditore non risponde per calamità naturale, sciopero, guerra, epidemia, atto governativo o chiusura portuale.','Legge applicabile: legge della Repubblica Popolare Cinese; controversie risolte prima mediante negoziazione.'], validDays:'giorni dalla data del preventivo', validUntil:'Valido fino al', orderNo:'N. ordine',
   from:'Dal (Venditore)', to:'Al (Compratore)', contact:'Contatto', address:'Indirizzo', tel:'Tel', email:'E-mail', web:'Web',
@@ -2170,6 +2178,7 @@ it: {
   signatureTitle:'FIRME', sellerRep:'Per il Venditore', buyerRep:'Per il Compratore'
 },
 pt: {
+  sc:{title:'CONFIRMAÇÃO DE VENDA',no:'N.º da confirmação',buyerPo:'N.º do pedido do comprador',ourOrder:'Nosso n.º do pedido'},sa:{title:'AVISO DE EMBARQUE',to:'PARA (COMPRADOR)',details:'DETALHES DO EMBARQUE',remarks:'OBSERVAÇÕES',clauses:['A mercadoria acima foi embarcada em {date}. O transportador emitiu um conhecimento de embarque limpo; não foram observados danos ou divergências no carregamento.','Documentos anexos: fatura comercial, packing list, cópia do conhecimento de embarque, certificado de origem (se necessário).','O comprador deverá verificar os dados acima ao receber este aviso e comunicar por escrito qualquer divergência em 3 dias úteis.']},
   quotation:'COTAÇÃO', proforma:'FATURA PROFORMA', contract:'CONTRATO DE COMPRA E VENDA', commercial:'FATURA COMERCIAL', packing:'LISTA DE EMBALAGEM',
   no:'N.º', date:'Data', lInco:'Incoterms', lLead:'Prazo', lPay:'Pagamento', lPort:'Embarque → Destino', lCur:'Moeda', std:['Validade: esta cotação é válida pelo prazo acima indicado. Após o prazo, o vendedor pode renegociar o preço se o custo das matérias-primas variar.','Pagamento: todos os valores por transferência T/T. As despesas bancárias fora do banco do vendedor correm por conta do comprador.','Prazo: a contar do recebimento do sinal integral e da confirmação escrita da amostra e especificações; atrasos por confirmação tardia do comprador não são imputáveis ao vendedor.','Quantidade: tolerância de ±3% admitida; liquidação pela quantidade efetivamente embarcada.','Qualidade: conforme a amostra aprovada por ambas as partes; reclamação por escrito em 7 dias após a chegada, com foto ou vídeo.','Propriedade: a mercadoria permanece do vendedor até o pagamento integral.','Força maior: o vendedor não responde por catástrofe natural, greve, guerra, epidemia, ato governamental ou fechamento de porto.','Lei aplicável: leis da República Popular da China; litígios resolvidos primeiro por negociação.'], validDays:'dias a partir da data da cotação', validUntil:'Válido até', orderNo:'N.º do pedido',
   from:'De (Vendedor)', to:'Para (Comprador)', contact:'Contato', address:'Endereço', tel:'Tel', email:'E-mail', web:'Web',
@@ -2200,6 +2209,7 @@ pt: {
   signatureTitle:'ASSINATURAS', sellerRep:'Pelo Vendedor', buyerRep:'Pelo Comprador'
 },
 ru: {
+  sc:{title:'ПОДТВЕРЖДЕНИЕ ПРОДАЖИ',no:'№ подтверждения',buyerPo:'№ заказа покупателя',ourOrder:'Наш № заказа'},sa:{title:'ИЗВЕЩЕНИЕ ОБ ОТГРУЗКЕ',to:'ПОЛУЧАТЕЛЬ (ПОКУПАТЕЛЬ)',details:'ДЕТАЛИ ОТГРУЗКИ',remarks:'ПРИМЕЧАНИЯ',clauses:['Указанный товар погружен на борт {date}. Перевозчик выдал чистый бортовой коносамент; при погрузке повреждений и расхождений не обнаружено.','Прилагаемые документы: коммерческий инвойс, упаковочный лист, копия коносамента, сертификат происхождения (при необходимости).','Покупатель проверяет указанные сведения при получении настоящего извещения и сообщает о расхождениях письменно в течение 3 рабочих дней.']},
   quotation:'КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ', proforma:'ПРОФОРМА-ИНВОЙС', contract:'ДОГОВОР КУПЛИ-ПРОДАЖИ', commercial:'КОММЕРЧЕСКИЙ ИНВОЙС', packing:'УПАКОВОЧНЫЙ ЛИСТ',
   no:'№', date:'Дата', lInco:'Инкотермс', lLead:'Срок', lPay:'Оплата', lPort:'Погрузка → Назначение', lCur:'Валюта', std:['Срок действия: предложение действительно в указанный выше срок. По его истечении продавец вправе пересмотреть цену при изменении стоимости сырья.','Оплата: все суммы банковским переводом (T/T). Банковские расходы вне банка продавца несёт покупатель.','Срок поставки: с даты получения полного аванса и письменного подтверждения образца и спецификации; задержки из-за позднего подтверждения покупателем не относятся на продавца.','Количество: допускается допуск ±3%; расчёт по фактически отгруженному количеству.','Качество: соответствует образцу, подтверждённому обеими сторонами; претензия письменно в течение 7 дней после прибытия с фото- или видеоматериалами.','Право собственности: товар остаётся собственностью продавца до полной оплаты.','Форс-мажор: продавец не отвечает за стихийное бедствие, забастовку, войну, эпидемию, акт государства или закрытие порта.','Применимое право: законодательство КНР; споры сначала решаются путём переговоров.'], validDays:'дней с даты предложения', validUntil:'Действительно до', orderNo:'№ заказа',
   from:'От (Продавец)', to:'Кому (Покупатель)', contact:'Контакт', address:'Адрес', tel:'Тел', email:'Эл. почта', web:'Сайт',
@@ -2230,6 +2240,7 @@ ru: {
   signatureTitle:'ПОДПИСИ', sellerRep:'За Продавца', buyerRep:'За Покупателя'
 },
 ar: {
+  sc:{title:'تأكيد البيع',no:'رقم التأكيد',buyerPo:'رقم طلب المشتري',ourOrder:'رقم طلبنا'},sa:{title:'إشعار الشحن',to:'إلى (المشتري)',details:'تفاصيل الشحن',remarks:'ملاحظات',clauses:['تم شحن البضاعة المذكورة أعلاه على ظهر السفينة بتاريخ {date}. أصدر الناقل بوليصة شحن نظيفة؛ ولم تُلاحظ أي أضرار أو اختلافات عند التحميل.','المستندات المرفقة: الفاتورة التجارية، قائمة التعبئة، نسخة من بوليصة الشحن، شهادة المنشأ (عند الحاجة).','على المشتري التحقق من البيانات أعلاه عند استلام هذا الإشعار وإبلاغ أي اختلاف كتابيًا خلال 3 أيام عمل.']},
   quotation:'عرض سعر', proforma:'فاتورة أولية', contract:'عقد بيع', commercial:'فاتورة تجارية', packing:'قائمة التعبئة',
   no:'رقم', date:'التاريخ', lInco:'إنكوترمز', lLead:'مدة التسليم', lPay:'الدفع', lPort:'الشحن → الوصول', lCur:'العملة', std:['الصلاحية: هذا العرض ساري للمدة المذكورة أعلاه. وبعد انتهائها يحق للبائع إعادة التفاوض على السعر إذا تغيرت تكلفة المواد الخام.','الدفع: جميع المبالغ بالتحويل البرقي (T/T). الرسوم المصرفية خارج بنك البائع يتحملها المشتري.','مدة التسليم: من تاريخ استلام الدفعة المقدمة كاملة والتأكيد الكتابي للعينة والمواصفات؛ التأخير الناتج عن تأخر تأكيد المشتري لا يقع على البائع.','الكمية: يُسمح بهامش ±3%؛ والتسوية على أساس الكمية المشحونة فعلياً.','الجودة: مطابقة للعينة المعتمدة من الطرفين؛ وتُقدَّم الاعتراضات كتابياً خلال 7 أيام من الوصول مع صور أو فيديو.','الملكية: تبقى البضاعة ملكاً للبائع حتى السداد الكامل.','القوة القاهرة: لا يتحمل البائع المسؤولية في حالات الكوارث الطبيعية أو الإضراب أو الحرب أو الوباء أو الإجراء الحكومي أو إغلاق الميناء.','القانون الواجب التطبيق: قوانين جمهورية الصين الشعبية؛ وتُحل النزاعات أولاً بالتفاوض.'], validDays:'يوماً من تاريخ العرض', validUntil:'صالح حتى', orderNo:'رقم الطلب',
   from:'من (البائع)', to:'إلى (المشتري)', contact:'جهة الاتصال', address:'العنوان', tel:'هاتف', email:'بريد إلكتروني', web:'الموقع',
@@ -2806,24 +2817,30 @@ function renderPacking(ctx){
 function renderConfirmation(ctx){
   ctx.typeKey = 'confirmation';
   var T = ctx.T, o = ctx.order, tm = o.terms || {};
-  var inner = dHead(ctx, 'SALES CONFIRMATION', [
-      ['S/C No.', ctx.docNo], [T.date, o.date],
-      ["Buyer's P.O. No.", tm.poNo || '—'], ['Our Order No.', o.orderNo]
+  var S = T.sc || {title:'SALES CONFIRMATION', no:'S/C No.', buyerPo:"Buyer's P.O. No.", ourOrder:'Our Order No.'};
+  /* 条款复用销售合同的多语言条款，避免另写一套只有英文 */
+  var C = T.clauses || {};
+  var fill = {
+    seller: esc(ctx.company.name) + (ctx.company.nameEn ? ' (' + esc(ctx.company.nameEn) + ')' : ''),
+    buyer: esc(orderCustomer(o).company || ''),
+    totalAmount: fmtMoney(ctx.totals.amount, ctx.cur), sayTotal: esc(ctx.sayTotal), currency: ctx.cur,
+    tradeTerms: esc(tm.tradeTerm || ''), paymentTerms: esc(tm.paymentTerm || ''),
+    deliveryTime: esc(tm.deliveryDate || ''), portLoading: esc(tm.portLoading || ''), portDest: esc(tm.portDest || '')
+  };
+  function f(t){ return esc(t).replace(/\{(\w+)\}/g, function(_, k){ return fill[k] || ''; }); }
+  /* 商品与价格已在明细表体现，条款只留履约相关的六条，保证一页 */
+  var keys = ['payment','delivery','packing','inspection','force'];
+  var stripNo = function(t){ return String(t).replace(/^\s*(?:[一二三四五六七八九十]+、|\d+[.、]\s*)/, ''); };
+  var inner = dHead(ctx, S.title, [
+      [S.no, ctx.docNo], [T.date, o.date],
+      [S.buyerPo, tm.poNo || '—'], [S.ourOrder, o.orderNo]
     ]) +
     dParties(ctx) +
     dKv([[T.lInco, tm.tradeTerm], [T.lLead, tm.deliveryDate], [T.lPort, [tm.portLoading, tm.portDest].filter(Boolean).join(' → ')], [T.lPay, tm.paymentTerm], [T.lCur, tm.currency]]) +
     dItems(ctx) + dSummary(ctx, true) +
-    '<div class="d-clauses">' + [
-      ['1. Goods', 'The goods shall conform to the specification stated above. Any deviation must be agreed in writing before shipment.'],
-      ['2. Shipment', 'Shipment shall be effected within the lead time stated above, counted from receipt of the deposit and confirmation of the pre-production sample. Partial shipment and transhipment are allowed unless otherwise stated.'],
-      ['3. Payment', 'Payment shall be made strictly as stated above. Bank charges outside the Seller\u2019s bank are for the Buyer\u2019s account.'],
-      ['4. Packing & Marks', 'Export standard packing, marked as per the Buyer\u2019s instruction confirmed by the Seller before production.'],
-      ['5. Claims', 'Any claim must be raised in writing within 30 days after arrival of the goods at the port of destination, supported by an inspection report issued by a recognised surveyor.'],
-      ['6. Title & Documents', 'The goods remain the property of the Seller until payment is received in full. The Seller is not obliged to release the original bill of lading or any other document of title before such payment.'],
-      ['7. Confirmation', 'This Sales Confirmation is issued in response to the Buyer\u2019s purchase order. The Buyer shall sign and return one copy within 3 working days; production starts upon receipt of the signed copy and the deposit.'],
-      ['8. Governing Law', 'This Confirmation is governed by the laws of the People\u2019s Republic of China. Any dispute shall first be settled by negotiation; failing which it shall be submitted to CIETAC for arbitration.']
-    ].map(function(c){
-      return '<div class="d-clause"><div class="d-cl-t">' + esc(c[0]) + '</div><div class="d-cl-b">' + esc(c[1]) + '</div></div>';
+    '<div class="d-clauses">' + keys.map(function(k, i){
+      if(!C[k]) return '';
+      return '<div class="d-clause"><div class="d-cl-t">' + (i + 1) + '. ' + esc(stripNo(C[k])) + '</div><div class="d-cl-b">' + f(C[k + 'T']) + '</div></div>';
     }).join('') + incoBlock(ctx) + '</div>' +
     dSign(ctx, true);
   return dPage(ctx, inner);
@@ -2922,16 +2939,19 @@ function renderCustoms(ctx){
 function renderShipping(ctx){
   ctx.typeKey = 'shipping';
   var T = ctx.T, o = ctx.order, tm = o.terms || {}, cust = orderCustomer(o);
+  var S = T.sa || {title:'SHIPPING ADVICE', to:'TO (BUYER)', details:'SHIPMENT DETAILS', remarks:'REMARKS', clauses:[]};
   var termUp = String(tm.tradeTerm || '').trim().toUpperCase();
   var sellerIns = /^(CIF|CIP)/.test(termUp);
   var insLine = tm.insNo ? 'Insurance Policy No.: <b>' + esc(tm.insNo) + '</b>' : '';
   var agentLine = tm.agentDest ? 'Destination Agent: ' + esc(tm.agentDest) : '';
-  var inner = dHead(ctx, 'SHIPPING ADVICE', [['No.', ctx.docNo], [T.date, o.date], ['Invoice No.', o.docs && o.docs.filter(function(d){ return d.type === 'commercial'; })[0] ? o.docs.filter(function(d){ return d.type === 'commercial'; })[0].docNo : '—']]) +
+  var shipDate = tm.etd || tm.sailing || '';
+  var cl = (S.clauses && S.clauses.length) ? S.clauses : ((DOC_I18N.en.sa && DOC_I18N.en.sa.clauses) || []);
+  var inner = dHead(ctx, S.title, [['No.', ctx.docNo], [T.date, o.date], ['Invoice No.', o.docs && o.docs.filter(function(d){ return d.type === 'commercial'; })[0] ? o.docs.filter(function(d){ return d.type === 'commercial'; })[0].docNo : '—']]) +
     '<div class="d-parties">' +
-      '<div class="d-party"><div class="d-plabel">TO (BUYER)</div>' +
+      '<div class="d-party"><div class="d-plabel">' + esc(S.to) + '</div>' +
         '<div class="d-pname">' + esc(cust.companyEn || cust.company || '') + '</div>' +
         '<div class="d-plines">' + [cust.contact, cust.address, cust.email].filter(Boolean).join('<br>') + '</div></div>' +
-      '<div class="d-party"><div class="d-plabel">SHIPMENT DETAILS</div>' +
+      '<div class="d-party"><div class="d-plabel">' + esc(S.details) + '</div>' +
         '<div class="d-plines">' +
           ['Vessel / Voyage: <b>' + esc([tm.vessel, tm.voyage].filter(Boolean).join(' / ') || '—') + '</b>',
            'B/L No.: <b>' + esc(tm.blNo || '—') + '</b>',
@@ -2943,17 +2963,14 @@ function renderShipping(ctx){
         '</div></div>' +
     '</div>' +
     dItems(ctx) + dSummary(ctx, true) +
-    '<div class="d-terms"><div class="d-terms-t">REMARKS</div><ul>' +
-      ['The above goods have been shipped on board on ' + esc(tm.etd || tm.sailing || 'the date shown above') + '. The carrier issued a clean on-board bill of lading; no damage or discrepancy was noted at the time of loading.',
-       (sellerIns
-          ? 'Insurance has been effected by the Seller' + (tm.insNo ? ' under policy No. ' + esc(tm.insNo) : '') +
-            ' for 110% of the invoice value; the Buyer may claim directly against the insurer in the event of loss or damage.'
-          : 'Please arrange insurance cover immediately upon receipt of this advice; under ' + esc(termUp || 'FOB') +
-            ' terms the risk passes to the Buyer at the port of loading and cover is for the Buyer\'s account.'),
-       'Shipping documents (Commercial Invoice, Packing List, Bill of Lading, Certificate of Origin where applicable) will be couriered to you within 3 working days after departure.',
-       'Please take delivery against the original B/L and check the quantity and condition at the terminal before leaving; any shortage or damage must be noted on the delivery receipt and notified to us within 7 days.',
-       'Kindly acknowledge receipt of this Shipping Advice by return so that we can close the shipment file.'
-      ].map(function(l){ return '<li>' + esc(l) + '</li>'; }).join('') +
+    '<div class="d-terms"><div class="d-terms-t">' + esc(S.remarks) + '</div><ul>' +
+      cl.map(function(l){
+        var txt = String(l).replace(/\{date\}/g, esc(shipDate || (ctx.lang === 'zh' ? '上述日期' : 'the date shown above')));
+        if(sellerIns && l === cl[0] && !/保险|insurance/i.test(txt)){
+          txt += (ctx.lang === 'zh' ? ' 保险由卖方按发票金额 110% 投保，买方可在出险时直接向保险人索赔。' : ' Insurance has been effected by the Seller at 110% of the invoice value; the Buyer may claim directly against the insurer.');
+        }
+        return '<li>' + txt + '</li>';
+      }).join('') +
     '</ul></div>' + dSign(ctx);
   return dPage(ctx, inner);
 }
@@ -3088,7 +3105,8 @@ var DOC_RENDERERS = {
   purchase: renderPurchase, taxfile: renderTaxFile
 };
 /* 这几类单据有固定语种：中文单证给国内报关行/货代/税局，英文单证给客户 */
-var FIXED_LANG = {booking:'zh', customs:'zh', purchase:'zh', taxfile:'zh', shipping:'en', confirmation:'en'};
+/* 订舱/报关/采购/退税是对国内的，固定中文；销售确认书与装船通知是给外商的，跟随界面语言 */
+var FIXED_LANG = {booking:'zh', customs:'zh', purchase:'zh', taxfile:'zh'};
 function renderDoc(order, type, lang, themeId, docNo, opts){
   var useLang = FIXED_LANG[type] || lang;
   var ctx = buildDocContext(order, useLang, themeId, opts);
@@ -3409,7 +3427,7 @@ function copyText(txt, okMsg){
 }
 
 /* ========== 版本信息 ========== */
-var APP_VER = 'V3.5';
+var APP_VER = 'V3.6';
 var APP_DATE = '2026-10-23';
 var EULA_VER = '1.1';
 var EULA_DATE = '2026-10-23';
@@ -3417,6 +3435,10 @@ var K_EULA = 'eula_agree_v1';
 
 /* 版本更新记录（设置页可查） */
 var VER_LOG = [
+  {v:'V3.6', d:'2026-10-24', items:[
+    '销售确认书、装船通知改为跟随界面语言（原来被固定为英文，切语言不生效）',
+    '销售确认书条款接入多语言，编号统一为 1–5，中文版压回一页'
+  ]},
   {v:'V3.5', d:'2026-10-24', items:[
     '商业发票补齐卖方银行信息（与签章并排），可直接用于收款',
     '商业发票默认显示 HS 编码；修正产品字段名不一致导致 HS 从不显示的问题',
