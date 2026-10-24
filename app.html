@@ -443,6 +443,14 @@ details[open] .chev{transform:rotate(90deg);}
 .d-shint{font-size:6.8pt;color:#9aa1ab;margin-top:3px;letter-spacing:.04em;}
 
 .d-foot{position:absolute;left:14mm;right:14mm;bottom:7mm;display:flex;justify-content:space-between;gap:10px;font-size:6.4pt;color:#b0b6be;border-top:1px solid #f2f3f5;padding-top:4px;letter-spacing:.02em;}
+.d-foot .d-pg{font-variant-numeric:tabular-nums;letter-spacing:.04em;}
+.d-foot .d-pg::before{content:'Page ';}
+/* 商业发票：签章与银行信息并排，既符合惯例又不额外占高度 */
+.d-sign-row{display:flex;gap:16px;align-items:flex-start;margin-top:10px;}
+.d-sign-row > .d-sign{flex:1;margin-top:0;}
+.d-sign-row > .d-bank{flex:1.05;margin:0;padding:8px 10px;}
+.d-sign-row .d-bank-grid{grid-template-columns:1fr 1fr;gap:4px 12px;}
+.d-sign-row .d-bankitem b{font-size:7.6pt;}
 
 /* ---------- 打印 ---------- */
 #printArea{display:none;}
@@ -694,6 +702,27 @@ b,strong{font-weight:600;}
 .tag-green{background:#edf7f1;color:#0f7b4f;}
 .chip{height:27px;border-radius:var(--r-pill);font-size:11.5px;border-color:#e2e5ea;}
 .chip.on{border-color:#e6b9ba;background:var(--brand-l);color:var(--brand);font-weight:500;}
+/* HS 库：分类快捷筛选 + 底部说明 */
+.hs-cats{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px;}
+.hs-tip{margin-top:10px;font-size:11px;color:var(--faint);line-height:1.7;}
+/* 180 条要能快速扫，行高比普通表格紧一点 */
+.hs-tbl td{padding:7px 14px;}
+.hs-tbl td .mono{font-size:12px;}
+/* 手机：分类横向滑动不换行，隐藏冗余列，保证一屏多看几条 */
+@media (max-width:900px){
+  .hs-cats{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;padding-bottom:6px;margin-bottom:8px;}
+  .hs-cats .chip{flex:none;}
+  .hs-tbl th:nth-child(3),.hs-tbl td:nth-child(3),
+  .hs-tbl th:nth-child(4),.hs-tbl td:nth-child(4){display:none;}
+  .tbl-wrap>.hs-tbl{min-width:0;}
+  .hs-tbl{table-layout:fixed;width:100%;}
+  .hs-tbl th:first-child,.hs-tbl td:first-child{width:92px!important;padding-left:12px;}
+  .hs-tbl th:nth-child(2),.hs-tbl td:nth-child(2){width:auto;}
+  .hs-tbl td{padding:9px 8px;font-size:12.5px;}
+  .hs-tbl td .mono{font-size:11.5px;}
+  .hs-tbl th:last-child,.hs-tbl td:last-child{width:78px!important;text-align:right;padding-right:10px;}
+}
+.empty-sm{padding:34px 0;text-align:center;color:var(--faint);font-size:12.5px;}
 .filters{padding:10px 16px;}
 
 /* Tabs */
@@ -2489,7 +2518,7 @@ function dItems(ctx, mode){
       '<th class="c-n">G.W. (KGS)</th><th class="c-n">CBM</th></tr></thead><tbody>' +
       items.map(function(it, i){
         return '<tr><td class="c-no">' + (i + 1) + '</td>' +
-          '<td><div class="d-name">' + esc(it.name) + '</div><div class="d-sub">' + [it.spec, it.hs ? 'HS: ' + it.hs : '', it.model ? 'NO: ' + it.model : ''].filter(Boolean).join(' · ') + '</div></td>' +
+          '<td><div class="d-name">' + esc(it.name) + '</div><div class="d-sub">' + [it.spec, (it.hsCode || it.hs) ? 'HS: ' + (it.hsCode || it.hs) : '', it.model ? 'NO: ' + it.model : ''].filter(Boolean).join(' · ') + '</div></td>' +
           '<td class="c-q">' + fmtNum(it.qty, 0) + '</td><td class="c-u">' + esc(it.unit) + '</td>' +
           '<td class="c-n">' + (it.ctn > 0 ? fmtNum(it.qty / it.ctn, 0) : '—') + '</td>' +
           '<td class="c-n">' + fmtNum(it.ctn, 0) + '</td><td class="c-n">' + fmtFixed(it.nw, 2) + '</td>' +
@@ -2504,7 +2533,7 @@ function dItems(ctx, mode){
       items.map(function(it, i){
         var has = it.cost > 0;
         return '<tr><td><div class="d-name">' + esc(it.name) + '</div><div class="d-sub">' +
-            [it.spec, it.hs ? 'HS: ' + it.hs : '', it.model ? 'NO: ' + it.model : ''].filter(Boolean).join(' · ') + '</div></td>' +
+            [it.spec, (it.hsCode || it.hs) ? 'HS: ' + (it.hsCode || it.hs) : '', it.model ? 'NO: ' + it.model : ''].filter(Boolean).join(' · ') + '</div></td>' +
           '<td class="c-no">' + esc(it.model || '—') + '</td>' +
           '<td class="c-u">' + esc(it.unit) + '</td>' +
           '<td class="c-q">' + fmtNum(it.qty, 0) + '</td>' +
@@ -2523,7 +2552,7 @@ function dItems(ctx, mode){
     items.map(function(it, i){
       return '<tr>' +
         (o.showPhoto ? '<td class="c-ph">' + (it.photo ? '<img class="d-photo" src="' + it.photo + '">' : '<div class="d-photo ph"></div>') + '</td>' : '') +
-        '<td><div class="d-name">' + esc(it.name) + '</div><div class="d-sub">' + [it.spec, (o.showHS && it.hs) ? 'HS: ' + it.hs : ''].filter(Boolean).join(' · ') + '</div></td>' +
+        '<td><div class="d-name">' + esc(it.name) + '</div><div class="d-sub">' + [it.spec, (o.showHS !== false && (it.hsCode || it.hs)) ? 'HS: ' + (it.hsCode || it.hs) : ''].filter(Boolean).join(' · ') + '</div></td>' +
         '<td class="c-no">' + esc(it.model || '—') + '</td>' +
         '<td class="c-u">' + esc(it.unit) + '</td>' +
         '<td class="c-q">' + fmtNum(it.qty, 0) + '</td>' +
@@ -2566,7 +2595,16 @@ function incoBlock(ctx){
     lines.map(esc).join('<br>') + '</div></div>';
 }
 
-function dSign(ctx, force){  var show = force || ctx.opts.showSign;
+/* ---------- 卖方银行信息（形式发票、商业发票共用） ---------- */
+function dBank(ctx){
+  var T = ctx.T, b = ctx.bank || {};
+  if(!b.beneficiary && !b.bankName && !b.accountNo && !b.swiftCode && !b.bankAddress) return '';
+  var rows = [[T.beneficiary, b.beneficiary], [T.bankName, b.bankName], [T.accountNo, b.accountNo], [T.swift, b.swiftCode]];
+  return '<div class="d-bank"><div class="d-bank-t">' + esc(T.bank) + '</div><div class="d-bank-grid">' +
+    rows.map(function(kv){ return '<div class="d-bankitem"><span>' + esc(kv[0]) + '</span><b>' + esc(kv[1] || '—') + '</b></div>'; }).join('') +
+    '</div>' + (b.bankAddress ? '<div class="d-bankaddr">' + esc(b.bankAddress) + '</div>' : '') + '</div>';
+}
+function dSign(ctx, force, onlySeller){  var show = force || ctx.opts.showSign;
   if(!show) return '';
   if(!force && !ctx.signImage && !ctx.sealImage) return '';
   var T = ctx.T;
@@ -2576,7 +2614,7 @@ function dSign(ctx, force){  var show = force || ctx.opts.showSign;
       (ctx.signImage ? '<img class="d-signimg" src="' + ctx.signImage + '">' : '') +
       (seal ? '<img class="d-sealimg" src="' + seal + '">' : '') +
       '<div class="d-sline"></div></div><div class="d-shint">' + esc(T.authSign) + '</div></div>' +
-    (force ? '<div class="d-signbox"><div class="d-slabel">' + esc(T.buyerSign) + '</div><div class="d-sarea"><div class="d-sline"></div></div><div class="d-shint">' + esc(T.accepted) + '</div></div>' : '') +
+    (force && !onlySeller ? '<div class="d-signbox"><div class="d-slabel">' + esc(T.buyerSign) + '</div><div class="d-sarea"><div class="d-sline"></div></div><div class="d-shint">' + esc(T.accepted) + '</div></div>' : '') +
   '</div>';
 }
 /* ---------- 单页自适应 ----------
@@ -2586,16 +2624,25 @@ function dSign(ctx, force){  var show = force || ctx.opts.showSign;
    内容溢出才会超过。所以阈值必须用 297mm，不能按 296mm 算。 */
 var PAGE_PX = 297 * 96 / 25.4;   /* ≈ 1122.5px */
 
+/* 页码：浏览器分页由打印引擎决定，这里按渲染高度折算，单页单据永远准确 */
+function setPageNo(el){
+  if(!el) return;
+  var pg = el.querySelector('.d-pg');
+  if(!pg) return;
+  var total = Math.max(1, Math.ceil((el.offsetHeight - 6) / PAGE_PX));
+  pg.textContent = '1 / ' + total;
+}
 function fitDocEl(el){
   if(!el) return;
   el.classList.remove('fit-tight', 'fit-tighter');
-  if(el.offsetHeight <= PAGE_PX + 2) return;          /* 本来就一页 */
+  if(el.offsetHeight <= PAGE_PX + 2){ setPageNo(el); return; }   /* 本来就一页 */
   el.classList.add('fit-tight');
-  if(el.offsetHeight <= PAGE_PX + 2) return;          /* 压一档够了 */
+  if(el.offsetHeight <= PAGE_PX + 2){ setPageNo(el); return; }   /* 压一档够了 */
   el.classList.add('fit-tighter');
-  if(el.offsetHeight <= PAGE_PX + 2) return;          /* 压两档够了 */
+  if(el.offsetHeight <= PAGE_PX + 2){ setPageNo(el); return; }   /* 压两档够了 */
   /* 压到最紧仍超页：内容确实要多页，恢复原样，让它正常分页 */
   el.classList.remove('fit-tight', 'fit-tighter');
+  setPageNo(el);
 }
 function fitDocsIn(host){
   if(!host) return;
@@ -2615,7 +2662,8 @@ function fitPrintArea(){
 function dFoot(ctx){
   var ver = (typeof APP_VER !== 'undefined') ? APP_VER : '';
   return '<footer class="d-foot"><span>' + esc(ctx.company.name) + ' · ' + esc(ctx.company.website || '') + '</span>' +
-    '<span>' + esc(ctx.docNo || '') + (ver ? ' · ' + esc(ver) : '') + '</span></footer>';
+    '<span>' + esc(ctx.docNo || '') + (ver ? ' · ' + esc(ver) : '') + '</span>' +
+    '<span class="d-pg">1 / 1</span></footer>';
 }
 function dPage(ctx, inner){
   ctx.typeKey = ctx.typeKey || 'quotation';
@@ -2661,10 +2709,7 @@ function renderProforma(ctx){
   var T = ctx.T, o = ctx.order;
   var inner = dHead(ctx, T.proforma, [[T.invoiceNo, ctx.docNo], [T.date, o.date], [T.orderNo, o.orderNo || ctx.docNo]]) +
     dParties(ctx) + kvMain(ctx) + dItems(ctx) + dSummary(ctx, true) +
-    '<div class="d-bank" style="margin-top:16px"><div class="d-bank-t">' + esc(T.bank) + '</div><div class="d-bank-grid">' +
-      [[T.beneficiary, ctx.bank.beneficiary], [T.bankName, ctx.bank.bankName], [T.accountNo, ctx.bank.accountNo], [T.swift, ctx.bank.swiftCode]]
-      .map(function(kv){ return '<div class="d-bankitem"><span>' + esc(kv[0]) + '</span><b>' + esc(kv[1] || '—') + '</b></div>'; }).join('') +
-    '</div>' + (ctx.bank.bankAddress ? '<div class="d-bankaddr">' + esc(ctx.bank.bankAddress) + '</div>' : '') + '</div>' +
+    dBank(ctx) +
     '<div class="doc-tail">' + dTerms(ctx, extraTermLines(ctx)) + dSign(ctx, true) + '</div>';
   return dPage(ctx, inner);
 }
@@ -2725,13 +2770,12 @@ function renderCommercial(ctx){
     '<div class="doc-tail">' + dTerms(ctx, (function(){
       var t = ctx.totals;
       return [
-        'We certify that the goods described in this invoice are of Chinese origin, and that the particulars are true and correct in every respect.',
         'This invoice is issued under contract ' + (o.orderNo || ctx.docNo) + '. The quantity, description and value agree with the packing list and the bill of lading; in case of discrepancy the contract prevails.',
         'Payment shall be made strictly as stated above. Bank charges outside the seller bank, including intermediary bank charges, are for the buyer account.',
         'The value declared herein is the transaction value for customs valuation purposes and includes the packing cost.',
         'Any alteration to this invoice is invalid unless signed and stamped by the seller. This invoice forms part of the shipping documents.'
       ].concat(extraTermLines(ctx));
-    })(), false) + dSign(ctx, true) + '</div>';
+    })(), false) + '<div class="d-sign-row">' + dSign(ctx, true, true) + dBank(ctx) + '</div>' + '</div>';
   return dPage(ctx, inner);
 }
 /* ---------- 5. 装箱单 ---------- */
@@ -3365,7 +3409,7 @@ function copyText(txt, okMsg){
 }
 
 /* ========== 版本信息 ========== */
-var APP_VER = 'V3.4';
+var APP_VER = 'V3.5';
 var APP_DATE = '2026-10-23';
 var EULA_VER = '1.1';
 var EULA_DATE = '2026-10-23';
@@ -3373,6 +3417,12 @@ var K_EULA = 'eula_agree_v1';
 
 /* 版本更新记录（设置页可查） */
 var VER_LOG = [
+  {v:'V3.5', d:'2026-10-24', items:[
+    '商业发票补齐卖方银行信息（与签章并排），可直接用于收款',
+    '商业发票默认显示 HS 编码；修正产品字段名不一致导致 HS 从不显示的问题',
+    '单据页脚加页码（Page 1 / N），单页单据始终准确',
+    'HS 编码库扩到 180 条，支持分词搜索与按品类筛选'
+  ]},
   {v:'V3.4', d:'2026-10-23', items:[
     '金额书写统一为币种前置（USD 13,350.00），修正合同条款中币种重复显示',
     '合计金额右边缘与明细「金额」列对齐；退税备案表头与数值对齐',
@@ -3501,7 +3551,7 @@ var ORDER_FILTER = {q:'', status:'', from:'', to:''};
 var DOCS_FILTER_OPEN = false;
 var PROD_FILTER = {q:'', cat:''};
 var CUST_FILTER = {q:'', tag:''};
-var HS_FILTER = {q:''};
+var HS_FILTER = {q:'', cat:''};
 var DRAFT_KEY = 'tradeDocDraft_v2';
 
 /* ---------- 图标 ---------- */
@@ -4249,63 +4299,235 @@ function readSupplierForm(){
 
 /* ---------- HS 编码 ---------- */
 var BUILTIN_HS = [
-  ['8467.21', '手持式电动工具（电钻/螺丝刀等）', '电动工具'],
-  ['8507.60', '锂离子蓄电池', '电子元件'],
-  ['8544.42', '电导体连接线缆（额定电压≤1000V）', '电子元件'],
-  ['9405.40', '其他电灯及照明装置（LED灯具）', '照明设备'],
-  ['9617.00', '保温容器（真空保温杯/瓶）', '家居用品'],
-  ['7323.93', '不锈钢餐桌/厨房用具', '家居用品'],
-  ['6912.00', '陶瓷餐具及厨房用陶瓷制品', '家居用品'],
-  ['4419.90', '其他竹木制餐具及木制品', '家居用品'],
-  ['6307.90', '其他纺织制成品（家纺/抹布等）', '纺织服装'],
-  ['6109.10', '棉制针织T恤', '纺织服装'],
-  ['6204.62', '棉制女式长裤/工装裤', '纺织服装'],
-  ['4202.92', '皮革/纺织材料制箱包', '箱包配饰'],
-  ['9004.10', '太阳镜', '箱包配饰'],
-  ['9102.11', '机械手表', '箱包配饰'],
-  ['7117.90', '其他仿首饰/饰品', '箱包配饰'],
-  ['8518.22', '扬声器/音箱（蓝牙音箱）', '消费电子'],
-  ['8528.72', '彩色电视接收机', '消费电子'],
-  ['8471.30', '便携式电脑（笔记本电脑）', '消费电子'],
-  ['8517.62', '通信设备（电话机/路由器等）', '消费电子'],
-  ['9401.61', '带软垫的坐具（办公椅/沙发椅）', '家具'],
-  ['9401.79', '其他坐具（折叠椅/露营椅）', '家具'],
-  ['9403.60', '其他木制家具', '家具'],
-  ['9503.00', '玩具及模型', '玩具运动'],
-  ['8712.00', '自行车及非机动脚踏车', '玩具运动'],
-  ['4011.10', '汽车用充气橡胶轮胎', '汽配'],
-  ['8708.99', '其他汽车零件及附件', '汽配'],
-  ['8481.80', '其他阀门及配件', '机械'],
-  ['8431.43', '挖掘机用零部件', '机械'],
-  ['7306.30', '不锈钢焊接管', '建材五金'],
-  ['8483.40', '传动轴、齿轮及传动装置', '机械'],
-  ['8418.10', '组合式冷藏冷冻箱（冰箱）', '家电'],
-  ['8450.11', '全自动洗衣机', '家电'],
-  ['3304.99', '其他护肤品/美容品', '化妆品'],
-  ['3401.11', '香皂（条状/块状）', '化妆品'],
-  ['2204.21', '小包装葡萄酒（≤2升）', '食品饮料'],
-  ['0805.10', '鲜橙', '食品饮料'],
-  ['0902.10', '绿茶（内包装≤3公斤）', '食品饮料'],
-  ['2008.99', '其他方法制作的水果制品', '食品饮料'],
-  ['3924.10', '塑料制餐具及厨房用具', '家居用品'],
-  ['7013.49', '其他玻璃制餐桌/厨房用玻璃器皿', '家居用品']
+  /* 塑料橡胶 */
+  ['3923.10','塑料箱、盒、周转箱','塑料橡胶'],
+  ['3923.30','塑料瓶、坛、罐','塑料橡胶'],
+  ['3923.50','塑料塞、盖、瓶盖','塑料橡胶'],
+  ['3924.10','塑料制餐具及厨房用具','塑料橡胶'],
+  ['3924.90','其他塑料家用制品','塑料橡胶'],
+  ['3925.90','其他塑料建筑制品','塑料橡胶'],
+  ['3926.90','其他塑料制品','塑料橡胶'],
+  ['3917.23','硬质聚氯乙烯管','塑料橡胶'],
+  ['3920.10','乙烯聚合物板片膜','塑料橡胶'],
+  ['4011.10','轿车用充气橡胶轮胎','塑料橡胶'],
+  ['4011.20','客车、货车用轮胎','塑料橡胶'],
+  ['4015.19','其他橡胶手套','塑料橡胶'],
+  ['4016.93','橡胶密封件、垫片','塑料橡胶'],
+  /* 箱包皮革 */
+  ['4202.12','塑料或纺织材料衣箱','箱包皮革'],
+  ['4202.22','塑料或纺织材料手提包','箱包皮革'],
+  ['4202.32','塑料或纺织材料钱包','箱包皮革'],
+  ['4202.92','其他箱包、旅行包','箱包皮革'],
+  ['4203.30','皮革腰带','箱包皮革'],
+  /* 家居用品 */
+  ['7323.93','不锈钢餐厨用具','家居用品'],
+  ['7323.99','其他钢铁家用制品','家居用品'],
+  ['7615.10','铝制餐厨用具','家居用品'],
+  ['7616.99','其他铝制品','家居用品'],
+  ['6911.10','瓷制餐具','家居用品'],
+  ['6912.00','陶瓷餐具及厨房用具','家居用品'],
+  ['7013.33','玻璃制高脚杯','家居用品'],
+  ['7013.49','其他玻璃餐厨器皿','家居用品'],
+  ['7009.91','玻璃镜（未镶框）','家居用品'],
+  ['4419.11','竹制餐具及厨房用具','家居用品'],
+  ['4419.90','其他木制餐具','家居用品'],
+  ['4420.90','木制装饰品、首饰盒','家居用品'],
+  ['6302.60','棉制毛巾','家居用品'],
+  ['6302.93','化纤制毛巾','家居用品'],
+  ['6302.21','印花棉制床单','家居用品'],
+  ['6302.31','其他棉制床单','家居用品'],
+  ['9404.90','被子、枕头、寝具','家居用品'],
+  ['9617.00','真空保温容器（保温杯）','家居用品'],
+  /* 纺织服装 */
+  ['6109.10','棉制针织T恤衫','纺织服装'],
+  ['6109.90','其他针织T恤衫','纺织服装'],
+  ['6110.20','棉制针织套头衫','纺织服装'],
+  ['6110.30','化纤制针织套头衫','纺织服装'],
+  ['6105.10','棉制针织男衬衫','纺织服装'],
+  ['6104.62','棉制针织女长裤','纺织服装'],
+  ['6203.42','棉制男式长裤','纺织服装'],
+  ['6204.62','棉制女式长裤','纺织服装'],
+  ['6205.20','棉制男式衬衫','纺织服装'],
+  ['6206.30','棉制女式衬衫','纺织服装'],
+  ['6115.95','棉制袜子','纺织服装'],
+  ['6214.20','化纤制披巾、围巾','纺织服装'],
+  ['6307.90','其他纺织制成品','纺织服装'],
+  ['6306.22','化纤制帐篷','纺织服装'],
+  ['5603.12','无纺布（每平米>25g）','纺织服装'],
+  /* 鞋帽 */
+  ['6403.99','其他皮革鞋靴','鞋帽'],
+  ['6404.11','运动鞋（橡胶底纺织面）','鞋帽'],
+  ['6404.19','其他纺织面鞋','鞋帽'],
+  ['6402.99','其他塑料底鞋','鞋帽'],
+  ['6505.00','针织帽、围巾类头饰','鞋帽'],
+  /* 五金建材 */
+  ['7318.15','螺栓、螺钉','五金建材'],
+  ['7318.16','螺母','五金建材'],
+  ['7306.30','不锈钢焊接管','五金建材'],
+  ['7326.90','其他钢铁制品','五金建材'],
+  ['8302.41','门窗用金属附件','五金建材'],
+  ['8310.00','金属标牌、铭牌','五金建材'],
+  ['8205.40','螺丝刀','五金建材'],
+  ['8205.51','家用非电动手工具','五金建材'],
+  ['8211.93','非固定刀刃的刀','五金建材'],
+  ['8215.20','成套餐具（刀叉勺）','五金建材'],
+  ['7005.29','其他浮法玻璃板','五金建材'],
+  ['7007.19','钢化安全玻璃','五金建材'],
+  /* 机械工具 */
+  ['8414.51','电风扇','机械工具'],
+  ['8414.59','其他风机、通风机','机械工具'],
+  ['8415.10','窗式或壁挂式空调','机械工具'],
+  ['8418.10','组合式冷藏冷冻箱','机械工具'],
+  ['8418.21','压缩式家用冰箱','机械工具'],
+  ['8421.21','水的过滤、净化设备','机械工具'],
+  ['8422.11','家用洗碗机','机械工具'],
+  ['8433.11','动力驱动的割草机','机械工具'],
+  ['8431.43','挖掘机用零部件','机械工具'],
+  ['8450.11','全自动洗衣机','机械工具'],
+  ['8467.21','手持式电动工具（电钻等）','机械工具'],
+  ['8467.22','电锯','机械工具'],
+  ['8467.29','其他手持电动工具','机械工具'],
+  ['8481.80','其他阀门及类似装置','机械工具'],
+  ['8482.10','球轴承','机械工具'],
+  ['8483.40','传动轴、齿轮及传动装置','机械工具'],
+  ['8413.70','离心泵','机械工具'],
+  /* 电子电器 */
+  ['8504.40','静止式变流器（电源适配器）','电子电器'],
+  ['8507.60','锂离子蓄电池','电子电器'],
+  ['8513.10','手电筒','电子电器'],
+  ['8516.10','电热水器','电子电器'],
+  ['8516.31','电吹风','电子电器'],
+  ['8516.32','电熨斗','电子电器'],
+  ['8516.60','电烤箱、烤面包机','电子电器'],
+  ['8516.71','咖啡机','电子电器'],
+  ['8516.79','其他家用电热器具','电子电器'],
+  ['8517.62','通信网络设备（路由器等）','电子电器'],
+  ['8518.22','多喇叭音箱','电子电器'],
+  ['8518.30','耳机、头戴式受话器','电子电器'],
+  ['8528.72','彩色电视接收机','电子电器'],
+  ['8536.50','电路开关','电子电器'],
+  ['8536.69','插座、插头','电子电器'],
+  ['8541.40','发光二极管（LED 器件）','电子电器'],
+  ['8544.42','额定电压≤1000V 的电导体','电子电器'],
+  ['8544.49','其他电导体（≤1000V）','电子电器'],
+  ['8543.70','其他具有独立功能的电气设备','电子电器'],
+  ['8471.30','便携式自动数据处理设备（笔记本）','电子电器'],
+  ['8471.50','自动数据处理设备存储单元','电子电器'],
+  /* 汽车配件 */
+  ['8703.23','1500-3000cc 小轿车','汽车配件'],
+  ['8708.99','其他机动车辆零件附件','汽车配件'],
+  ['8708.29','车身零件及附件','汽车配件'],
+  ['8712.00','自行车及非机动脚踏车','汽车配件'],
+  ['8714.10','自行车零件','汽车配件'],
+  ['8711.20','摩托车（50-250cc）','汽车配件'],
+  /* 家具灯具 */
+  ['9401.30','可升降、旋转的坐具','家具灯具'],
+  ['9401.61','带软垫的木框架坐具','家具灯具'],
+  ['9401.79','其他坐具（折叠椅等）','家具灯具'],
+  ['9403.20','其他金属家具','家具灯具'],
+  ['9403.60','其他木制家具','家具灯具'],
+  ['9403.70','塑料家具','家具灯具'],
+  ['9405.40','其他电灯及照明装置（LED 灯具）','家具灯具'],
+  ['9405.10','枝形吊灯及天花板灯具','家具灯具'],
+  ['9405.21','聚光灯、射灯','家具灯具'],
+  ['9405.41','光伏 LED 灯具','家具灯具'],
+  /* 玩具运动 */
+  ['9503.00','玩具、模型、拼图','玩具运动'],
+  ['9504.40','扑克牌','玩具运动'],
+  ['9505.10','节日、狂欢节用品','玩具运动'],
+  ['9506.62','充气玩具、游泳圈','玩具运动'],
+  ['9506.91','健身及力量训练器材','玩具运动'],
+  ['9506.29','其他游泳、戏水用品','玩具运动'],
+  ['9603.21','牙刷','玩具运动'],
+  /* 食品饮料 */
+  ['2007.10','均质制果酱、果冻','食品饮料'],
+  ['2008.99','其他制作或保藏的水果','食品饮料'],
+  ['2005.51','脱荚豆类制品','食品饮料'],
+  ['2008.11','花生制品','食品饮料'],
+  ['2009.11','橙汁（冷冻）','食品饮料'],
+  ['2201.10','矿泉水及汽水','食品饮料'],
+  ['2202.99','其他加味水、饮料','食品饮料'],
+  ['2203.00','啤酒','食品饮料'],
+  ['2204.21','≤2L 容器装葡萄酒','食品饮料'],
+  ['0801.31','腰果（鲜或干）','食品饮料'],
+  ['0803.10','香蕉（鲜或干）','食品饮料'],
+  ['0805.10','橙（鲜或干）','食品饮料'],
+  ['0806.10','葡萄（鲜）','食品饮料'],
+  ['0808.10','苹果（鲜）','食品饮料'],
+  ['0901.21','已烘焙咖啡','食品饮料'],
+  ['0902.10','绿茶（内包装≤3kg）','食品饮料'],
+  ['0902.30','红茶（内包装≤3kg）','食品饮料'],
+  ['0702.00','鲜或冷藏番茄','食品饮料'],
+  ['0703.10','洋葱、青葱','食品饮料'],
+  ['0304.62','其他鱼片（鲜或冷藏）','食品饮料'],
+  ['0306.17','虾（冻）','食品饮料'],
+  ['0307.21','扇贝（活鲜冷）','食品饮料'],
+  /* 美妆日化 */
+  ['3303.00','香水及花露水','美妆日化'],
+  ['3304.10','唇用化妆品','美妆日化'],
+  ['3304.99','其他护肤、美容品','美妆日化'],
+  ['3305.10','洗发水','美妆日化'],
+  ['3306.10','牙膏','美妆日化'],
+  ['3401.11','条块状香皂','美妆日化'],
+  ['3402.20','零售包装洗涤剂','美妆日化'],
+  ['3307.49','其他芳香或化妆制品','美妆日化'],
+  ['9619.00','卫生巾、尿布及类似品','美妆日化'],
+  /* 化工医药 */
+  ['2836.30','碳酸氢钠（小苏打）','化工医药'],
+  ['2905.11','甲醇','化工医药'],
+  ['3208.10','聚酯类油漆、清漆','化工医药'],
+  ['3808.94','消毒剂','化工医药'],
+  ['3004.90','其他零售包装药品','化工医药'],
+  ['3005.90','其他敷料、绷带','化工医药'],
+  ['3506.91','以橡胶或塑料为基料的胶粘剂','化工医药'],
+  /* 仪器钟表 */
+  ['9004.10','太阳镜','仪器钟表'],
+  ['9004.90','其他眼镜及类似品','仪器钟表'],
+  ['9017.20','其他绘图、划线工具','仪器钟表'],
+  ['9025.11','液体温度计','仪器钟表'],
+  ['9026.20','压力测量仪表','仪器钟表'],
+  ['9031.80','其他测量或检验仪器','仪器钟表'],
+  ['9102.11','机械手表（贵金属表壳除外）','仪器钟表'],
+  ['9102.12','石英手表','仪器钟表'],
+  ['9105.21','挂钟','仪器钟表'],
+  ['9608.10','圆珠笔','仪器钟表'],
+  ['9607.11','拉链','仪器钟表'],
+  ['9613.80','打火机','仪器钟表'],
+  ['7117.90','其他仿首饰','仪器钟表']
 ];
 function hsTab(){
   var f = HS_FILTER;
+  var cats = {};
+  BUILTIN_HS.forEach(function(h){ cats[h[2]] = (cats[h[2]] || 0) + 1; });
   var all = S.hsCodes.map(function(h){ return {code:h.code, name:h.name, cat:h.category, mine:true, id:h.id}; })
     .concat(BUILTIN_HS.map(function(h){ return {code:h[0], name:h[1], cat:h[2], mine:false}; }));
-  if(f.q){
-    var q = f.q.toLowerCase();
-    all = all.filter(function(h){ return h.code.indexOf(q) >= 0 || (h.name || '').toLowerCase().indexOf(q) >= 0 || (h.cat || '').toLowerCase().indexOf(q) >= 0; });
+  if(f.cat) all = all.filter(function(h){ return h.cat === f.cat; });
+  /* 多关键词各自匹配（AND），编码去掉点号比较，输 940540 也能命中 9405.40 */
+  var terms = (f.q || '').toLowerCase().split(/\s+/).filter(Boolean);
+  if(terms.length){
+    all = all.filter(function(h){
+      var hay = (h.code + ' ' + h.code.replace(/\./g,'') + ' ' + (h.name || '') + ' ' + (h.cat || '')).toLowerCase();
+      return terms.every(function(t){ return hay.indexOf(t) >= 0; });
+    });
   }
+  var catChips = '<span class="chip' + (!f.cat ? ' on' : '') + '" onclick="A.setHsCat(\'\')">全部 ' + BUILTIN_HS.length + '</span>' +
+    Object.keys(cats).map(function(c){
+      return '<span class="chip' + (f.cat === c ? ' on' : '') + '" onclick="A.setHsCat(\'' + esc(c) + '\')">' + esc(c) + ' ' + cats[c] + '</span>';
+    }).join('');
+  /* 收藏与编辑都放最后一列，手机上隐藏中间两列也不会丢操作 */
   var rows = all.map(function(h){
     return '<tr><td class="mono b">' + esc(h.code) + '</td><td>' + esc(h.name) + '</td><td class="xs muted">' + esc(h.cat || '') + '</td>' +
-      '<td>' + (h.mine ? '<span class="tag tag-green">我的</span>' : '<button class="btn btn-ghost btn-xs" onclick="A.addHsFromBuiltin(\'' + esc(h.code) + '\')">收藏</button>') + '</td>' +
-      '<td class="nowrap">' + (h.mine ? '<button class="btn btn-ghost btn-xs" onclick="A.editHs(\'' + h.id + '\')">编辑</button> <button class="btn btn-ghost btn-xs btn-danger" onclick="A.delHs(\'' + h.id + '\')">删除</button>' : '') + '</td></tr>';
+      '<td>' + (h.mine ? '<span class="tag tag-green">我的</span>' : '<span class="xs faint">内置</span>') + '</td>' +
+      '<td class="nowrap">' + (h.mine
+        ? '<button class="btn btn-ghost btn-xs" onclick="A.editHs(\'' + h.id + '\')">编辑</button> <button class="btn btn-ghost btn-xs btn-danger" onclick="A.delHs(\'' + h.id + '\')">删除</button>'
+        : '<button class="btn btn-ghost btn-xs" onclick="A.addHsFromBuiltin(\'' + esc(h.code) + '\')">收藏</button>') + '</td></tr>';
   }).join('');
-  return '<div class="card"><div class="filters"><input class="inp search" placeholder="模糊搜索编码或品名，如「保温」「LED」" value="' + esc(f.q) + '" oninput="A.setHsFilter(this.value)">' +
-      '<span class="xs faint">内置常用编码 ' + BUILTIN_HS.length + ' 条 · 我的库 ' + S.hsCodes.length + ' 条</span></div>' +
-    '<div class="tbl-wrap"><table class="tbl"><thead><tr><th style="width:110px">HS 编码</th><th>品名描述</th><th style="width:120px">分类</th><th style="width:90px">来源</th><th style="width:120px">操作</th></tr></thead><tbody>' + rows + '</tbody></table></div></div>';
+  return '<div class="card"><div class="filters"><input class="inp search" placeholder="搜编码或品名，可空格分词，如「LED 灯」「不锈钢」" value="' + esc(f.q) + '" oninput="A.setHsFilter(this.value)">' +
+      '<span class="xs faint">命中 ' + all.length + ' 条 · 内置 ' + BUILTIN_HS.length + ' 条 · 我的库 ' + S.hsCodes.length + ' 条</span></div>' +
+    '<div class="hs-cats">' + catChips + '</div>' +
+    (all.length ? '<div class="tbl-wrap"><table class="tbl hs-tbl"><thead><tr><th style="width:110px">HS 编码</th><th>品名描述</th><th style="width:110px">分类</th><th style="width:90px">来源</th><th style="width:120px">操作</th></tr></thead><tbody>' + rows + '</tbody></table></div>'
+      : '<div class="empty-sm">没有匹配的编码。换个说法试试，或点右上角「添加编码」自己录一条。</div>') +
+    '<div class="hs-tip">表内为 6 位国际通用归类，报关时需按中国税则补足 10 位（含监管条件、申报要素），以海关现行税则为准。</div></div>';
 }
 function hsFormHtml(h){
   h = h || {code:'', name:'', category:''};
@@ -5843,6 +6065,10 @@ var A = {
     render();
     var el2 = document.querySelector('#page .search');
     if(el2){ el2.focus(); el2.setSelectionRange(pos, pos); }
+  },
+  setHsCat: function(c){
+    HS_FILTER.cat = c || '';
+    render();
   },
   editHs: function(id){
     var h = id ? S.hsCodes.filter(function(x){ return x.id === id; })[0] : null;
